@@ -12,8 +12,8 @@ namespace SellingKoi.Data
         public DbSet<Farm> Farms { get; set; }
         public DbSet<KOI> KOIs { get; set; }
         public DbSet<Models.Route> Routes { get; set; }
-        public DbSet<Order> Orders { get; set; }
         public DbSet<OrderShorten> OrtherShortens { get; set; }
+        public DbSet<Trip> Trips { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -47,13 +47,12 @@ namespace SellingKoi.Data
                 .WithOne(k => k.Route)
                 .HasForeignKey(k => k.RouteId);
 
-            //nhieu order nhieu route
-            // Định nghĩa quan hệ 1-nhiều giữa Route và Order
+            //1 trip - nhieu order
+            modelBuilder.Entity<Trip>()
+          .HasMany(o => o.ordershortens)
+          .WithOne(t => t.Trip) 
+          .HasForeignKey(o => o.TripId); 
 
-            modelBuilder.Entity<Models.Route>()
-                .HasMany(r => r.Orders)
-                .WithOne(o => o.Route)
-                .HasForeignKey(o => o.RouteId);
         }
 
     }

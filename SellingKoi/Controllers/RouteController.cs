@@ -84,16 +84,18 @@ namespace SellingKoi.Controllers
                 }
             }
 
-            if (ModelState.IsValid)
-            {
-                await _routeService.CreateRouteAsync(route);
-                return RedirectToAction(nameof(RouteManagement));
-            }
-            else
-            {
-                ModelState.AddModelError("", "There was an issue with the data provided. Please check your inputs.");
-                return View(route);
-            }
+            await _routeService.CreateRouteAsync(route);
+            return RedirectToAction(nameof(RouteManagement));
+            //if (ModelState.IsValid)
+            //{
+            //    await _routeService.CreateRouteAsync(route);
+            //    return RedirectToAction(nameof(RouteManagement));
+            //}
+            //else
+            //{
+            //    ModelState.AddModelError("", "There was an issue with the data provided. Please check your inputs.");
+            //    return View(route);
+            //}
 
         }
         [HttpGet]

@@ -34,6 +34,23 @@ namespace SellingKoi.Controllers
             HttpContext.Session.SetObjectAsJson("Cart", cart);
             return Ok();
         }
+
+        [HttpPost]
+        public IActionResult RemoveFromCart(string itemId)
+        {
+            var cart = HttpContext.Session.GetObjectFromJson<List<CartItem>>("Cart") ?? new List<CartItem>();
+
+            // Tìm item trong giỏ hàng
+            var itemToRemove = cart.FirstOrDefault(i => i.Id == itemId);
+            if (itemToRemove != null)
+            {
+                cart.Remove(itemToRemove); // Xóa item
+            }
+
+            // Lưu giỏ hàng vào session
+            HttpContext.Session.SetObjectAsJson("Cart", cart);
+            return Ok();
+        }
         //[HttpPost]
 
         //public IActionResult AddRouteToCart([FromBody] RouteCartItem routeItem)

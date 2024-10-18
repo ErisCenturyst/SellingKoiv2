@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 using SellingKoi.Services;
 
@@ -83,6 +84,37 @@ namespace SellingKoi.Controllers
             }
             ModelState.AddModelError("", "Tên đăng nhập đã tồn tại");
             return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateRole(string id, string role)
+        {
+            if (id == null)
+            {
+                return BadRequest("Invalid account ID.");
+            }
+
+            if (string.IsNullOrWhiteSpace(role))
+            {
+                return BadRequest("Role cannot be empty.");
+            }
+
+            try
+            {
+                await _accountService.AssignRoleToUserAsync(id, role);
+                TempData["SuccessMessage"] = $"Role updated successfully to {role} for account with ID {id}.";
+            }
+            catch (KeyNotFoundException)
+            {
+                TempData["ErrorMessage"] = $"Account with ID {id} not found.";
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                TempData["ErrorMessage"] = "An error occurred while updating the role.";
+            }
+
+            return RedirectToAction(nameof(DetailsAccount), new { id = id });
         }
 
 

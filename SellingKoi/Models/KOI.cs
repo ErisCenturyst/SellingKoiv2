@@ -28,7 +28,7 @@ namespace SellingKoi.Models
         //luu tru hinh anh
         [StringLength(100)]
         [Column(TypeName = "nvarchar(100)")]
-        public string AvatarUrl { get; set; } // Thêm trường lưu hình ảnh avatar
+        public string ?AvatarUrl { get; set; } // Thêm trường lưu hình ảnh avatar
 
         [NotMapped]
         public List<string> AlbumUrl { get; set; } = new List<string>(); // Thêm trường lưu các hình ảnh liên quan

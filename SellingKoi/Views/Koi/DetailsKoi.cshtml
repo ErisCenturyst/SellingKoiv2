@@ -33,10 +33,29 @@
     </dl>
 </div>
 
+
+
 <div>
     <a asp-action="KoiManagement" class="btn btn-secondary">Quay lại</a>
     <a asp-action="EditKoi" asp-route-id="@Model.Id" class="btn btn-warning">Chỉnh sửa</a>
     <form asp-action="DeleteKoi" asp-route-id="@Model.Id" method="post" style="display:inline;">
         <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa cá này?');">Xóa</button>
     </form>
+</div>
+
+<div class="col-sm-6">
+
+    <h4>Thông tin trang trại</h4>
+    <dl class="row">
+        <dt class="col-sm-4">Tên</dt>
+        <dd class="col-sm-8">@Model.Farm.Name</dd>
+
+        <dt class="col-sm-4">Chủ trại</dt>
+        <dd class="col-sm-8">@Model.Farm.Owner</dd>
+
+        <dt class="col-sm-4">Chú thích</dt>
+        <dd class="col-sm-8">@Model.Farm.Description</dd>
+    </dl>
+    <a asp-controller="Farm" asp-action="DetailsFarm" asp-route-id="@Model.Farm.Id" class="btn btn-info">Chi tiết trang trại</a> <!-- Thêm nút này -->
+
 </div>

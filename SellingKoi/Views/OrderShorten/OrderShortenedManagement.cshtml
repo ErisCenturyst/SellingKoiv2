@@ -1,0 +1,94 @@
+﻿@model IEnumerable<SellingKoi.Models.OrderShorten>
+
+@{
+    ViewData["Title"] = "Order Management";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Order Management</h2>
+    <a asp-controller="Trip" asp-action="QuickCreateTrip" class="btn btn-primary">Quick create Trip</a>
+</div>
+
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>
+                <a asp-action="OrderShortenedManagementSort" asp-route-sortOrder="@ViewBag.OrderDateSortParm">Order Date</a>
+            </th>
+            <th>
+                <a asp-action="OrderShortenedManagementSort" asp-route-sortOrder="@ViewBag.RouteNameSortParm">Lộ trình</a>
+            </th>
+            <th>
+                <a asp-action="OrderShortenedManagementSort" asp-route-sortOrder="@ViewBag.StatusSortParm">Status</a>
+            </th>
+            <th>Chuyến đi</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model)
+        {
+            <tr>
+                <td>@order.Id</td>
+                <td>@order.Registration_date.ToShortDateString()</td>
+                <td>@order.routename.ToString()</td>
+                <td>
+                    <span class="badge @GetStatusBadgeClass(order.Status)">
+                        @order.Status
+                    </span>
+                </td>
+                <td>
+                    @if (order != null && order.Trip != null)
+                    {
+                        @order.Trip.TripNum
+                    }
+                    else
+                    {
+                        <span>Chưa có chuyến đi</span>
+                    }
+                </td>
+                <td>
+                    <form asp-action="UpdateOrder" method="post" class="d-inline">
+                        <select name="tripId" class="form-control">
+                            @* <option value="">-- Chọn Trip --</option> *@
+                            @if (order != null && order.Trip != null)
+                            {
+                                <option value="0">-- Hủy chuyến đi --   </option>
+                            }
+                            @if(order !=null && order.Trip == null)
+                            {
+                                <option value="0">-- Chọn chuyến đi --   </option>
+                            }
+                            
+                            @if (ViewBag.TripList != null)
+                            {
+                                foreach (var trip in ViewBag.TripList as List<Trip>)
+                                {   
+                                     <option value="@trip.Id">@trip.TripNum</option>
+                                }
+                            }
+                        </select>
+                        <input type="hidden" name="orderId" value="@order.Id" /> <!-- Thêm hidden field để gửi Order ID -->
+                        <button type="submit" class="btn btn-success btn-sm">Cập nhật</button> <!-- Nút cập nhật -->
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@functions {
+    string GetStatusBadgeClass(string status)
+    {
+        return status.ToLower() switch
+        {
+            "pending" => "bg-warning",
+            "processing" => "bg-info",
+            "shipped" => "bg-primary",
+            "delivered" => "bg-success",
+            "cancelled" => "bg-danger",
+            _ => "bg-secondary"
+        };
+    }
+}

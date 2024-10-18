@@ -17,7 +17,26 @@
         <dd class="col-sm-10">@Model.Fullname</dd>
 
         <dt class="col-sm-2">Vai trò</dt>
-        <dd class="col-sm-10">@Model.Role</dd>
+        <dd class="col-sm-10">
+            <form asp-action="UpdateRole" asp-route-id="@Model.Id" method="post" class="role-update-form">
+                <div class="input-group">
+                    <select name="role" class="form-select custom-select">
+                        @foreach (var role in new[] { "Staff", "Customer","Manager" })
+                        {
+                            @if (Model.Role == role)
+                            {
+                                <option value="@role" selected>@role</option>
+                            }
+                            else
+                            {
+                                <option value="@role">@role</option>
+                            }
+                        }
+                    </select>
+                    <button type="submit" class="btn btn-outline-secondary">Cập nhật</button>
+                </div>
+            </form>
+        </dd>
 
         <dt class="col-sm-2">Ngày đăng ký</dt>
         <dd class="col-sm-10">@Model.Registration_date.ToString("dd/MM/yyyy")</dd>
@@ -31,3 +50,17 @@
         <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa tài khoản này?');">Xóa</button>
     </form>
 </div>
+
+<style>
+    .role-update-form .input-group {
+        max-width: 250px;
+    }
+    .role-update-form .custom-select {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+    .role-update-form .btn {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+</style>

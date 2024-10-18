@@ -429,3 +429,29 @@ body {
     margin: 0;
     padding: 0;
 }
+
+/* Admin Dashboard Styles */
+.admin-dashboard .card {
+    transition: all 0.3s ease;
+}
+
+.admin-dashboard .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.admin-dashboard .card-title {
+    font-weight: bold;
+}
+
+.admin-dashboard .btn-light:hover {
+    background-color: #f8f9fa;
+}
+
+.admin-dashboard .list-group-item {
+    transition: background-color 0.2s ease;
+}
+
+.admin-dashboard .list-group-item:hover {
+    background-color: #f8f9fa;
+}

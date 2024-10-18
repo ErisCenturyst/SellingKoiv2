@@ -23,8 +23,8 @@ namespace SellingKoi.Models
 
         public required string Role { get; set; }
         
-        public Guid CartId { get; set; }
-        public virtual Cart Cart { get; set; }
+        public Guid ?CartId { get; set; }
+        public virtual Cart ?Cart { get; set; }
 
 
         public bool Status { get; set; } = true;

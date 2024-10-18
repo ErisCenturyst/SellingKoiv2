@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Routing;
+using Microsoft.EntityFrameworkCore;
 using SellingKoi.Data;
 using SellingKoi.Models;
 
@@ -49,9 +50,12 @@ namespace SellingKoi.Services
             return await _dataContext.OrtherShortens.FirstOrDefaultAsync(o => o.Id.ToString().ToUpper().Equals(id));
         }
 
-        public Task UpdatOrderAsync(OrderShorten order)
+
+
+        public async Task UpdatOrderAsync(OrderShorten order)
         {
-            throw new NotImplementedException();
+            _dataContext.Entry(order).State = EntityState.Modified;
+            await _dataContext.SaveChangesAsync();
         }
 
     }

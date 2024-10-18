@@ -1,0 +1,48 @@
+﻿@model SellingKoi.Models.Trip
+
+<h2>Tạo Trip Mới</h2>
+
+@{
+    var staff = ViewData["Staff"] as Account;
+}
+
+<form asp-action="QuickCreateTrip" method="post">
+    <div class="form-group">
+        <label asp-for="TripNum">Số Trip</label>
+        <input asp-for="TripNum" class="form-control" />
+        <span asp-validation-for="TripNum" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="status">Trạng thái</label>
+        <select asp-for="status" class="form-control">
+            @* <option value="">-- Chọn trạng thái --</option> *@
+            <option value="preparing">Đang chuẩn bị</option>
+            @* <option value="going">Đang giao hàng</option>
+            <option value="done">Đã hoàn thành</option> *@
+        </select>
+        <span asp-validation-for="status" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="staff">Nhân viên phụ trách</label>
+        <select asp-for="staff.Id" class="form-control">
+            <option value="">-- Chọn nhân viên --</option>
+            @if (ViewBag.StaffList != null)
+            {
+                foreach (var staff in ViewBag.StaffList as List<Account>)
+                {
+                    <option value="@staff.Id">@staff.Username</option>
+                }
+            }
+        </select>
+        <span asp-validation-for="staff" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Tạo Trip</button>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

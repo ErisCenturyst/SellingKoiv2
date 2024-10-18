@@ -14,7 +14,6 @@ builder.Services.AddDbContext<DataContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("SellingKoiString")));
 
 
-
 builder.Services.AddScoped<IAccountService, AccountService>();
 
 builder.Services.AddScoped<IKoiService, KoiService>();
@@ -23,10 +22,9 @@ builder.Services.AddScoped<IFarmService, FarmService>();
 
 builder.Services.AddScoped<IRouteService, RouteService>();
 
-builder.Services.AddScoped<IOrderService,OrderService>();
-
 builder.Services.AddScoped<IOrderShortenService, OrderShortenService>();
 
+builder.Services.AddScoped<ITripService, TripService>();
 
 
 builder.Services.AddSession(options =>

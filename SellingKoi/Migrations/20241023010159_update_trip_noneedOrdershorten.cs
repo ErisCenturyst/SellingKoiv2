@@ -5,7 +5,7 @@
 namespace SellingKoi.Migrations
 {
     /// <inheritdoc />
-    public partial class update_farmstatus : Migration
+    public partial class update_trip_noneedOrdershorten : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

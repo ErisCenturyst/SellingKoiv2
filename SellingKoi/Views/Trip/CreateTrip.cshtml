@@ -1,0 +1,57 @@
+@model SellingKoi.Models.Trip
+@using SellingKoi.Models
+
+<h2>Tạo Trip Mới</h2>
+
+<form asp-action="CreateTrip" method="post">
+    <div class="form-group">
+        <label asp-for="TripNum">Số Trip</label>
+        <input asp-for="TripNum" class="form-control" />
+        <span asp-validation-for="TripNum" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="status">Trạng thái</label>
+        <select asp-for="status" class="form-control">
+            <option value="">-- Chọn trạng thái --</option>
+            <option value="Đang chuẩn bị">Đang chuẩn bị</option>
+            <option value="Đang giao hàng">Đang giao hàng</option>
+            <option value="Đã hoàn thành">Đã hoàn thành</option>
+        </select>
+        <span asp-validation-for="status" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="staff">Nhân viên phụ trách</label>
+        <select asp-for="staff.Id" class="form-control">
+            <option value="">-- Chọn nhân viên --</option>
+            @foreach (var staff in ViewBag.StaffList as List<Account>)
+            {
+                <option value="@staff.Id">@staff.Username</option>
+            }
+        </select>
+        <span asp-validation-for="staff" class="text-danger"></span>
+    </div>
+
+    @* Không cần nhập Registration_date vì nó được tự động set là DateTime.Now *@
+
+    @* Phần orders có thể phức tạp hơn, có thể cần một giao diện riêng để chọn các đơn hàng *@
+    @* Ví dụ đơn giản: *@
+    <div class="form-group">
+        <label>Chọn đơn hàng</label>
+        @* Giả sử bạn có một danh sách các OrderShorten được truyền vào View *@
+        @* @foreach (var order in ViewBag.AvailableOrders)
+        {
+            <div class="form-check">
+                <input type="checkbox" name="SelectedOrders" value="@order.Id" class="form-check-input" />
+                <label class="form-check-label">@order.OrderNumber</label>
+            </div>
+        } *@
+    </div>
+
+    <button type="submit" class="btn btn-primary">Tạo Trip</button>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

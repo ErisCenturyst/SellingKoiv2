@@ -14,6 +14,7 @@
             {
                 <div class="cart-item">
                     <p class="item-name">Tên cá Koi: @item.Name</p>
+                    <button onclick="removeFromCart(@item.Id)" class="btn-remove">Xóa</button>
                 </div>
             }
             else // Nếu không phải cá Koi, thì đây là lộ trình
@@ -21,6 +22,7 @@
                 <div class="cart-item">
                     <p class="item-name">Tên lộ trình: @item.Name</p>
                     <p class="item-price">Giá: @item.Price</p>
+                    <button onclick="removeFromCart(@item.Id)" class="btn-remove">Xóa</button>
                 </div>
             }
         }
@@ -32,6 +34,24 @@
         </div>
     }
 </div>
+
+<script>
+    function removeFromCart(itemId) {
+        if (confirm("Bạn có chắc chắn muốn xóa item này khỏi giỏ hàng?")) {
+            $.ajax({
+                url: '/Cart/RemoveFromCart',
+                type: 'POST',
+                data: { itemId: itemId },
+                success: function () {
+                    location.reload(); // Tải lại trang để cập nhật giỏ hàng
+                },
+                error: function () {
+                    alert("Có lỗi xảy ra khi xóa item.");
+                }
+            });
+        }
+    }
+</script>
 
 <style>
     body {

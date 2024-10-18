@@ -16,6 +16,10 @@ namespace SellingKoi.Services
         {
             return await _dataContext.Accounts.Where(a => a.Status).FirstOrDefaultAsync(a => a.Id == id);
         }
+        public async Task<List<Account>> GetStaffAccountAsync()
+        {
+            return await _dataContext.Accounts.Where(a => a.Role.Equals("Staff")).ToListAsync();
+        }
 
         public async Task<IEnumerable<Account>> GetAllAccountsAsync()
         {
@@ -91,7 +95,7 @@ namespace SellingKoi.Services
 
         public async Task<bool> AssignRoleToUserAsync(string userId, string role)
         {
-            var account = await _dataContext.Accounts.FindAsync(userId);
+            var account = await _dataContext.Accounts.FindAsync(Guid.Parse(userId.ToUpper()));
             if (account == null) return false;
 
             account.Role = role;

@@ -17,6 +17,7 @@ namespace SellingKoi.Services
         Task<bool> AssignRoleToUserAsync(string userId, string role);
         Task<Account> GetAccountByIdAsync(Guid id);
         Task NegateAccountAsync(Guid id);
+        Task<List<Account>> GetStaffAccountAsync();
 
 
     }

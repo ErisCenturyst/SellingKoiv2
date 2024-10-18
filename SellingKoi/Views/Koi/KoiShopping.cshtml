@@ -9,7 +9,6 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-        
         }
 
         .koi-container {
@@ -55,7 +54,8 @@
             {
                 <div class="col-md-3 col-sm-6 mb-4">
                     <div class="koi-item">
-                        <img src="/images/default-koi.jpg" class="img-fluid" alt="@koi.Name">
+                        @* <img src="/images/default-koi.jpg" class="img-fluid" alt="@koi.Name"> *@
+                    <img src="/images/default-koi.jpg" class="img-fluid" alt="@koi.Id" onclick="viewKoiDetails('@koi.Id')">
                         <h5 class="mt-3">@koi.Name</h5>
                         <p class="mb-1">Trang trại: @koi.Farm.Name</p>
                         <p class="mb-3">Tuổi: @koi.Age</p>
@@ -85,6 +85,10 @@
             .catch(error => {
                 console.error('Error:', error);
             });
+        }
+
+        function viewKoiDetails(koiId) {
+            window.location.href = `/Koi/detailsKoi/${koiId}`;
         }
     </script>
 

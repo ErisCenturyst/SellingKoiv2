@@ -22,8 +22,13 @@
     </div>
 
     <div class="form-group">
+        <label for="Price">Giá tiền</label>
+        <textarea class="form-control" id="Price" name="Price"></textarea>
+    </div>
+
+    <div class="form-group">
         <label for="Farms">Chọn Farm</label>
-        <select multiple class="form-control" id="Farms" name="Farms"> <!-- Bỏ dấu ngoặc vuông -->
+        <select multiple class="form-control" id="Farms" name="Farms"> 
             @if (ViewBag.Farms != null && ((List<SellingKoi.Models.Farm>)ViewBag.Farms).Count > 0) // Kiểm tra null và có phần tử
             {
                 foreach (var farm in (List<SellingKoi.Models.Farm>)ViewBag.Farms) // Ép kiểu

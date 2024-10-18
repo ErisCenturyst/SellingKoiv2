@@ -20,8 +20,6 @@ namespace SellingKoi.Models
         //Navigation Property
         public List<Farm> Farms { get; set; } = new List<Farm>();
         public List<Cart> Carts { get; set; }
-        public List<Order> Orders { get; set; } = new List<Order>();
-
         
     }
 }

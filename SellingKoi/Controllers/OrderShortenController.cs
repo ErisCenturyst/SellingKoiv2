@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using SellingKoi.Data;
 using SellingKoi.Models;
 using SellingKoi.Services;
 using System.Collections.Immutable;
@@ -8,10 +10,14 @@ namespace SellingKoi.Controllers
     public class OrderShortenController : Controller
     {
         private readonly IOrderShortenService _orderShortenService;
+        private readonly ITripService _tripService;
+        private readonly DataContext _datacontext;
 
-        public OrderShortenController(IOrderShortenService orderShortenService)
+        public OrderShortenController(IOrderShortenService orderShortenService,ITripService tripService,DataContext datacontext)
         {
             _orderShortenService = orderShortenService;
+            _tripService = tripService;
+            _datacontext = datacontext;
         }
         [HttpGet]
         public async Task<IActionResult> ShowOrderHaveCreated(string orderid) //by customer
@@ -22,6 +28,31 @@ namespace SellingKoi.Controllers
                 return NotFound("No order are found !");
             }
             return View(order);
+        }
+        [HttpPost]
+        public async Task<IActionResult> UpdateOrder(string orderid,string tripid)
+        {
+
+            var order = await _orderShortenService.GetOrderByIdAsync(orderid);
+            if (order == null)
+            {
+                return BadRequest();
+            }
+            if (!tripid.Equals("0"))
+            {
+                var trip = await _tripService.GetTripByIdAsync(tripid);
+                order.TripId = Guid.Parse(tripid);
+                order.Trip = trip;
+                
+            }
+            else
+            {
+                order.TripId = null; 
+                order.Trip = null; 
+            }
+            await _orderShortenService.UpdatOrderAsync(order);
+            return RedirectToAction("OrderShortenedManagement");
+
         }
 
         [HttpPost]
@@ -55,7 +86,9 @@ namespace SellingKoi.Controllers
                 routeid = routeItem.Id,
                 routename = routeItem.Name,
                 koisid = koiItem.Select(koi => koi.Id).ToList(), // Lưu danh sách id Koi
-                koisname = koiItem.Select(koi => koi.Name).ToList() // Lưu danh sách tên Koi
+                koisname = koiItem.Select(koi => koi.Name).ToList(), // Lưu danh sách tên Koi
+                Price = routeItem.Price,
+                buyer = HttpContext.Session.GetString("Username")
 
             };
             if (ModelState.IsValid)
@@ -69,6 +102,55 @@ namespace SellingKoi.Controllers
                 var errorMessage = "Có lỗi xảy ra trong lúc tọa Order";
                 return RedirectToAction("Error", "Home", new { errorMessage });
             }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> OrderShortenedManagement()
+        {
+            var models = await _orderShortenService.GetAllOrder();
+            var trips = await _tripService.GetAllTripsAsync();
+            if (models == null)
+            {
+                return NotFound("No Order are found !");
+            }
+            ViewBag.TripList = trips;
+            return View(models);
+        }
+
+        [HttpGet]
+        public IActionResult OrderShortenedManagementSort(string sortOrder)
+        {
+            ViewBag.OrderDateSortParm = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
+            ViewBag.RouteNameSortParm = sortOrder == "route" ? "route_desc" : "route";
+            ViewBag.StatusSortParm = sortOrder == "status" ? "status_desc" : "status";
+
+            var orders = _datacontext.OrtherShortens.AsQueryable();
+
+            switch (sortOrder)
+            {
+                case "date_desc":
+                    orders = orders.OrderByDescending(o => o.Registration_date);
+                    break;
+                case "route":
+                    orders = orders.OrderBy(o => o.routename);
+                    break;
+                case "route_desc":
+                    orders = orders.OrderByDescending(o => o.routename);
+                    break;
+                case "status":
+                    orders = orders.OrderBy(o => o.Status);
+                    break;
+                case "status_desc":
+                    orders = orders.OrderByDescending(o => o.Status);
+                    break;
+                default:
+                    orders = orders.OrderBy(o => o.Registration_date);
+                    break;
+            }
+
+            //return View(orders.ToList());
+            return RedirectToAction("OrderShortenedManagement", "OrderShorten", new { sortedOrders = orders.ToList() });
+
         }
 
     }
