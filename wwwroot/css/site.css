@@ -455,6 +455,7 @@ body {
 .admin-dashboard .list-group-item:hover {
     background-color: #f8f9fa;
 }
+<<<<<<< HEAD
 
 .navbar-nav .nav-item .nav-link {
     position: relative;
@@ -471,3 +472,5 @@ body {
     font-size: 0.7rem;
     padding: 0.2em 0.4em;
 }
+=======
+>>>>>>> 09ea402fa627b6e8917a1926ea5fd64127e28f93

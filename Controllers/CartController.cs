@@ -79,11 +79,19 @@ namespace SellingKoi.Controllers
         //    AddToCart(cartItem); // Thêm vào giỏ hàng
         //    return Ok();
         //}
+<<<<<<< HEAD
                 public IActionResult GetCartCount()
+=======
+
+        public IActionResult GetCartCount()
+>>>>>>> 09ea402fa627b6e8917a1926ea5fd64127e28f93
         {
             var cart = HttpContext.Session.GetObjectFromJson<List<CartItem>>("Cart") ?? new List<CartItem>();
             return Json(cart.Count);
         }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 09ea402fa627b6e8917a1926ea5fd64127e28f93
     }
 }

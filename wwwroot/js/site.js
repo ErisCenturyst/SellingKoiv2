@@ -2,6 +2,7 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 // Write your JavaScript code.
+<<<<<<< HEAD
 
 function updateCartCount() {
     fetch('/Cart/GetCartCount')
@@ -14,3 +15,5 @@ function updateCartCount() {
 
 // Call this function when the page loads
 document.addEventListener('DOMContentLoaded', updateCartCount);
+=======
+>>>>>>> 09ea402fa627b6e8917a1926ea5fd64127e28f93

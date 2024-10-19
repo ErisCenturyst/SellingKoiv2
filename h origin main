@@ -1,0 +1,100 @@
+[33mcommit a2f431a12c2e6e10b5dbe24b2cb8e3c9c66bf70f[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/main[m[33m)[m
+Merge: 5fdda29 e4a8aca
+Author: NamFeng247 <117258294+NamFeng247@users.noreply.github.com>
+Date:   Sat Oct 19 02:13:07 2024 +0700
+
+    Merge pull request #3 from ErisCenturyst/dev
+    
+    Dev
+
+[33mcommit e4a8acaf0322135281bafd533c459d86fd63fe22[m[33m ([m[1;31morigin/dev[m[33m)[m
+Author: NamFeng247 <phongldnse173682@fpt.edu.vn>
+Date:   Sat Oct 19 01:20:35 2024 +0700
+
+    Your commit message here
+
+[33mcommit 58be6f5e5c352fe775a3d77d6cb095b9260c0b2e[m
+Author: NamFeng247 <phongldnse173682@fpt.edu.vn>
+Date:   Sat Oct 19 01:17:24 2024 +0700
+
+    Change stage
+
+[33mcommit b03f25d1b5323cd4aeac7aff7f49e93ccceaf5d2[m
+Merge: c7f3e2c 5fdda29
+Author: NamFeng247 <phongldnse173682@fpt.edu.vn>
+Date:   Sat Oct 19 01:10:35 2024 +0700
+
+    Resolve merge conflicts
+
+[33mcommit c7f3e2c7baec72753d8f4262eaa0e2c8a67716cf[m
+Author: NamFeng247 <phongldnse173682@fpt.edu.vn>
+Date:   Sat Oct 19 01:06:12 2024 +0700
+
+    Enhance some pages
+
+[33mcommit d269b181c7ebd0ac654b0a1787c2ae5e4b99675b[m
+Author: NamFeng247 <phongldnse173682@fpt.edu.vn>
+Date:   Sat Oct 19 00:36:44 2024 +0700
+
+    Account management page fix
+
+[33mcommit 5fdda29eb5e1176b0cf589f1566c85f9a568e6ef[m
+Merge: 0d71ca7 48035f0
+Author: sonukik <106607859+sonukik@users.noreply.github.com>
+Date:   Fri Oct 18 14:24:37 2024 +0700
+
+    Merge pull request #2 from ErisCenturyst/dev
+    
+    Adding Views in AdminPage
+
+[33mcommit 48035f088e883dc84c0cca62fc19ac034d99b43a[m
+Author: sonukik <son293526@gmail.com>
+Date:   Fri Oct 18 14:21:56 2024 +0700
+
+    Adding Views in AdminPage
+
+[33mcommit 0d71ca7d2a3e92a33a1f524acffaf865f07bb751[m
+Author: NamFeng247 <117258294+NamFeng247@users.noreply.github.com>
+Date:   Thu Oct 17 02:31:11 2024 +0700
+
+    Update appsettings.json
+
+[33mcommit d5b2e3e2893f979e519bacb254d3ce8b2999a4d1[m
+Merge: c91f0e3 622ac08
+Author: NamFeng247 <117258294+NamFeng247@users.noreply.github.com>
+Date:   Thu Oct 17 02:26:01 2024 +0700
+
+    Merge pull request #1 from ErisCenturyst/dev
+    
+    Dev
+
+[33mcommit 622ac08cf8f5fcbe377d41ed3b9288aea985329b[m
+Author: NamFeng247 <phongldnse173682@fpt.edu.vn>
+Date:   Thu Oct 17 02:07:12 2024 +0700
+
+    first init
+
+[33mcommit 6108a9c26c8698de15093783d2cfe546c60d2772[m
+Merge: 32602d5 c91f0e3
+Author: NamFeng247 <phongldnse173682@fpt.edu.vn>
+Date:   Wed Oct 16 17:15:50 2024 +0700
+
+    Merge branch 'dev' of https://github.com/ErisCenturyst/SellingKoiv2
+
+[33mcommit 32602d550ebbc0754c3abc1ecaed653e3a0c3505[m
+Author: NamFeng247 <phongldnse173682@fpt.edu.vn>
+Date:   Wed Oct 16 17:13:10 2024 +0700
+
+    Initial commi
+
+[33mcommit c91f0e31a81784c29ad2103ec70663d19234b8c7[m
+Author: ThuanPhat <phatctse172611@fpt.edu.vn>
+Date:   Wed Oct 16 08:36:25 2024 +0700
+
+    Add project files.
+
+[33mcommit 7c4ae0bf68001485c2adbd927839f10d1e588d28[m
+Author: ThuanPhat <phatctse172611@fpt.edu.vn>
+Date:   Wed Oct 16 08:36:22 2024 +0700
+
+    Add .gitattributes.
