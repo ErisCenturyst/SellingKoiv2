@@ -1,0 +1,63 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model SellingKoi.Models.Account
+
+@{
+    ViewData["Title"] = "Chi tiết Tài khoản";
+}
+
+<div class="container mt-5">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h2 class="mb-0">Chi tiết Tài khoản</h2>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4 text-center mb-4">
+                    <i class="fas fa-user-circle fa-6x text-primary"></i>
+                    <h4 class="mt-3">@Model.Username</h4>
+                    <span class="badge bg-info">@Model.Role</span>
+                </div>
+                <div class="col-md-8">
+                    <dl class="row">
+                        <dt class="col-sm-4">Họ tên</dt>
+                        <dd class="col-sm-8">@Model.Fullname</dd>
+
+                        <dt class="col-sm-4">Ngày đăng ký</dt>
+                        <dd class="col-sm-8">@Model.Registration_date.ToString("dd/MM/yyyy")</dd>
+
+                        <dt class="col-sm-4">Trạng thái</dt>
+                        <dd class="col-sm-8">
+                            @if (Model.Status)
+                            {
+                                <span class="badge bg-success">Hoạt động</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">Đã khóa</span>
+                            }
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="d-flex justify-content-between">
+                <a asp-action="AccountManagement" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Quay lại danh sách
+                </a>
+                <div>
+                    @* <a asp-action="EditAccount" asp-route-id="@Model.Id" class="btn btn-warning">
+                        <i class="fas fa-edit"></i> Chỉnh sửa
+                    </a> *@
+                    <form asp-action="NegateAccount" asp-route-id="@Model.Id" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa tài khoản này?');">
+                            <i class="fas fa-trash-alt"></i> Xóa
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

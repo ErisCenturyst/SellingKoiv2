@@ -1,0 +1,73 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model SellingKoi.Models.KOI
+
+@{
+    ViewData["Title"] = "Chi tiết Koi";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Chi tiết Koi</h2>
+
+    @if (Model == null)
+    {
+        <div class="alert alert-warning" role="alert">
+            Không tìm thấy thông tin Koi.
+        </div>
+    }
+    else
+    {
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">@Model.Name</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 text-center mb-4">
+                        <img src="/images/default-koi.jpg" class="img-fluid rounded" alt="@Model.Name">
+                    </div>
+                    <div class="col-md-8">
+                        <dl class="row">
+                            <dt class="col-sm-3">Loại cá</dt>
+                            <dd class="col-sm-9"><span class="badge bg-info">@Model.Type</span></dd>
+
+                            <dt class="col-sm-3">Tuổi</dt>
+                            <dd class="col-sm-9">@Model.Age năm</dd>
+
+                            <dt class="col-sm-3">Mô tả</dt>
+                            <dd class="col-sm-9">@Model.Description</dd>
+
+                            <dt class="col-sm-3">Trang trại</dt>
+                            <dd class="col-sm-9">@Model.Farm.Name</dd>
+
+                            <dt class="col-sm-3">Ngày đăng ký</dt>
+                            <dd class="col-sm-9">@Model.Registration_date.ToShortDateString()</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="d-flex justify-content-between">
+                    <a asp-action="KoiManagement" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Quay lại
+                    </a>
+                    <div>
+                        <a asp-action="EditKoi" asp-route-id="@Model.Id" class="btn btn-warning">
+                            <i class="fas fa-edit"></i> Chỉnh sửa
+                        </a>
+                        <form asp-action="DeleteKoi" asp-route-id="@Model.Id" method="post" class="d-inline">
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa cá này?');">
+                                <i class="fas fa-trash-alt"></i> Xóa
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script>
+}

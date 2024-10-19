@@ -1,0 +1,49 @@
+﻿@model IEnumerable<SellingKoi.Models.Route>
+
+@{
+    ViewBag.Title = "Quản Lý Lộ trình";
+}
+
+<h2>Quản Lý lộ trình</h2>
+
+<table>
+    <thead>
+        <tr>
+@*             <th>ID</th> *@
+            <th>Tên lộ trình</th>
+            <th>Trang trại đi qua</th>
+            <th>Hành Động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var route in Model)
+        {
+            <tr>
+              @*   <td>@route.Id</td> *@
+                <td>@route.Name</td>
+                <td> 
+                    @foreach (var farms in route.Farms.Where(f => f.Status))
+                    {
+                           <p>@farms.Name</p>
+                    }
+
+                </td>
+
+
+                <td>
+                    @* <a asp-controller="Route" asp-action="UpdateRoute" asp-route-id="@route.Id  " class="btn btn-warning">Chỉnh sửa</a> *@
+                    <form asp-controller="Route" asp-action="NegateRoute" asp-route-id="@route.Id" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa farm này?');">Xóa</button>
+                    </form>
+                    <a asp-controller="Route" asp-action="DetailsRoute" asp-route-id="@route.Id" class="btn btn-primary">Chi tiết</a>
+                </td>
+
+
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div>
+    <a asp-controller="Route" asp-action="CreateRoute" class="btn btn-primary">Thêm Lộ trình mới</a>
+</div>

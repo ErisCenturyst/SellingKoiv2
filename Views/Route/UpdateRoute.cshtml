@@ -1,0 +1,48 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model SellingKoi.Models.Route
+
+@{
+    ViewBag.Title = "Cập nhật Route";
+}
+
+<h2>Cập nhật Route</h2>
+
+<form asp-controller="Route" asp-action="UpdateRoute" method="post">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="form-group">
+        <label asp-for="Name">Tên Route</label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="Farms">Chọn Farm</label>
+        <select multiple class="form-control" id="Farms" name="Farms"> 
+            @* @if (ViewBag.Farms != null && ((List<SellingKoi.Models.Farm>)ViewBag.Farms).Count > 0) *@
+            @if (ViewBag.Farms != null )
+            {
+                foreach (var farm in (List<SellingKoi.Models.Farm>)ViewBag.Farms)
+                {
+                    @* <option value="@farm.Id" @(Model.Farms.Any(f => f.Id == farm.Id) ? "selected" : "")>@farm.Name</option> *@
+                    <option value="@farm.Id">@farm.Name</option> <!-- Giá trị là ID farm -->
+                }
+            }
+            else
+            {
+                <option disabled>Không có farm nào để chọn</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Cập nhật</button>
+        <a asp-action="RouteManagement" class="btn btn-secondary">Quay lại danh sách Route</a>
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,18 @@
+﻿```SellingKoi/Views/OrderShorten/CreateOrderShorten.cshtml
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@{
+    // Giả sử bạn đã có một đối tượng Order được truyền vào từ OrderShortenController
+    var order = Model; // Thay đổi này có thể cần điều chỉnh tùy thuộc vào cách bạn truyền dữ liệu
+}
+
+<div class="order-summary">
+    <h1>Thông tin đơn hàng</h1>
+    <p><strong>ID Đơn hàng:</strong> @order.Id</p>
+    @* <p><strong>Tên khách hàng:</strong> @order.CustomerName</p> *@
+    @* <p><strong>Ngày tạo:</strong> @order.CreatedDate.ToString("dd/MM/yyyy")</p> *@
+    @* <p><strong>Tổng số tiền:</strong> @order.TotalAmount.ToString("C")</p> *@
+    <p><strong>Trạng thái:</strong> @order.Status</p>
+</div>

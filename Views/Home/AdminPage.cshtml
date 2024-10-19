@@ -1,0 +1,82 @@
+﻿@{
+    ViewData["Title"] = "Admin Dashboard";
+    Layout = "_Layout";
+}
+
+<div class="container-fluid">
+    <h1 class="mt-4 mb-4">Admin Dashboard</h1>
+
+    <div class="row">
+        <div class="col-md-3 mb-4">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Customer Management</h5>
+                    <p class="card-text">Manage user accounts and permissions</p>
+                    <a href="@Url.Action("AccountManagement", "Account")" class="btn btn-light">Go to Customer Management</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Koi Management</h5>
+                    <p class="card-text">Manage Koi inventory and details</p>
+                    <a href="@Url.Action("KoiManagement", "Koi")" class="btn btn-light">Go to Koi Management</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="card bg-info text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Farm Management</h5>
+                    <p class="card-text">Manage Koi farms and locations</p>
+                    <a href="@Url.Action("FarmManagement", "Farm")" class="btn btn-light">Go to Farm Management</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="card bg-warning text-dark">
+                <div class="card-body">
+                    <h5 class="card-title">Route Management</h5>
+                    <p class="card-text">Manage delivery routes and schedules</p>
+                    <a href="@Url.Action("RouteManagement", "Route")" class="btn btn-light">Go to Route Management</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    Recent Activities
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">New user registered - John Doe</li>
+                    <li class="list-group-item">Koi added to inventory - Kohaku #1234</li>
+                    <li class="list-group-item">New farm added - Sunshine Koi Farm</li>
+                    <li class="list-group-item">Route updated - Tokyo to Osaka</li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    Quick Stats
+                </div>
+                <div class="card-body">
+                    <p>Total Users: 1,234</p>
+                    <p>Total Koi: 5,678</p>
+                    <p>Active Farms: 42</p>
+                    <p>Ongoing Routes: 15</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // You can add any JavaScript for the admin page here
+    </script>
+}

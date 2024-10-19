@@ -1,0 +1,50 @@
+﻿@model SellingKoi.Models.KOI
+
+<h2>Tạo Koi Mới</h2>
+
+<form asp-controller="Koi" asp-action="CreateKoi" method="post">
+    <div class="form-group">
+        <label asp-for="Name">Tên Koi</label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Type">Loại Koi</label>
+        <select asp-for="Type" class="form-control">
+            <option value="">-- Chọn loại Koi --</option>
+            <option value="Kohaku">Kohaku</option>
+            <option value="Sanke">Sanke</option>
+            <option value="Showa">Showa</option>
+            <option value="Utsuri">Utsuri</option>
+            <option value="Ogon">Ogon</option>
+            <option value="Chagoi">Chagoi</option>
+            <option value="Butterfly">Chagoi</option>
+            <!-- Thêm các loại Koi khác nếu cần -->
+        </select>
+        <span asp-validation-for="Type" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Age">Tuổi</label>
+        <input asp-for="Age" class="form-control" type="number" />
+        <span asp-validation-for="Age" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Description">Mô tả</label>
+        <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    <input type="hidden" asp-for="FarmID" value="@Model.FarmID" />
+
+    <button type="submit" class="btn btn-primary">Tạo Koi</button>
+</form>
+
+<div>
+    <a asp-action="KoiManagement">Quay lại danh sách</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,102 @@
+﻿@model IEnumerable<SellingKoi.Models.Route>
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh sách Lộ trình</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        .route-container {
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+        }
+
+        .add-to-cart {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .route-title {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .farm-list {
+            margin-top: 10px;
+            padding-left: 20px;
+        }
+
+        .farm-item {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Danh sách Lộ trình</h1>
+
+    @foreach (var route in Model)
+    {
+        <div class="route-container">
+            <div class="route-title">@route.Name</div>
+            <div>
+                <strong>Trạng thái:</strong> @(route.Status ? "Hoạt động" : "Ngừng hoạt động")<br />
+                <strong>Ngày đăng ký:</strong> @route.Registration_date.ToString("dd/MM/yyyy")<br />
+                <strong>Giá tiền :</strong> @(route.Price.ToString()) VNĐ
+            </div>
+            <div class="farm-list">
+                <strong>Trang trại thuộc lộ trình:</strong>
+                @if (route.Farms != null && route.Farms.Any())
+                {
+                    foreach (var farm in route.Farms)
+                    {
+                        <div class="farm-item">- @farm.Name</div>
+                    }
+                }
+                else
+                {
+                    <div class="farm-item">Không có trang trại nào.</div>
+                }
+            </div>
+            <!-- Thêm nút "Add to Cart" -->
+            <button class="add-to-cart" onclick="addToCart('@route.Id','@route.Name','@route.Price')">Add to Cart</button>
+        </div>
+    }
+
+    <script>
+        function addToCart(routeId,routeName,routePrice) {
+            console.log('Adding to cart:', routeId); // Kiểm tra xem hàm có được gọi không
+            fetch('/Cart/AddToCart', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ Id: routeId, Name: routeName, Price: routePrice }) // Gửi cả id và name, price
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Đã thêm vào giỏ hàng!');
+                } else {
+                    alert('Có lỗi xảy ra!');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error); // Kiểm tra lỗi trong fetch
+            });
+        }
+    </script>
+
+</body>
+</html>

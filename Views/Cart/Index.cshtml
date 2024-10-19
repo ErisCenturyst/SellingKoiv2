@@ -1,0 +1,94 @@
+﻿@model IEnumerable<CartItem>
+
+<h2>Giỏ hàng</h2>
+<div id="cartContainer">
+    @if (!Model.Any())
+    {
+        <p>Giỏ hàng trống.</p>
+    }
+    else
+    {
+        @foreach (var item in Model.OrderBy(item => item.Price == null || item.Price == 0))
+        {
+            if (item.Price == null || item.Price == 0) // Kiểm tra nếu đây là cá Koi
+            {
+                <div class="cart-item">
+                    <p class="item-name">Tên cá Koi: @item.Name</p>
+                </div>
+            }
+            else // Nếu không phải cá Koi, thì đây là lộ trình
+            {
+                <div class="cart-item">
+                    <p class="item-name">Tên lộ trình: @item.Name</p>
+                    <p class="item-price">Giá: @item.Price</p>
+                </div>
+            }
+        }
+        <!-- Nút tạo đơn hàng -->
+        <div class="create-order">
+            <form asp-controller="OrderShorten" asp-action="CreateOrderShorten" method="post">
+                <button type="submit" class="btn-create-order">Tạo Đơn Hàng</button>
+            </form>
+        </div>
+    }
+</div>
+
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f4f7f6;
+        color: #333;
+        margin: 0;
+        padding: 0;
+    }
+
+    h2 {
+        text-align: center;
+        color: #333;
+        font-size: 24px;
+        margin-bottom: 20px;
+        font-weight: 600;
+    }
+
+    #cartContainer {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 30px;
+        border: 1px solid #ddd;
+        border-radius: 12px;
+        background-color: #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .cart-item {
+        padding: 15px;
+        margin-bottom: 15px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .item-name {
+        font-size: 18px;
+        font-weight: 500;
+        color: #0073e6;
+    }
+
+    .item-price {
+        font-size: 16px;
+        color: #ff5722;
+        font-weight: 600;
+    }
+
+    p {
+        margin: 5px 0;
+    }
+
+        p:last-child {
+            margin-bottom: 0;
+        }
+
+    /* Hiệu ứng khi di chuột qua các mục trong giỏ hàng */
+    .cart-item:hover {
+        background-color: #f9f9f9;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+</style>
