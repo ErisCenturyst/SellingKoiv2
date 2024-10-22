@@ -1,0 +1,73 @@
+﻿@model IEnumerable<SellingKoi.Models.KOI>
+
+@{
+    ViewData["Title"] = "Koi List";
+}
+
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">Koi List</h2>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="row">
+            @foreach (var koi in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-sm h-100 koi-card">
+                        <img src="/images/default-koi.jpg" class="card-img-top" alt="Default Koi Image">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">@koi.Name</h5>
+                            <p class="card-text">
+                                <span class="badge bg-primary">@koi.Type</span>
+                            </p>
+                            <p class="card-text">
+                                <small class="text-muted">Farm: @koi.Farm.Name</small>
+                            </p>
+                            <p class="card-text mt-auto">
+                                <small class="text-muted">Registered on @koi.Registration_date.ToShortDateString()</small>
+                            </p>
+                        </div>
+                        <div class="card-footer bg-transparent border-top-0">
+                            <div class="d-flex justify-content-between">
+                                <a asp-controller="Koi" asp-action="DetailsKoi" asp-route-id="@koi.Id" class="btn btn-outline-info btn-sm">Details</a>
+                                <a asp-controller="Koi" asp-action="EditKoi" asp-route-id="@koi.Id" class="btn btn-outline-warning btn-sm">Edit</a>
+                                <form asp-action="NegateKoi" asp-controller="Koi" method="post" style="display: inline;">
+                                    <input type="hidden" name="id" value="@koi.Id" />
+                                    <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('Are you sure you want to negate this Koi?');">Negate</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info text-center" role="alert">
+            No Koi found.
+        </div>
+    }
+</div>
+
+@section Styles {
+    <style>
+        .koi-card {
+            transition: all 0.3s ease;
+        }
+        .koi-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
+        }
+        .card-img-top {
+            height: 200px;
+            object-fit: cover;
+        }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        // You can add custom JavaScript here if needed
+    </script>
+}

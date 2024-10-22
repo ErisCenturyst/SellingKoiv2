@@ -1,0 +1,42 @@
+﻿@model IEnumerable<SellingKoi.Models.Farm>
+
+@{
+    ViewData["Title"] = "Quản lý Farm";
+}
+
+<h2>Quản lý Farm</h2>
+
+<div>
+    <a asp-controller="Farm" asp-action="CreateFarm" class="btn btn-primary">Thêm Farm Mới</a>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Tên Trại</th>
+            <th>Chủ Trại</th>
+            <th>Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var farm in Model)
+        {
+            <tr>
+                <td>@farm.Name</td>
+                <td>@farm.Owner</td>
+                @* <td>@farm.CreationDate.ToString("dd/MM/yyyy")</td> *@
+                <td>
+                    <a asp-controller="Farm" asp-action="UpdateFarm" asp-route-id="@farm.Id" class="btn btn-warning">Chỉnh sửa</a>
+                    <form asp-controller="Farm" asp-action="NegateFarm" asp-route-id="@farm.Id" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa farm này?');">Xóa</button>
+                    </form>
+                    <a asp-controller="Farm" asp-action="DetailsFarm" asp-route-id="@farm.Id" class="btn btn-primary">Chi tiết</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

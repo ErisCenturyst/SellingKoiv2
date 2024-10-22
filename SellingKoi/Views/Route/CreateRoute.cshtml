@@ -1,0 +1,43 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model SellingKoi.Models.Route
+@using System.Linq
+
+@{
+    ViewBag.Title = "Tạo Route Mới";
+}
+
+<h2>Tạo Route Mới</h2>
+
+<form asp-controller="Route" asp-action="CreateRoute" method="post">
+    <div class="form-group">
+        <label for="Name">Tên Lộ Trình</label>
+        <input type="text" class="form-control" id="Name" name="Name" required />
+    </div>
+
+    <div class="form-group">
+        <label for="Description">Mô Tả</label>
+        <textarea class="form-control" id="Description" name="Description"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="Farms">Chọn Farm</label>
+        <select multiple class="form-control" id="Farms" name="Farms"> <!-- Bỏ dấu ngoặc vuông -->
+            @if (ViewBag.Farms != null && ((List<SellingKoi.Models.Farm>)ViewBag.Farms).Count > 0) // Kiểm tra null và có phần tử
+            {
+                foreach (var farm in (List<SellingKoi.Models.Farm>)ViewBag.Farms) // Ép kiểu
+                {
+                    <option value="@farm.Id">@farm.Name</option> <!-- Giá trị là ID farm -->
+                }
+            }
+            else
+            {
+                <option disabled>Không có farm nào để chọn</option> // Thông báo nếu không có farm
+            }
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Lưu</button>
+    <a href="@Url.Action("RouteManagement", "Route")" class="btn btn-secondary">Hủy</a>
+</form>

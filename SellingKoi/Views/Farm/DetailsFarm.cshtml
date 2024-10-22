@@ -1,0 +1,77 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model SellingKoi.Models.Farm
+
+@{
+    ViewData["Title"] = "Chi tiết Farm";
+}
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Chi tiết Farm</h2>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h4 class="card-title text-center mb-3">@Model.Name</h4>
+            <dl class="row">
+                <dt class="col-sm-3">Chủ trại</dt>
+                <dd class="col-sm-9">@Model.Owner</dd>
+
+                <dt class="col-sm-3">Chú thích</dt>
+                <dd class="col-sm-9">@Model.Description</dd>
+            </dl>
+        </div>
+        <div class="card-footer bg-transparent">
+            <div class="d-flex justify-content-between">
+                <a asp-action="FarmManagement" class="btn btn-secondary">Quay lại</a>
+                <a asp-action="UpdateFarm" asp-route-id="@Model.Id" class="btn btn-warning">Chỉnh sửa</a>
+            </div>
+        </div>
+    </div>
+
+    <h4 class="mb-3">Danh sách cá thuộc farm này</h4>
+    <div class="mb-3">
+        <a asp-controller="Koi" asp-action="CreateKoi" asp-route-farmId="@Model.Id" class="btn btn-primary">Thêm cá Koi mới</a>
+    </div>
+
+    @if (Model.KOIs.Any())
+    {
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Tên cá</th>
+                        <th>Loại cá</th>
+                        <th>Tuổi</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var koi in Model.KOIs.Where(k => k.Status))
+                    {
+                        <tr>
+                            <td>@koi.Name</td>
+                            <td>@koi.Type</td>
+                            <td>@koi.Age</td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a asp-controller="Koi" asp-action="DetailsKoi" asp-route-id="@koi.Id" class="btn btn-info btn-sm">Chi tiết</a>
+                                    <a asp-controller="Koi" asp-action="EditKoi" asp-route-id="@koi.Id" class="btn btn-warning btn-sm">Chỉnh sửa</a>
+                                    <form asp-controller="Koi" asp-action="NegateKoi" asp-route-id="@koi.Id" method="post" class="d-inline">
+                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc chắn muốn xóa cá này?')">Xóa</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info" role="alert">
+            Không có cá nào thuộc farm này.
+        </div>
+    }
+</div>

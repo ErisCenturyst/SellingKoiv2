@@ -1,0 +1,109 @@
+﻿@model IEnumerable<SellingKoi.Models.KOI>
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh sách Koi</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        
+        }
+
+        .koi-container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .koi-item {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin: 10px;
+            padding: 10px;
+            width: 200px;
+            text-align: center;
+        }
+
+            .koi-item img {
+                max-width: 100%;
+                height: auto;
+                border-radius: 5px;
+            }
+
+        .add-to-cart {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+            .add-to-cart:hover {
+                background-color: #218838;
+            }
+    </style>
+</head>
+<body>
+
+    <div class="container-fluid px-0"></div>
+        <h1 class="text-center mb-4">Available Koi List</h1>
+        <div class="row koi-container mx-0" id="koiContainer">
+            @foreach (var koi in Model)
+            {
+                <div class="col-md-3 col-sm-6 mb-4">
+                    <div class="koi-item">
+                        <img src="/images/default-koi.jpg" class="img-fluid" alt="@koi.Name">
+                        <h5 class="mt-3">@koi.Name</h5>
+                        <p class="mb-1">Farm: @koi.Farm.Name</p>
+                        <p class="mb-3">Age: @koi.Age</p>
+                        <button class="btn btn-success btn-block" onclick="addToCart('@koi.Id', '@koi.Name')">Add to Cart</button>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <script>
+        function addToCart(koiId, koiName) {
+            fetch('/Cart/AddToCart', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ Id: koiId, Name: koiName })
+            })
+            .then(response => response.json())  // Expect a JSON response
+            .then(data => {
+                if (data.success) {
+                    alert(`Cá koi ${koiName} đã được thêm vào giỏ hàng!`);
+                    updateCartCount();
+                } else {
+                    alert('Có lỗi xảy ra khi thêm cá koi vào giỏ hàng.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        function updateCartCount() {
+            fetch('/Cart/GetCartCount')
+                .then(response => response.json())
+                .then(count => {
+                    const cartCountElement = document.getElementById('cart-count');
+                    if (cartCountElement) {
+                        cartCountElement.textContent = count;
+                    }
+                })
+                .catch(error => console.error('Error updating cart count:', error));
+        }
+
+        // Call updateCartCount when the page loads
+        document.addEventListener('DOMContentLoaded', updateCartCount);
+    </script>
+
+</body>
+</html>

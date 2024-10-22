@@ -1,0 +1,42 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model SellingKoi.Models.Farm
+
+@{
+    ViewData["Title"] = "Edit Farm";
+}
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Edit Farm</h2>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form asp-action="UpdateFarm" method="post">
+                <div class="form-group mb-3">
+                    <label asp-for="Name" class="form-label">Farm Name</label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="Owner" class="form-label">Owner</label>
+                    <input asp-for="Owner" class="form-control" />
+                    <span asp-validation-for="Owner" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="Description" class="form-label">Description</label>
+                    <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <a asp-action="FarmManagement" class="btn btn-secondary">Back</a>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

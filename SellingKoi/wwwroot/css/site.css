@@ -1,0 +1,457 @@
+/* Ensure no margin on body */
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden; /* This prevents horizontal scrolling */
+}
+
+/* Header styles */
+.header {
+    background-color: #343a40; /* Match footer background color */
+    padding: 15px 0; /* Increase padding to make header thicker */
+}
+
+.navbar {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.navbar-light .navbar-nav .nav-link,
+.navbar-light .navbar-brand,
+.navbar-light .navbar-text {
+    color: #ffffff !important; /* White text color */
+    font-size: 1.1rem; /* Increase font size */
+}
+
+.navbar-light .navbar-nav .nav-link:hover,
+.navbar-light .navbar-brand:hover {
+    color: #f8f9fa !important; /* Light gray on hover for better visibility */
+}
+
+/* Adjust logo and brand name alignment */
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    font-size: 1.3rem; /* Increase brand font size */
+}
+
+.navbar-brand img {
+    margin-right: 10px;
+}
+
+/* Button styles */
+.btn-primary {
+    background-color: #0056b3;
+    border-color: #0056b3;
+    font-size: 1.1rem; /* Increase button text size */
+}
+
+.btn-primary:hover {
+    background-color: #004494;
+    border-color: #004494;
+}
+
+.hero {
+    background-image: url('/images/banners/image-8.png');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    text-align: center;
+    padding: 100px 0;
+    position: relative;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+.hero .container {
+    position: relative;
+    z-index: 2;
+}
+
+.hero-content {
+    text-align: center;
+    color: white;
+    position: relative;
+    z-index: 1;
+}
+
+.hero-title {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.hero-subtitle {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.features {
+  padding: 60px 0;
+}
+
+.section-title {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 3rem;
+  color: #333;
+}
+
+.feature-card {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+}
+
+/* Footer styles */
+.footer {
+    background-color: #343a40;
+    color: #ffffff;
+    padding: 30px 0;
+}
+
+.footer h5 {
+    color: #ffffff;
+    font-size: 1.3rem; /* Increased size */
+    margin-bottom: 1rem;
+}
+
+.footer p,
+.footer a,
+.footer li {
+    color: #ffffff;
+    font-size: 1.1rem; /* Increased size */
+}
+
+.footer a:hover {
+    color: #f8f9fa; /* Light gray on hover for better visibility */
+    text-decoration: none;
+}
+
+.footer-divider {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin: 20px 0;
+}
+
+.footer .list-inline-item:not(:last-child) {
+    margin-right: 1rem;
+}
+
+.footer .fab {
+    font-size: 1.5rem;
+}
+
+.auth-container {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.auth-container h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.form-check {
+    margin-bottom: 20px;
+}
+
+.form-check-label {
+    font-size: 14px;
+}
+
+.float-right {
+    float: right;
+    font-size: 14px;
+}
+
+.auth-container .btn-primary {
+    display: block;
+    width: 100%;
+    margin-top: 20px;
+    padding: 12px;
+    font-size: 18px;
+}
+
+.auth-container .text-center {
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+.hero {
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.hero-image {
+    width: 100%;
+    height: auto;
+}
+
+.hero-overlay {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+}
+
+.welcome {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.koi-info, .koi-farm, .travel-experience, .koi-varieties {
+    display: flex;
+    align-items: center;
+    margin: 50px 0;
+}
+
+.info-image, .farm-image, .experience-image, .varieties-image {
+    width: 50%;
+    height: auto;
+    border-radius: 10px;
+}
+
+.info-text, .farm-text, .experience-text, .varieties-text {
+    width: 50%;
+    padding: 0 30px;
+}
+
+.cta {
+    text-align: center;
+    background-color: #f8f9fa;
+    padding: 50px 0;
+    margin-top: 50px;
+    border-radius: 10px;
+}
+
+.cta h2 {
+    font-size: 2.2rem;
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.cta p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    color: #666;
+}
+
+.cta-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.btn-cta {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #ff6b6b;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.btn-cta:hover {
+    background-color: #ff5252;
+    color: white;
+    text-decoration: none;
+}
+
+.main-content {
+    padding: 50px 0;
+}
+
+.info-section {
+    display: flex;
+    align-items: center;
+    margin-bottom: 50px;
+}
+
+.info-section.reverse {
+    flex-direction: row-reverse;
+}
+
+.info-image {
+    flex: 0 0 40%;
+    padding: 0 15px;
+}
+
+.info-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.info-text {
+    flex: 0 0 60%;
+    padding: 0 30px;
+}
+
+.info-text h3 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    color: #ff6b6b;
+}
+
+@media (max-width: 768px) {
+    .info-section, .info-section.reverse {
+        flex-direction: column;
+    }
+
+    .info-image, .info-text {
+        flex: 0 0 100%;
+        padding: 0;
+    }
+
+    .info-image {
+        margin-bottom: 20px;
+    }
+
+    .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .btn-cta {
+        margin-bottom: 10px;
+    }
+}
+
+/* Ensure contrast for the toggler icon */
+.navbar-light .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 0.8)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+.navbar-light .navbar-toggler {
+    border-color: rgba(255,255,255,.5);
+}
+
+/* Adjust other text sizes */
+h1, .h1 { font-size: 2.5rem; }
+h2, .h2 { font-size: 2rem; }
+h3, .h3 { font-size: 1.75rem; }
+h4, .h4 { font-size: 1.5rem; }
+h5, .h5 { font-size: 1.25rem; }
+
+/* KoiShopping styles */
+.koi-container {
+    margin-top: 20px;
+}
+
+.koi-item {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 15px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: box-shadow 0.3s ease;
+}
+
+.koi-item:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.koi-item img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.koi-item h5 {
+    font-size: 1.2rem;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+.koi-item p {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+
+@media (max-width: 767px) {
+    .col-sm-6 {
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+/* Admin Dashboard Styles */
+.admin-dashboard .card {
+    transition: all 0.3s ease;
+}
+
+.admin-dashboard .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.admin-dashboard .card-title {
+    font-weight: bold;
+}
+
+.admin-dashboard .btn-light:hover {
+    background-color: #f8f9fa;
+}
+
+.admin-dashboard .list-group-item {
+    transition: background-color 0.2s ease;
+}
+
+.admin-dashboard .list-group-item:hover {
+    background-color: #f8f9fa;
+}

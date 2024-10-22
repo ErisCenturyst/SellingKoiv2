@@ -1,0 +1,25 @@
+﻿@{
+    ViewData["Title"] = "Sign Up";
+}
+
+<div class="auth-container">
+    <h2>SIGN UP</h2>
+    <form asp-controller="Account" asp-action="SignUp" method="post">
+        <div class="form-group">
+            <input type="text" class="form-control" id="fullname" name="fullname" placeholder="Full Name" required>
+        </div>
+        <div class="form-group">
+            <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
+        </div>
+        <div class="form-group">
+            <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+        </div>
+        <div class="form-group">
+            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Sign Up</button>
+    </form>
+    <div class="text-center mt-3">
+        <p>Already have an account? <a asp-controller="Account" asp-action="Login">Login</a></p>
+    </div>
+</div>

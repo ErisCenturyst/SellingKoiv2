@@ -1,0 +1,48 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model SellingKoi.Models.KOI
+
+@{
+    ViewData["Title"] = "Chi tiết Koi";
+}
+
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">Chi tiết Koi</h2>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            @if(Model == null)
+            {
+                <p class="text-center">Không tìm thấy thông tin Koi.</p>
+            }
+            else
+            {
+                <h4 class="card-title text-center mb-4">@Model.Name</h4>
+                <dl class="row">
+                    <dt class="col-sm-3">Loại cá</dt>
+                    <dd class="col-sm-9">@Model.Type</dd>
+
+                    <dt class="col-sm-3">Tuổi</dt>
+                    <dd class="col-sm-9">@Model.Age</dd>
+
+                    <dt class="col-sm-3">Mô tả</dt>
+                    <dd class="col-sm-9">@Model.Description</dd>
+
+                    <dt class="col-sm-3">Trang trại</dt>
+                    <dd class="col-sm-9">@Model.Farm.Name</dd>
+                </dl>
+            }
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-between">
+        <a asp-action="KoiManagement" class="btn btn-secondary">Quay lại</a>
+        <div>
+            <a asp-action="EditKoi" asp-route-id="@Model.Id" class="btn btn-warning">Chỉnh sửa</a>
+            <form asp-action="DeleteKoi" asp-route-id="@Model.Id" method="post" class="d-inline">
+                <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa cá này?');">Xóa</button>
+            </form>
+        </div>
+    </div>
+</div>
