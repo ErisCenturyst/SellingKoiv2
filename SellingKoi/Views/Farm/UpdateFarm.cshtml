@@ -12,19 +12,28 @@
 <form asp-action="UpdateFarm" method="post">
     <div class="form-group">
         <label asp-for="Name" class="control-label"></label>
-        <input asp-for="Name" class="form-control" />
+        <input asp-for="Name" class="form-control" placeholder="Nhập tên farm" />
         <span asp-validation-for="Name" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label class="control-label">Chủ trại</label>
-        <label asp-for="Owner" class="control-label"></label>
-        <input asp-for="Owner" class="form-control" />
+        <input asp-for="Owner" class="form-control" placeholder="Nhập tên chủ farm" />
         <span asp-validation-for="Owner" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label asp-for="Description" class="control-label"></label>
-        <textarea asp-for="Description" class="form-control"></textarea>
+        <textarea asp-for="Description" class="form-control" placeholder="Mô tả farm"></textarea>
         <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Location" class="control-label"></label>
+        <input asp-for="Location" class="form-control" placeholder="Nhập vị trí farm" />
+        <span asp-validation-for="Location" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Size" class="control-label"></label>
+        <input asp-for="Size" class="form-control" placeholder="Diện tích (m²)" type="number" />
+        <span asp-validation-for="Size" class="text-danger"></span>
     </div>
     <div class="form-group">
         <button type="submit" class="btn btn-primary">Chỉnh sửa</button>
