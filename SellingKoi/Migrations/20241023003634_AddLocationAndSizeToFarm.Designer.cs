@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SellingKoi.Data;
 
@@ -11,9 +12,11 @@ using SellingKoi.Data;
 namespace SellingKoi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20241023003634_AddLocationAndSizeToFarm")]
+    partial class AddLocationAndSizeToFarm
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -58,7 +61,7 @@ namespace SellingKoi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CartId")
+                    b.Property<Guid>("CartId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Fullname")
@@ -157,6 +160,7 @@ namespace SellingKoi.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("AvatarUrl")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -173,6 +177,9 @@ namespace SellingKoi.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<Guid?>("OrderId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("Registration_date")
                         .HasColumnType("datetime2");
 
@@ -186,7 +193,33 @@ namespace SellingKoi.Migrations
 
                     b.HasIndex("FarmID");
 
+                    b.HasIndex("OrderId");
+
                     b.ToTable("KOIs");
+                });
+
+            modelBuilder.Entity("SellingKoi.Models.Order", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Registration_date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("RouteId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RouteId");
+
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("SellingKoi.Models.OrderShorten", b =>
@@ -195,9 +228,6 @@ namespace SellingKoi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
-
                     b.Property<DateTime>("Registration_date")
                         .HasColumnType("datetime2");
 
@@ -205,16 +235,6 @@ namespace SellingKoi.Migrations
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
-
-                    b.Property<Guid?>("TripId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("TripId1")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("buyer")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("koisid")
                         .IsRequired()
@@ -233,10 +253,6 @@ namespace SellingKoi.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("TripId");
-
-                    b.HasIndex("TripId1");
 
                     b.ToTable("OrtherShortens");
                 });
@@ -264,32 +280,6 @@ namespace SellingKoi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Routes");
-                });
-
-            modelBuilder.Entity("SellingKoi.Models.Trip", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("Registration_date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("TripNum")
-                        .HasColumnType("int");
-
-                    b.Property<Guid?>("staffId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("staffId");
-
-                    b.ToTable("Trips");
                 });
 
             modelBuilder.Entity("CartKOI", b =>
@@ -349,34 +339,28 @@ namespace SellingKoi.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("SellingKoi.Models.Order", null)
+                        .WithMany("Kois")
+                        .HasForeignKey("OrderId");
+
                     b.Navigation("Farm");
                 });
 
-            modelBuilder.Entity("SellingKoi.Models.OrderShorten", b =>
+            modelBuilder.Entity("SellingKoi.Models.Order", b =>
                 {
-                    b.HasOne("SellingKoi.Models.Trip", "Trip")
-                        .WithMany("ordershortens")
-                        .HasForeignKey("TripId");
+                    b.HasOne("SellingKoi.Models.Route", "Route")
+                        .WithMany("Orders")
+                        .HasForeignKey("RouteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("SellingKoi.Models.Trip", null)
-                        .WithMany("orders")
-                        .HasForeignKey("TripId1");
-
-                    b.Navigation("Trip");
-                });
-
-            modelBuilder.Entity("SellingKoi.Models.Trip", b =>
-                {
-                    b.HasOne("SellingKoi.Models.Account", "staff")
-                        .WithMany()
-                        .HasForeignKey("staffId");
-
-                    b.Navigation("staff");
+                    b.Navigation("Route");
                 });
 
             modelBuilder.Entity("SellingKoi.Models.Account", b =>
                 {
-                    b.Navigation("Cart");
+                    b.Navigation("Cart")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("SellingKoi.Models.Farm", b =>
@@ -384,16 +368,16 @@ namespace SellingKoi.Migrations
                     b.Navigation("KOIs");
                 });
 
+            modelBuilder.Entity("SellingKoi.Models.Order", b =>
+                {
+                    b.Navigation("Kois");
+                });
+
             modelBuilder.Entity("SellingKoi.Models.Route", b =>
                 {
                     b.Navigation("Carts");
-                });
 
-            modelBuilder.Entity("SellingKoi.Models.Trip", b =>
-                {
-                    b.Navigation("orders");
-
-                    b.Navigation("ordershortens");
+                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }
