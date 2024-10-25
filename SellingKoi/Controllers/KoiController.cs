@@ -1,9 +1,4 @@
-<<<<<<< HEAD
-﻿using Microsoft.AspNetCore.Mvc;
-=======
-﻿
 using Microsoft.AspNetCore.Mvc;
->>>>>>> 5b5388ad21c23fb2001d1b054751ac52623bd0d7
 using Microsoft.EntityFrameworkCore;
 using SellingKoi.Data;
 using SellingKoi.Models;
@@ -13,27 +8,16 @@ namespace SellingKoi.Controllers
 {
     public class KoiController : Controller
     {
-<<<<<<< HEAD
         private readonly DataContext _context;
-=======
->>>>>>> 5b5388ad21c23fb2001d1b054751ac52623bd0d7
         private readonly IKoiService _koiService;
         private readonly IFarmService _farmService;
        
 
-<<<<<<< HEAD
         public KoiController(DataContext context, IKoiService koiService,IFarmService farmService)
         {
             _context = context;
             _koiService = koiService;
             _farmService = farmService;
-=======
-        public KoiController(IKoiService koiService,IFarmService farmService,DataContext dataContext)
-        {
-            _koiService = koiService;
-            _farmService = farmService;
- 
->>>>>>> 5b5388ad21c23fb2001d1b054751ac52623bd0d7
         }
 
         [HttpGet("paged")]
@@ -100,7 +84,6 @@ namespace SellingKoi.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateKoi(KOI koi)
         {
-<<<<<<< HEAD
             if (ModelState.IsValid)
             {
                 // Set a default avatar URL if none is provided
@@ -113,56 +96,27 @@ namespace SellingKoi.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(koi);
-=======
-            var farm = await _farmService.GetFarmByIdAsync(koi.FarmID.ToString().ToUpper());
-            koi.Farm = farm;
-            if (koi != null)
-            {
-                await _koiService.CreateKoiAsync(koi);
-                //return RedirectToAction(nameof(KoiManagement));
-                return RedirectToAction("DetailsFarm", "Farm", new { id = koi.FarmID }); // Chuyển hướng về trang chi tiết farm
-            }
-            else
-            {
-                ModelState.AddModelError("", "There was an issue with the data provided. Please check your inputs.");
-                return View(koi);
-            }
-
->>>>>>> 5b5388ad21c23fb2001d1b054751ac52623bd0d7
         }
 
         [HttpGet]
         public async Task<IActionResult> EditKoi(Guid id)
         {
-<<<<<<< HEAD
             var koi = await _koiService.GetKoiByIdAsync(id);
-=======
-            var koi= await _koiService.GetKoiByIdAsync(id);
->>>>>>> 5b5388ad21c23fb2001d1b054751ac52623bd0d7
             if (koi == null)
             {
                 return NotFound();
             }   
-<<<<<<< HEAD
             return View(koi);  // Add this line
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-=======
-            return View(koi);
-        }
-
-        [HttpPost]
-        //[ValidateAntiForgeryToken]
->>>>>>> 5b5388ad21c23fb2001d1b054751ac52623bd0d7
         public async Task<IActionResult> EditKoi(Guid id, [Bind("Id,Name,Type,Age,Description,FarmID")] KOI koi)
         {
             if (id != koi.Id)
             {
                 return NotFound();
             }
-<<<<<<< HEAD
 
             if (ModelState.IsValid)
             {
@@ -182,20 +136,6 @@ namespace SellingKoi.Controllers
                 }
             }
             return View(koi);
-=======
-             try
-             {
-                 await _koiService.UpdateKoiAsync(koi);
-             //return RedirectToAction(nameof(KoiManagement));
-             return RedirectToAction("DetailsFarm", "Farm", new { id = koi.FarmID });
-             }   
-             catch (Exception ex)
-             {
-             // Log the error
-             ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
-             return NotFound();
-             }
->>>>>>> 5b5388ad21c23fb2001d1b054751ac52623bd0d7
         }
 
         [HttpPost]
@@ -221,13 +161,10 @@ namespace SellingKoi.Controllers
                 return NotFound();
             }
         }
-<<<<<<< HEAD
 
         private async Task<bool> KOIExists(Guid id)
         {
             return await _context.KOIs.AnyAsync(e => e.Id == id);
         }
-=======
->>>>>>> 5b5388ad21c23fb2001d1b054751ac52623bd0d7
     }
 }

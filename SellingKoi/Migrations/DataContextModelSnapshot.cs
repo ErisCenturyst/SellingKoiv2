@@ -121,14 +121,6 @@ namespace SellingKoi.Migrations
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
-<<<<<<< HEAD
-=======
-                    b.Property<string>("Location")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
->>>>>>> 5b5388ad21c23fb2001d1b054751ac52623bd0d7
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -139,12 +131,6 @@ namespace SellingKoi.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-<<<<<<< HEAD
-=======
-                    b.Property<int>("Size")
-                        .HasColumnType("int");
-
->>>>>>> 5b5388ad21c23fb2001d1b054751ac52623bd0d7
                     b.Property<bool>("Status")
                         .HasColumnType("bit");
 

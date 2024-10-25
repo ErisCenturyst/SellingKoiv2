@@ -91,7 +91,6 @@ namespace SellingKoi.Services
 
         public async Task UpdateKoiAsync(KOI koi)
         {
-<<<<<<< HEAD
             try
             {
                 var farmExists = await _context.Farms.AnyAsync(f => f.Id == koi.FarmID);
@@ -120,10 +119,6 @@ namespace SellingKoi.Services
                 // Add logging here
                 throw new Exception("Failed to update Koi", ex);
             }
-=======
-            _context.Entry(koi).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
->>>>>>> 5b5388ad21c23fb2001d1b054751ac52623bd0d7
         }
     }
 }
