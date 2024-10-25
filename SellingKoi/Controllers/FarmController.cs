@@ -47,33 +47,40 @@ namespace SellingKoi.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateFarm(Farm farm)
         {
-
-           if (ModelState.IsValid)
-    {
-        // Kiểm tra và xử lý các thuộc tính Location và Size nếu cần
-        if (string.IsNullOrWhiteSpace(farm.Location))
+            if (ModelState.IsValid)
+            {
+                // Kiểm tra và xử lý các thuộc tính Location, Size và GoogleMapsLink nếu cần
+                if (string.IsNullOrWhiteSpace(farm.Location))
+                {
+                    ModelState.AddModelError("Location", "Vị trí farm không được để trống.");
+                }
+                if (string.IsNullOrWhiteSpace(farm.GoogleMapsLink))
         {
-            ModelState.AddModelError("Location", "Vị trí farm không được để trống.");
+            ModelState.AddModelError("GoogleMapsLink", "Đường link Google Maps không được để trống.");
         }
 
-        if (farm.Size <= 0)
-        {
-            ModelState.AddModelError("Size", "Diện tích phải lớn hơn 0.");
-        }
+                if (farm.Size <= 0)
+                {
+                    ModelState.AddModelError("Size", "Diện tích phải lớn hơn 0.");
+                }
 
-        if (ModelState.IsValid) // Kiểm tra lại ModelState sau khi thêm các lỗi
-        {
-            await _farmService.CreateFarmAsync(farm);
-            return RedirectToAction(nameof(FarmManagement));
-        }
-    }
-    else
-    {
-        ModelState.AddModelError("", "There was an issue with the data provided. Please check your inputs.");
-    }
-    return View(farm);
-}
+                if (string.IsNullOrWhiteSpace(farm.GoogleMapsLink))
+                {
+                    ModelState.AddModelError("GoogleMapsLink", "Đường link Google Maps không được để trống.");
+                }
 
+                if (ModelState.IsValid) // Kiểm tra lại ModelState sau khi thêm các lỗi
+                {
+                    await _farmService.CreateFarmAsync(farm);
+                    return RedirectToAction(nameof(FarmManagement));
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("", "There was an issue with the data provided. Please check your inputs.");
+            }
+            return View(farm);
+        }
 
         [HttpGet]
         public async Task<IActionResult> UpdateFarm(Guid id)
@@ -88,43 +95,48 @@ namespace SellingKoi.Controllers
             return View(farm);
         }
 
-       [HttpPost]
-public async Task<IActionResult> UpdateFarm(Guid id, Farm farm)
-{
-    if (id != farm.Id)
-    {
-        return NotFound();
-    }
-
-    if (ModelState.IsValid)
-    {
-        // Kiểm tra và xử lý các thuộc tính Location và Size nếu cần
-        if (string.IsNullOrWhiteSpace(farm.Location))
+        [HttpPost]
+        public async Task<IActionResult> UpdateFarm(Guid id, Farm farm)
         {
-            ModelState.AddModelError("Location", "Vị trí farm không được để trống.");
-        }
-
-        if (farm.Size <= 0)
-        {
-            ModelState.AddModelError("Size", "Diện tích phải lớn hơn 0.");
-        }
-
-        if (ModelState.IsValid) // Kiểm tra lại ModelState sau khi thêm các lỗi
-        {
-            try
+            if (id != farm.Id)
             {
-                await _farmService.UpdateFarmAsync(farm);
-                return RedirectToAction("DetailsFarm", "Farm", new { id = farm.Id });
+                return NotFound();
             }
-            catch (Exception ex)
+
+            if (ModelState.IsValid)
             {
-                // Log the error
-                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                // Kiểm tra và xử lý các thuộc tính Location, Size và GoogleMapsLink nếu cần
+                if (string.IsNullOrWhiteSpace(farm.Location))
+                {
+                    ModelState.AddModelError("Location", "Vị trí farm không được để trống.");
+                }
+
+                if (farm.Size <= 0)
+                {
+                    ModelState.AddModelError("Size", "Diện tích phải lớn hơn 0.");
+                }
+
+                if (string.IsNullOrWhiteSpace(farm.GoogleMapsLink))
+                {
+                    ModelState.AddModelError("GoogleMapsLink", "Đường link Google Maps không được để trống.");
+                }
+
+                if (ModelState.IsValid) // Kiểm tra lại ModelState sau khi thêm các lỗi
+                {
+                    try
+                    {
+                        await _farmService.UpdateFarmAsync(farm);
+                        return RedirectToAction("DetailsFarm", "Farm", new { id = farm.Id });
+                    }
+                    catch (Exception ex)
+                    {
+                        // Log the error
+                        ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                    }
+                }
             }
+            return View(farm);
         }
-    }
-    return View(farm);
-}
 
         public async Task<IActionResult> NegateFarm(Guid id)
         {

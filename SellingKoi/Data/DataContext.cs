@@ -13,10 +13,12 @@ namespace SellingKoi.Data
         public DbSet<KOI> KOIs { get; set; }
         public DbSet<Models.Route> Routes { get; set; }
         public DbSet<Order> Orders { get; set; }
+        
         public DbSet<OrderShorten> OrtherShortens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            
             base.OnModelCreating(modelBuilder);
 
             // Định nghĩa quan hệ 1-nhiều giữa Farm và KoiProduct
@@ -28,7 +30,7 @@ namespace SellingKoi.Data
             modelBuilder.Entity<Farm>()
                 .HasMany(f => f.Routes)
                 .WithMany(r => r.Farms);
-
+          modelBuilder.Entity<Farm>().Property(f => f.GoogleMapsLink).HasMaxLength(255);
 
             // Định nghĩa quan hệ 1-1 giữa Account và Cart
             modelBuilder.Entity<Account>()

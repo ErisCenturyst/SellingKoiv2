@@ -7,42 +7,51 @@
     ViewData["Title"] = "Chỉnh sửa trang trại";
 }
 
-<h2>Chỉnh sửa trang trại</h2>
+<h2 class="text-center">Chỉnh sửa trang trại</h2>
 
-<form asp-action="UpdateFarm" method="post">
-    <div class="form-group">
-        <label asp-for="Name" class="control-label"></label>
-        <input asp-for="Name" class="form-control" placeholder="Nhập tên farm" />
-        <span asp-validation-for="Name" class="text-danger"></span>
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-body">
+            <form asp-action="UpdateFarm" method="post">
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" placeholder="Nhập tên farm" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Owner" class="control-label"></label>
+                    <input asp-for="Owner" class="form-control" placeholder="Nhập tên chủ farm" />
+                    <span asp-validation-for="Owner" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Description" class="control-label"></label>
+                    <textarea asp-for="Description" class="form-control" placeholder="Mô tả farm"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Location" class="control-label"></label>
+                    <input asp-for="Location" class="form-control" placeholder="Nhập vị trí farm" />
+                    <span asp-validation-for="Location" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Size" class="control-label"></label>
+                    <input asp-for="Size" class="form-control" placeholder="Diện tích (m²)" type="number" />
+                    <span asp-validation-for="Size" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="GoogleMapsLink" class="control-label"></label>
+                    <input asp-for="GoogleMapsLink" class="form-control" placeholder="Nhập đường link Google Maps" />
+                    <span asp-validation-for="GoogleMapsLink" class="text-danger"></span>
+                </div>
+                <div class="form-group text-center">
+                    <button type="submit" class="btn btn-primary">Chỉnh sửa</button>
+                    <a asp-action="FarmManagement" class="btn btn-secondary">Quay lại</a>
+                </div>
+            </form>
+        </div>
     </div>
-    <div class="form-group">
-        <label class="control-label">Chủ trại</label>
-        <input asp-for="Owner" class="form-control" placeholder="Nhập tên chủ farm" />
-        <span asp-validation-for="Owner" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Description" class="control-label"></label>
-        <textarea asp-for="Description" class="form-control" placeholder="Mô tả farm"></textarea>
-        <span asp-validation-for="Description" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Location" class="control-label"></label>
-        <input asp-for="Location" class="form-control" placeholder="Nhập vị trí farm" />
-        <span asp-validation-for="Location" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Size" class="control-label"></label>
-        <input asp-for="Size" class="form-control" placeholder="Diện tích (m²)" type="number" />
-        <span asp-validation-for="Size" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <button type="submit" class="btn btn-primary">Chỉnh sửa</button>
-        <a asp-action="FarmManagement" class="btn btn-secondary">Quay lại</a>
-    </div>
-</form>
+</div>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
