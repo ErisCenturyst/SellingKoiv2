@@ -4,6 +4,7 @@
     ViewData["Title"] = "Koi List";
 }
 
+<<<<<<< HEAD
 <div class="container mt-5">
     <h2 class="mb-4 text-center">Koi List</h2>
 
@@ -64,10 +65,54 @@
             object-fit: cover;
         }
     </style>
+=======
+<h2>Koi List</h2>
+
+@if (Model != null && Model.Any())
+{
+    <div class="row">
+        @foreach (var koi in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                        <img src="/images/default-koi.jpg" class="card-img-top" alt="Default Koi Image">
+                    <div class="card-body">
+                        <h5 class="card-title">@koi.Name</h5>
+                        <p class="card-text">
+                            <strong>Type:</strong> @koi.Type<br>
+                            <strong>Farm :</strong> @koi.Farm.Name
+                        </p>
+                        <p class="card-text">
+                            <small class="text-muted">Registered on @koi.Registration_date.ToShortDateString()</small>
+                        </p>
+                        <a asp-controller="Koi" asp-action="DetailsKoi" asp-route-id="@koi.Id" class="btn btn-info">Details</a>
+                        <a asp-controller="Koi" asp-action="EditKoi" asp-route-id="@koi.Id" class="btn btn-warning">Edit</a>
+                        <form asp-action="NegateKoi" asp-controller="Koi" method="post" style="display: inline;">
+                            <input type="hidden" name="id" value="@koi.Id" />
+                            <button type="submit" class="btn btn-warning btn-sm">Negate Koi</button>
+                        </form>
+                        @* <a asp-controller="Koi" asp-action="NegateKoi" asp-route-id="@koi.Id" class="btn btn-danger">Delete</a> *@
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <p>No Koi found.</p>
+>>>>>>> 5b5388ad21c23fb2001d1b054751ac52623bd0d7
 }
 
 @section Scripts {
     <script>
+<<<<<<< HEAD
         // You can add custom JavaScript here if needed
     </script>
 }
+=======
+        // Bạn có thể thêm JavaScript tùy chỉnh ở đây nếu cần
+    </script>
+}
+
+>>>>>>> 5b5388ad21c23fb2001d1b054751ac52623bd0d7

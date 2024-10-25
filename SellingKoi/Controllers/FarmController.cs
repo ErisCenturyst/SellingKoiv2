@@ -48,6 +48,7 @@ namespace SellingKoi.Controllers
         public async Task<IActionResult> CreateFarm(Farm farm)
         {
 
+<<<<<<< HEAD
             if (ModelState.IsValid)
             {
                 await _farmService.CreateFarmAsync(farm);
@@ -61,6 +62,34 @@ namespace SellingKoi.Controllers
 
         }
 
+=======
+           if (ModelState.IsValid)
+    {
+        // Kiểm tra và xử lý các thuộc tính Location và Size nếu cần
+        if (string.IsNullOrWhiteSpace(farm.Location))
+        {
+            ModelState.AddModelError("Location", "Vị trí farm không được để trống.");
+        }
+
+        if (farm.Size <= 0)
+        {
+            ModelState.AddModelError("Size", "Diện tích phải lớn hơn 0.");
+        }
+
+        if (ModelState.IsValid) // Kiểm tra lại ModelState sau khi thêm các lỗi
+        {
+            await _farmService.CreateFarmAsync(farm);
+            return RedirectToAction(nameof(FarmManagement));
+        }
+    }
+    else
+    {
+        ModelState.AddModelError("", "There was an issue with the data provided. Please check your inputs.");
+    }
+    return View(farm);
+}
+
+>>>>>>> 5b5388ad21c23fb2001d1b054751ac52623bd0d7
 
         [HttpGet]
         public async Task<IActionResult> UpdateFarm(Guid id)
@@ -75,6 +104,7 @@ namespace SellingKoi.Controllers
             return View(farm);
         }
 
+<<<<<<< HEAD
         [HttpPost]
         //[ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateFarm(Guid id, Farm farm)
@@ -101,6 +131,46 @@ namespace SellingKoi.Controllers
             return View(farm);
         }
 
+=======
+       [HttpPost]
+public async Task<IActionResult> UpdateFarm(Guid id, Farm farm)
+{
+    if (id != farm.Id)
+    {
+        return NotFound();
+    }
+
+    if (ModelState.IsValid)
+    {
+        // Kiểm tra và xử lý các thuộc tính Location và Size nếu cần
+        if (string.IsNullOrWhiteSpace(farm.Location))
+        {
+            ModelState.AddModelError("Location", "Vị trí farm không được để trống.");
+        }
+
+        if (farm.Size <= 0)
+        {
+            ModelState.AddModelError("Size", "Diện tích phải lớn hơn 0.");
+        }
+
+        if (ModelState.IsValid) // Kiểm tra lại ModelState sau khi thêm các lỗi
+        {
+            try
+            {
+                await _farmService.UpdateFarmAsync(farm);
+                return RedirectToAction("DetailsFarm", "Farm", new { id = farm.Id });
+            }
+            catch (Exception ex)
+            {
+                // Log the error
+                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+            }
+        }
+    }
+    return View(farm);
+}
+
+>>>>>>> 5b5388ad21c23fb2001d1b054751ac52623bd0d7
         public async Task<IActionResult> NegateFarm(Guid id)
         {
             try

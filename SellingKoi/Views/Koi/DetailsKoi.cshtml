@@ -7,6 +7,7 @@
     ViewData["Title"] = "Chi tiết Koi";
 }
 
+<<<<<<< HEAD
 <div class="container mt-5">
     <h2 class="mb-4 text-center">Chi tiết Koi</h2>
 
@@ -45,4 +46,38 @@
             </form>
         </div>
     </div>
+=======
+
+<h2>Chi tiết Koi</h2>
+
+<div>
+    @if(Model == null)
+    {
+        <p>Không tìm thấy thông tin Koi.</p>
+    }
+
+    <h4>@Model.Name</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">Loại cá</dt>
+        <dd class="col-sm-10">@Model.Type</dd>
+
+        <dt class="col-sm-2">Tuổi</dt>
+        <dd class="col-sm-10">@Model.Age</dd>
+
+        <dt class="col-sm-2">Mô tả</dt>
+        <dd class="col-sm-10">@Model.Description</dd>
+
+        <dt class="col-sm-2">Trang trại</dt>
+        <dd class="col-sm-10">@Model.Farm.Name</dd>
+    </dl>
+</div>
+
+<div>
+    <a asp-action="KoiManagement" class="btn btn-secondary">Quay lại</a>
+    <a asp-action="EditKoi" asp-route-id="@Model.Id" class="btn btn-warning">Chỉnh sửa</a>
+    <form asp-action="DeleteKoi" asp-route-id="@Model.Id" method="post" style="display:inline;">
+        <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa cá này?');">Xóa</button>
+    </form>
+>>>>>>> 5b5388ad21c23fb2001d1b054751ac52623bd0d7
 </div>

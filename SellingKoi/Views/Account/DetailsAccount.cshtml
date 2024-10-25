@@ -7,6 +7,7 @@
     ViewData["Title"] = "Chi tiết Tài khoản";
 }
 
+<<<<<<< HEAD
 <div class="container mt-5">
     <h2 class="mb-4 text-center">Chi tiết Tài khoản</h2>
 
@@ -32,4 +33,29 @@
             <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa tài khoản này?');">Xóa</button>
         </form>
     </div>
+=======
+<h2>Chi tiết Tài khoản</h2>
+
+<div>
+    <h4>@Model.Username</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">Họ tên</dt>
+        <dd class="col-sm-10">@Model.Fullname</dd>
+
+        <dt class="col-sm-2">Vai trò</dt>
+        <dd class="col-sm-10">@Model.Role</dd>
+
+        <dt class="col-sm-2">Ngày đăng ký</dt>
+        <dd class="col-sm-10">@Model.Registration_date.ToString("dd/MM/yyyy")</dd>
+    </dl>
+</div>
+
+<div>
+    <a asp-action="AccountManagement" class="btn btn-secondary">Quay lại danh sách</a>
+    @* <a asp-action="EditAccount" asp-route-id="@Model.Id" class="btn btn-warning">Chỉnh sửa</a> *@
+    <form asp-action="NegateAccount" asp-route-id="@Model.Id" method="post" style="display:inline;">
+        <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa tài khoản này?');">Xóa</button>
+    </form>
+>>>>>>> 5b5388ad21c23fb2001d1b054751ac52623bd0d7
 </div>

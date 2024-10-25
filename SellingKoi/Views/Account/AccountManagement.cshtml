@@ -7,6 +7,7 @@
     ViewData["Title"] = "Quản lý Tài khoản";
 }
 
+<<<<<<< HEAD
 <h2 class="mb-4 text-center">Quản lý Tài khoản</h2>
 
 <div class="container mt-4">
@@ -41,3 +42,34 @@
         </table>
     </div>
 </div>
+=======
+<h2>Quản lý Tài khoản</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Tên tài khoản</th>
+            <th>Họ tên</th>
+            <th>Ngày đăng kí</th>   
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var account in Model.Where(a => a.Role != "ADMIN"))
+@*         @foreach (var account in Model) *@
+        {
+            <tr>
+                <td>@account.Username</td>
+                <td>@account.Fullname</td>
+                <td>@account.Registration_date</td>
+                <td>
+                    <a asp-action="DetailsAccount" asp-route-id="@account.Id" class="btn btn-warning">Chi tiết </a>
+                    <form asp-action="NegateAccount" asp-route-id="@account.Id" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa tài khoản này?');">Xóa</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+>>>>>>> 5b5388ad21c23fb2001d1b054751ac52623bd0d7

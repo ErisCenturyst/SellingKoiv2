@@ -9,6 +9,7 @@ namespace SellingKoi.Services
         Task<Guid?> GetIdByNameAsync(string name);
         Task CreateKoiAsync(KOI Koi);
         Task UpdateKoiAsync(KOI koi);
+        Task UpdateKoiAsync(KOI Koi);
         Task NegateKoiAsync(Guid id);
         Task<Pagination<KOI>> GetKOIsPaged(int page, int limit);
     }
