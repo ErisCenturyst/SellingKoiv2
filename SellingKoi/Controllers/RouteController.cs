@@ -119,11 +119,6 @@ namespace SellingKoi.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateRoute(Guid id, Route route, Guid[] Farms)
         {
-            //if (id != route.Id)
-            //{
-            //    return NotFound();
-            //}
-
             // Tìm route hiện tại từ cơ sở dữ liệu
             var existingRoute = await _routeService.GetRouteByIdAsync(id.ToString());
             if (existingRoute == null)

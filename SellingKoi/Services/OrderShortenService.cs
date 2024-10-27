@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using SellingKoi.Data;
 using SellingKoi.Models;
+using System.Linq;
 
 namespace SellingKoi.Services
 {
@@ -24,7 +25,12 @@ namespace SellingKoi.Services
         {
             return await _dataContext.OrtherShortens.ToListAsync();
         }
-
+        public async Task<IEnumerable<OrderShorten>> SearchOrderList(List<string> listorderid)
+        {
+            return await _dataContext.OrtherShortens
+                .Where(order => listorderid.Contains(order.Id.ToString()))
+                .ToListAsync();
+        }
         public async Task<IEnumerable<OrderShorten>> GetAllOrderBeingTrip()
         {
             return await _dataContext.OrtherShortens.Where(o => o.Status.Equals("beingtrip")).ToListAsync();

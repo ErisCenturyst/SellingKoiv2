@@ -15,13 +15,14 @@ namespace SellingKoi.Models
         //paid = readytotrip, beingstrip,waittoship,done
         public string routeid { get; set; }
         public string routename { get; set; }
-        public List<string> koisid { get; set; }
-        public List<string> koisname { get; set; }
+        public List<string> ?koisid { get; set; }
+        public List<string> ?koisname { get; set; }
         public double Price { get; set; }
-        public string buyer {  get; set; }
+        public string ?buyer {  get; set; }
+        public string ?TripId { get; set; }
+        public string ?TripNum { get; set; }
         //FK
-        public Guid ?TripId { get; set; } // Đảm bảo rằng kiểu dữ liệu là Guid
-        public Trip ?Trip { get; set; } // Mối quan hệ với Trip
+        
 
     }
 }

@@ -10,14 +10,14 @@ namespace SellingKoi.Controllers
     public class OrderShortenController : Controller
     {
         private readonly IOrderShortenService _orderShortenService;
-        private readonly ITripService _tripService;
         private readonly DataContext _datacontext;
+        private readonly ITripService _tripService;
 
         public OrderShortenController(IOrderShortenService orderShortenService,ITripService tripService,DataContext datacontext)
         {
             _orderShortenService = orderShortenService;
-            _tripService = tripService;
             _datacontext = datacontext;
+            _tripService = tripService;
         }
         [HttpGet]
         public async Task<IActionResult> ShowOrderHaveCreated(string orderid) //by customer
@@ -29,8 +29,21 @@ namespace SellingKoi.Controllers
             }
             return View(order);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> OrderShortenedManagement()
+        {
+            var models = await _orderShortenService.GetAllOrder();
+            var trips = await _tripService.GetAllTripAsync();
+            if (models == null)
+            {
+                return NotFound("No Order are found !");
+            }
+            ViewBag.TripList = trips;
+            return View(models);
+        }
         [HttpPost]
-        public async Task<IActionResult> UpdateOrder(string orderid,string tripid)
+        public async Task<IActionResult> UpdateOrder(string orderid, string tripid)
         {
 
             var order = await _orderShortenService.GetOrderByIdAsync(orderid);
@@ -41,14 +54,13 @@ namespace SellingKoi.Controllers
             if (!tripid.Equals("0"))
             {
                 var trip = await _tripService.GetTripByIdAsync(tripid);
-                order.TripId = Guid.Parse(tripid);
-                order.Trip = trip;
-                
+                order.TripId = trip.Id.ToString();
+                order.TripNum = trip.TripNum.ToString();
+
             }
             else
             {
-                order.TripId = null; 
-                order.Trip = null; 
+                order.TripId = null;
             }
             await _orderShortenService.UpdatOrderAsync(order);
             return RedirectToAction("OrderShortenedManagement");
@@ -104,18 +116,6 @@ namespace SellingKoi.Controllers
             }
         }
 
-        [HttpGet]
-        public async Task<IActionResult> OrderShortenedManagement()
-        {
-            var models = await _orderShortenService.GetAllOrder();
-            var trips = await _tripService.GetAllTripsAsync();
-            if (models == null)
-            {
-                return NotFound("No Order are found !");
-            }
-            ViewBag.TripList = trips;
-            return View(models);
-        }
 
         [HttpGet]
         public IActionResult OrderShortenedManagementSort(string sortOrder)

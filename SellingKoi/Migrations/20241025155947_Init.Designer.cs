@@ -12,8 +12,8 @@ using SellingKoi.Data;
 namespace SellingKoi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20241023002423_update_urlavt_koi")]
-    partial class update_urlavt_koi
+    [Migration("20241025155947_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -124,6 +124,11 @@ namespace SellingKoi.Migrations
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -133,6 +138,9 @@ namespace SellingKoi.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("Size")
+                        .HasColumnType("int");
 
                     b.Property<bool>("Status")
                         .HasColumnType("bit");
@@ -201,22 +209,19 @@ namespace SellingKoi.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<Guid>("TripId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("TripId")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("TripId1")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("TripNum")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("buyer")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("koisid")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("koisname")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("routeid")
@@ -228,10 +233,6 @@ namespace SellingKoi.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("TripId");
-
-                    b.HasIndex("TripId1");
 
                     b.ToTable("OrtherShortens");
                 });
@@ -267,14 +268,20 @@ namespace SellingKoi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("FollowAccountsID")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OrderShortensID")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("Registration_date")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid>("SaleStaffId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int>("TripNum")
                         .HasColumnType("int");
-
-                    b.Property<Guid?>("staffId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("status")
                         .IsRequired()
@@ -282,7 +289,7 @@ namespace SellingKoi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("staffId");
+                    b.HasIndex("SaleStaffId");
 
                     b.ToTable("Trips");
                 });
@@ -347,28 +354,15 @@ namespace SellingKoi.Migrations
                     b.Navigation("Farm");
                 });
 
-            modelBuilder.Entity("SellingKoi.Models.OrderShorten", b =>
+            modelBuilder.Entity("SellingKoi.Models.Trip", b =>
                 {
-                    b.HasOne("SellingKoi.Models.Trip", "Trip")
-                        .WithMany("ordershortens")
-                        .HasForeignKey("TripId")
+                    b.HasOne("SellingKoi.Models.Account", "SaleStaff")
+                        .WithMany()
+                        .HasForeignKey("SaleStaffId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SellingKoi.Models.Trip", null)
-                        .WithMany("orders")
-                        .HasForeignKey("TripId1");
-
-                    b.Navigation("Trip");
-                });
-
-            modelBuilder.Entity("SellingKoi.Models.Trip", b =>
-                {
-                    b.HasOne("SellingKoi.Models.Account", "staff")
-                        .WithMany()
-                        .HasForeignKey("staffId");
-
-                    b.Navigation("staff");
+                    b.Navigation("SaleStaff");
                 });
 
             modelBuilder.Entity("SellingKoi.Models.Account", b =>
@@ -384,13 +378,6 @@ namespace SellingKoi.Migrations
             modelBuilder.Entity("SellingKoi.Models.Route", b =>
                 {
                     b.Navigation("Carts");
-                });
-
-            modelBuilder.Entity("SellingKoi.Models.Trip", b =>
-                {
-                    b.Navigation("orders");
-
-                    b.Navigation("ordershortens");
                 });
 #pragma warning restore 612, 618
         }

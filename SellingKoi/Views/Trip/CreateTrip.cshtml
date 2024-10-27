@@ -1,57 +1,80 @@
-@model SellingKoi.Models.Trip
-@using SellingKoi.Models
+﻿@model SellingKoi.Models.Trip
 
-<h2>Tạo Trip Mới</h2>
+@{
+    ViewBag.Title = "Tạo Chuyến Đi";
+}
 
-<form asp-action="CreateTrip" method="post">
+<h2>Tạo Chuyến Đi</h2>
+
+<form method="post" action="@Url.Action("CreateTrip", "Trip")">
     <div class="form-group">
-        <label asp-for="TripNum">Số Trip</label>
-        <input asp-for="TripNum" class="form-control" />
-        <span asp-validation-for="TripNum" class="text-danger"></span>
+        <label asp-for="TripNum">Số Chuyến Đi</label>
+        <input asp-for="TripNum" class="form-control" required />
     </div>
 
     <div class="form-group">
-        <label asp-for="status">Trạng thái</label>
-        <select asp-for="status" class="form-control">
-            <option value="">-- Chọn trạng thái --</option>
-            <option value="Đang chuẩn bị">Đang chuẩn bị</option>
-            <option value="Đang giao hàng">Đang giao hàng</option>
-            <option value="Đã hoàn thành">Đã hoàn thành</option>
+        <label asp-for="status">Trạng Thái</label>
+        <select asp-for="status" class="form-control" required>
+            <option value="">Chọn trạng thái</option>
+            <option value="Preparing">Preparing</option>
+            <option value="Ongoing" disabled>Ongoing</option>
+            <option value="Done" disabled>Done</option>
         </select>
-        <span asp-validation-for="status" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="staff">Nhân viên phụ trách</label>
-        <select asp-for="staff.Id" class="form-control">
-            <option value="">-- Chọn nhân viên --</option>
-            @foreach (var staff in ViewBag.StaffList as List<Account>)
+        <label asp-for="Date_of_departure">Ngày Khởi Hành</label>
+        <input asp-for="Date_of_departure" type="date" id="Date_of_Departure" class="form-control" required />
+        <span class="text-danger" id="dateError" style="display:none;">Ngày khởi hành phải ít nhất 7 ngày trong tương lai.</span>
+
+    </div>
+
+    <div class="form-group">
+        <label for="FollowAccountsID">Nhân Viên </label>
+        <select class="form-control" id="FollowAccountsID" name="FollowAccountsID" multiple required>
+            <option value="" disabled>Chọn nhân viên</option>
+            @foreach (var staff in ViewBag.staffList)
             {
-                <option value="@staff.Id">@staff.Username</option>
+                <option value="@staff.Id">@staff.Fullname</option>
             }
         </select>
-        <span asp-validation-for="staff" class="text-danger"></span>
     </div>
 
-    @* Không cần nhập Registration_date vì nó được tự động set là DateTime.Now *@
-
-    @* Phần orders có thể phức tạp hơn, có thể cần một giao diện riêng để chọn các đơn hàng *@
-    @* Ví dụ đơn giản: *@
     <div class="form-group">
-        <label>Chọn đơn hàng</label>
-        @* Giả sử bạn có một danh sách các OrderShorten được truyền vào View *@
-        @* @foreach (var order in ViewBag.AvailableOrders)
-        {
-            <div class="form-check">
-                <input type="checkbox" name="SelectedOrders" value="@order.Id" class="form-check-input" />
-                <label class="form-check-label">@order.OrderNumber</label>
-            </div>
-        } *@
+        <label for="SaleStaffID">Nhân Viên Bán Hàng</label>
+        <select class="form-control" id="SaleStaffID" name="SaleStaffID" required>
+            <option value="">Chọn nhân viên bán hàng</option>
+            @foreach (var saleStaff in ViewBag.salestaffList)
+            {
+                <option value="@saleStaff.Id">@saleStaff.Fullname</option>
+            }
+        </select>
     </div>
 
-    <button type="submit" class="btn btn-primary">Tạo Trip</button>
+    <button type="submit" class="btn btn-primary">Tạo Chuyến Đi</button>
 </form>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var form = document.querySelector('form');
+        var dateInput = document.getElementById('Date_of_Departure');
+        var dateError = document.getElementById('dateError');
+        var submitButton = document.getElementById('submitButton');
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+        form.addEventListener('submit', function (event) {
+            event.preventDefault(); // Ngăn form được gửi ngay lập tức
+
+            // Tính toán ngày tối thiểu (7 ngày từ hôm nay)
+            var today = new Date();
+            var minDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 7);
+
+            var selectedDate = new Date(dateInput.value);
+            if (selectedDate < minDate) {
+                dateError.style.display = 'block';
+                dateInput.focus(); // Focus vào trường ngày để người dùng có thể sửa
+            } else {
+                dateError.style.display = 'none';
+                form.submit(); // Gửi form nếu ngày hợp lệ
+            }
+        });
+    });
+</script>

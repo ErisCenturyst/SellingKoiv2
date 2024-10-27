@@ -49,6 +49,7 @@
 
     <div class="container-fluid px-0"></div>
         <h1 class="text-center mb-4">Danh sách Koi hiện có</h1>
+        <span>Việc bạn lựa chọn cá Koi là để chúng tôi đưa ra gợi ý về chuyến đi phù hợp với bạn nhất !</span>
         <div class="row koi-container mx-0" id="koiContainer">
             @foreach (var koi in Model)
             {
@@ -88,7 +89,8 @@
         }
 
         function viewKoiDetails(koiId) {
-            window.location.href = `/Koi/detailsKoi/${koiId}`;
+            // window.location.href = `/Koi/DetailsKoi/${koiId}`;
+            window.location.href = `/Koi/DetailsShoppingKoi/${koiId}`;
         }
     </script>
 

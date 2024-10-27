@@ -20,7 +20,7 @@ namespace SellingKoi.Migrations
                     Password = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     Fullname = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Role = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
-                    CartId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CartId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     Status = table.Column<bool>(type: "bit", nullable: false),
                     Registration_date = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -37,11 +37,34 @@ namespace SellingKoi.Migrations
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Owner = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
-                    Status = table.Column<bool>(type: "bit", nullable: false)
+                    Status = table.Column<bool>(type: "bit", nullable: false),
+                    Location = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Size = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Farms", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OrtherShortens",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Registration_date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    routeid = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    routename = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    koisid = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    koisname = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Price = table.Column<double>(type: "float", nullable: false),
+                    buyer = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TripId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TripNum = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrtherShortens", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -67,16 +90,19 @@ namespace SellingKoi.Migrations
                     TripNum = table.Column<int>(type: "int", nullable: false),
                     status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Registration_date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    staffId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    OrderShortensID = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SaleStaffId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FollowAccountsID = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Trips", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Trips_Accounts_staffId",
-                        column: x => x.staffId,
+                        name: "FK_Trips_Accounts_SaleStaffId",
+                        column: x => x.SaleStaffId,
                         principalTable: "Accounts",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -90,7 +116,7 @@ namespace SellingKoi.Migrations
                     Description = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
                     Status = table.Column<bool>(type: "bit", nullable: false),
                     Registration_date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    AvatarUrl = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    AvatarUrl = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     FarmID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
@@ -154,38 +180,6 @@ namespace SellingKoi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "OrtherShortens",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Registration_date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    routeid = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    routename = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    koisid = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    koisname = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Price = table.Column<double>(type: "float", nullable: false),
-                    buyer = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TripId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TripId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_OrtherShortens", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_OrtherShortens_Trips_TripId",
-                        column: x => x.TripId,
-                        principalTable: "Trips",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_OrtherShortens_Trips_TripId1",
-                        column: x => x.TripId1,
-                        principalTable: "Trips",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "CartKOI",
                 columns: table => new
                 {
@@ -230,19 +224,9 @@ namespace SellingKoi.Migrations
                 column: "FarmID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrtherShortens_TripId",
-                table: "OrtherShortens",
-                column: "TripId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_OrtherShortens_TripId1",
-                table: "OrtherShortens",
-                column: "TripId1");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Trips_staffId",
+                name: "IX_Trips_SaleStaffId",
                 table: "Trips",
-                column: "staffId");
+                column: "SaleStaffId");
         }
 
         /// <inheritdoc />
@@ -258,22 +242,22 @@ namespace SellingKoi.Migrations
                 name: "OrtherShortens");
 
             migrationBuilder.DropTable(
+                name: "Trips");
+
+            migrationBuilder.DropTable(
                 name: "Cart");
 
             migrationBuilder.DropTable(
                 name: "KOIs");
 
             migrationBuilder.DropTable(
-                name: "Trips");
+                name: "Accounts");
 
             migrationBuilder.DropTable(
                 name: "Routes");
 
             migrationBuilder.DropTable(
                 name: "Farms");
-
-            migrationBuilder.DropTable(
-                name: "Accounts");
         }
     }
 }

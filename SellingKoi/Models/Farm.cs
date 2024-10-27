@@ -21,10 +21,10 @@ namespace SellingKoi.Models
         public string Description { get; set; }
         public bool Status { get; set; } = true;
          [StringLength(200)]
-        public string Location { get; set; } // Thuộc tính mới
+        public string ?Location { get; set; } // Thuộc tính mới
 
         [Range(0, int.MaxValue, ErrorMessage = "Diện tích phải là một số dương.")]
-        public int Size { get; set; } // Thuộc tính mới
+        public int ?Size { get; set; } // Thuộc tính mới
 
 
         // Navigation Property(1 Farm có nhiều Koi)

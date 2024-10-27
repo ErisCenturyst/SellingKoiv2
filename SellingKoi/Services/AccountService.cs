@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SellingKoi.Data;
 using SellingKoi.Models;
+using System.Linq;
 
 namespace SellingKoi.Services
 {
@@ -19,6 +20,16 @@ namespace SellingKoi.Services
         public async Task<List<Account>> GetStaffAccountAsync()
         {
             return await _dataContext.Accounts.Where(a => a.Role.Equals("Staff")).ToListAsync();
+        }
+        public async Task<List<Account>> GetSaleStaffAccountAsync()
+        {
+            return await _dataContext.Accounts.Where(a => a.Role.Equals("SaleStaff")).ToListAsync();
+        }
+        public async Task<List<Account>> SearchlistStaffbylistId(List<string> listaccountid)
+        {
+            return await _dataContext.Accounts
+                .Where(a => a.Role.Equals("Staff") && listaccountid.Contains(a.Id.ToString()))
+                .ToListAsync();
         }
 
         public async Task<IEnumerable<Account>> GetAllAccountsAsync()
@@ -49,6 +60,7 @@ namespace SellingKoi.Services
                 throw new KeyNotFoundException($"Farm with ID {id} not found.");
             }
         }
+
 
         public async Task UpdateAccountAsync(Account account)
         {

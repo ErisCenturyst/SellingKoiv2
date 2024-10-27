@@ -11,7 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<DataContext>(options =>
-options.UseSqlServer(builder.Configuration.GetConnectionString("SellingKoiString")));
+options.UseSqlServer(builder.Configuration.GetConnectionString("SellingKoiString")).EnableSensitiveDataLogging());
 
 
 builder.Services.AddScoped<IAccountService, AccountService>();
@@ -23,8 +23,9 @@ builder.Services.AddScoped<IFarmService, FarmService>();
 builder.Services.AddScoped<IRouteService, RouteService>();
 
 builder.Services.AddScoped<IOrderShortenService, OrderShortenService>();
-
 builder.Services.AddScoped<ITripService, TripService>();
+
+
 
 
 builder.Services.AddSession(options =>

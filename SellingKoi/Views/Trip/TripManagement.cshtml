@@ -1,0 +1,157 @@
+﻿@model List<SellingKoi.Models.Trip>
+@Html.AntiForgeryToken()
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<h2>Danh sách chuyến đi</h2>
+
+<div style="text-align: center; margin-top: 20px;">
+    <a href="@Url.Action("CreateTrip", "Trip")">
+        <button type="button" class="create-button">Tạo chuyến đi</button>
+    </a>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>Số chuyến đi</th>
+            <th>Ngày tạo</th>
+            <th>Ngày khởi hành</th>
+            <th>Trưởng đoàn</th>
+            <th>Trạng thái</th>
+            <th>Hành động</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var trip in Model)
+        {
+            <tr>
+                <td>@trip.TripNum</td>
+                <td>@trip.Registration_date.ToString("dd/MM/yyyy")</td>
+                <td>@trip.Date_of_departure</td>
+                <td>@(trip.SaleStaff != null ? trip.SaleStaff.Fullname : "Chưa có nhân viên")</td>
+                <td>@trip.status</td>
+                <td>
+                    <a asp-controller="Trip" asp-action="DetailsTrip" asp-route-id="@trip.Id" class="button btn btn-primary">Chi tiết</a>
+                    <button type="button" onclick="confirmDelete('@trip.Id', @(trip.SaleStaff != null || (trip.FollowAccountsID != null && trip.FollowAccountsID.Any()) ? "true" : "false"))">Xóa</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    function confirmDelete(tripId, hasStaff) {
+        if (hasStaff === true) {
+            alert("Bạn phải hủy chỉ định các nhân viên trước khi xóa chuyến đi");
+            return;
+        }
+
+        if (confirm("Bạn có chắc muốn xóa chuyến đi này?")) {
+            // Gửi request xóa đến server
+            fetch('/Trip/DeleteTrip', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                },
+                body: JSON.stringify({ tripId: tripId })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Nếu xóa thành công, reload trang
+                        window.location.reload();
+                    } else {
+                        // Nếu có lỗi, hiển thị thông báo
+                        alert(data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert("Có lỗi xảy ra khi xóa chuyến đi");
+                });
+        }
+    }
+</script>
+
+
+<style>
+    /* Căn chỉnh và kiểu cho tiêu đề */
+    h2 {
+        font-size: 24px;
+        text-align: center;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    /* Kiểu chung cho bảng */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        font-size: 16px;
+        text-align: left;
+        box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    thead th {
+        background-color: #4CAF50;
+        color: white;
+        padding: 12px;
+        font-weight: bold;
+    }
+
+    tbody td {
+        padding: 12px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    /* Kiểu chọn dòng */
+    tbody tr:hover {
+        background-color: #f5f5f5;
+    }
+
+    /* Kiểu cho các ô chọn */
+    select {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background-color: #f9f9f9;
+    }
+
+    /* Kiểu cho nút Cập nhật */
+    button[type="submit"] {
+        background-color: #4CAF50;
+        color: white;
+        padding: 8px 16px;
+        margin-right: 5px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+    /* Kiểu cho nút Xóa */
+    button[type="button"] {
+        background-color: #007BFF;
+        color: white;
+        padding: 8px 16px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+        button[type="button"]:hover {
+            background-color: #0069D9;
+        }
+
+
+</style>

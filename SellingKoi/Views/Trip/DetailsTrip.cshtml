@@ -1,0 +1,153 @@
+﻿@model SellingKoi.Models.Trip
+
+@{
+    ViewBag.Title = "Chi Tiết Chuyến Đi";
+}
+
+<h2>Chi Tiết Chuyến Đi</h2>
+
+<form method="post" action="@Url.Action("UpdateTrip", "Trip")">
+    <input type="hidden" name="tripid" value="@Model.Id" />
+
+    <div class="form-group">
+        <label for="TripNum">Chuyến Đi Số</label>
+        <input type="text" class="form-control" id="TripNum" name="TripNum" value="@Model.TripNum" readonly />
+    </div>
+
+    <div class="form-group">
+        <label for="StatusDropdown">Trạng Thái</label>
+        <select class="form-control" id="StatusDropdown" name="Status" required>
+            <option value="@Model.status">@Model.status</option>
+            @if (Model.status != "Preparing")
+            {
+                <option value="Preparing">Preparing</option>
+            }
+            @if (Model.status != "Ongoing")
+            {
+                <option value="Ongoing">Ongoing</option>
+            }
+            @if (Model.status != "Done")
+            {
+                <option value="Done">Done</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="Date_of_Departure">Ngày Khởi Hành (Tháng/Ngày/Năm)</label>
+        <input type="date" class="form-control" id="Date_of_Departure" name="Date_of_Departure"
+               value="@(Model.Date_of_departure.HasValue ? Model.Date_of_departure.Value.ToString("yyyy-MM-dd") : "")" required />
+        <span class="text-danger" id="dateError" style="display:none;">Ngày khởi hành phải ít nhất 7 ngày trong tương lai.</span>
+    </div>
+
+    <div class="form-group">
+        <label for="FollowAccountsID">Nhân Viên</label>
+        <select class="form-control" id="FollowAccountsID" name="FollowAccountsID[]" multiple >
+            <option value="" disabled>Chọn nhân viên</option>
+            @if (ViewBag.StaffList != null)
+            {
+                foreach (var staff in ViewBag.StaffList)
+                {
+                    if (Model.FollowAccountsID != null && Model.FollowAccountsID.Contains(staff.Id.ToString()))
+                    {
+                        <option value="@staff.Id" selected>@staff.Fullname</option>
+                    }
+                    else
+                    {
+                        <option value="@staff.Id">@staff.Fullname</option>
+                    }
+                }
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="SaleStaffID">Nhân Viên Bán Hàng - Trưởng đoàn</label>
+        <select class="form-control" id="SaleStaffID" name="SaleStaffID" >
+            <option value="">Chọn nhân viên bán hàng</option>
+            @if (ViewBag.SaleStaffList != null)
+            {
+                foreach (var saleStaff in ViewBag.SaleStaffList)
+                {
+                    if (Model.SaleStaff != null && Model.SaleStaff.Id == saleStaff.Id)
+                    {
+                        <option value="@saleStaff.Id" selected>@saleStaff.Fullname</option>
+                    }
+                    else
+                    {
+                        <option value="@saleStaff.Id">@saleStaff.Fullname</option>
+                    }
+                }
+            }
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Cập Nhật Chuyến Đi</button>
+</form>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var form = document.querySelector('form');
+        var statusDropdown = document.getElementById('StatusDropdown');
+        var dateInput = document.getElementById('Date_of_Departure');
+        var dateError = document.getElementById('dateError');
+        var originalStatus = statusDropdown.value;
+
+        statusDropdown.addEventListener('change', function () {
+            if (originalStatus === 'Preparing' && this.value === 'Ongoing') {
+                var confirmMessage = "Bạn có chắc muốn đổi trạng thái của chuyến đi này thành sẵn sàng không? Chuyến đi này sẽ được lên lịch và các thành viên liên quan sẽ nhận được thông báo nhiệm vụ của mình.";
+
+                if (!confirm(confirmMessage)) {
+                    this.value = originalStatus; // Nếu người dùng không xác nhận, quay lại giá trị ban đầu
+                }
+            }
+        });
+
+        form.addEventListener('submit', function (event) {
+            event.preventDefault(); // Ngăn form được gửi ngay lập tức
+
+            // Tính toán ngày tối thiểu (7 ngày từ hôm nay)
+            var today = new Date();
+            var minDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 7);
+
+            var selectedDate = new Date(dateInput.value);
+            if (selectedDate < minDate) {
+                dateError.style.display = 'block';
+                dateInput.focus(); // Focus vào trường ngày để người dùng có thể sửa
+            } else {
+                dateError.style.display = 'none';
+                form.submit(); // Gửi form nếu ngày hợp lệ
+            }
+        });
+    });
+</script>
+
+<style>
+    /* Kiểu cho tiêu đề */
+    h2 {
+        font-size: 24px;
+        text-align: center;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    /* Kiểu chung cho form */
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    /* Kiểu cho nút Cập nhật */
+    button[type="submit"] {
+        background-color: #4CAF50;
+        color: white;
+        padding: 8px 16px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+</style>

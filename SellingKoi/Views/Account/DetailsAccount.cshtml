@@ -21,7 +21,7 @@
             <form asp-action="UpdateRole" asp-route-id="@Model.Id" method="post" class="role-update-form">
                 <div class="input-group">
                     <select name="role" class="form-select custom-select">
-                        @foreach (var role in new[] { "Staff", "Customer","Manager" })
+                        @foreach (var role in new[] { "Staff", "Customer","Manager","SaleStaff" })
                         {
                             @if (Model.Role == role)
                             {

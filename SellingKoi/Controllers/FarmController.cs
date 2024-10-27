@@ -21,8 +21,31 @@ namespace SellingKoi.Controllers
             }
             return View(farms);
         }
+
         [HttpGet]
         public async Task<IActionResult> DetailsFarm(Guid id)
+        {
+            var farm = await _farmService.GetFarmByIdAsync(id.ToString());
+            if (farm == null)
+            {
+                return NotFound($"Farm with ID '{id}' not found.");
+            }
+            return View(farm);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> FarmShopping()
+        {
+            var farms = await _farmService.GetAllFarmsAsync();
+            if (farms == null)
+            {
+                return NotFound("No farm are found !");
+            }
+            return View(farms);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> DetailsShoppingFarm(Guid id)
         {
 
             if (id == null)
@@ -49,30 +72,30 @@ namespace SellingKoi.Controllers
         {
 
            if (ModelState.IsValid)
-    {
-        // Kiểm tra và xử lý các thuộc tính Location và Size nếu cần
-        if (string.IsNullOrWhiteSpace(farm.Location))
-        {
-            ModelState.AddModelError("Location", "Vị trí farm không được để trống.");
-        }
-
-        if (farm.Size <= 0)
-        {
-            ModelState.AddModelError("Size", "Diện tích phải lớn hơn 0.");
-        }
-
-        if (ModelState.IsValid) // Kiểm tra lại ModelState sau khi thêm các lỗi
-        {
-            await _farmService.CreateFarmAsync(farm);
-            return RedirectToAction(nameof(FarmManagement));
-        }
-    }
-    else
-    {
-        ModelState.AddModelError("", "There was an issue with the data provided. Please check your inputs.");
-    }
-    return View(farm);
-}
+           {
+                // Kiểm tra và xử lý các thuộc tính Location và Size nếu cần
+                if (string.IsNullOrWhiteSpace(farm.Location))
+                {
+                    ModelState.AddModelError("Location", "Vị trí farm không được để trống.");
+                }
+        
+                if (farm.Size <= 0)
+                {
+                    ModelState.AddModelError("Size", "Diện tích phải lớn hơn 0.");
+                }
+        
+                if (ModelState.IsValid) // Kiểm tra lại ModelState sau khi thêm các lỗi
+                {
+                    await _farmService.CreateFarmAsync(farm);
+                    return RedirectToAction(nameof(FarmManagement));
+                }
+            }
+           else
+           {
+               ModelState.AddModelError("", "There was an issue with the data provided. Please check your inputs.");
+           }
+           return View(farm);
+        }       
 
 
         [HttpGet]
@@ -88,7 +111,7 @@ namespace SellingKoi.Controllers
             return View(farm);
         }
 
-       [HttpPost]
+[HttpPost]
 public async Task<IActionResult> UpdateFarm(Guid id, Farm farm)
 {
     if (id != farm.Id)

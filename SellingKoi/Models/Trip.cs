@@ -4,12 +4,17 @@
     {
         public Guid Id { get; set; }
         public int TripNum { get; set; }
-        public List<OrderShorten> ?orders { get; set; }
         public string status { get; set; }
-        //preparing, going, done
+        //Preparing, Going, Done
         public DateTime Registration_date { get; set; } = DateTime.Now;
-        public Account ?staff { get; set; }
-        public List<OrderShorten> ?ordershortens { get; set; } = new List<OrderShorten>();
+        public string? Price { get; set; }
+        public DateTime? Date_of_departure { get; set; }
 
+
+        //
+        public List<string>? OrderShortensID { get; set; }
+        public Account? SaleStaff { get; set; }
+        // Thêm danh sách các tài khoản tham gia chuyến đi
+        public List<string>? FollowAccountsID { get; set; } = new List<string>();
     }
 }

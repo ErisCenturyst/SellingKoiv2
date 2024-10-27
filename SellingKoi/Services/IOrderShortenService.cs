@@ -9,7 +9,9 @@ namespace SellingKoi.Services
         Task<IEnumerable<OrderShorten>> GetAllOrderWaitToShip();
         Task<IEnumerable<OrderShorten>> GetAllOrderDone();
         Task<IEnumerable<OrderShorten>> GetAllOrder();
-        
+        Task<IEnumerable<OrderShorten>> SearchOrderList(List<string> listorderid);
+
+
         Task<OrderShorten> GetOrderByIdAsync(string id);
         Task CreateOrderAsync(OrderShorten order);
         Task UpdatOrderAsync(OrderShorten order);

@@ -10,6 +10,7 @@ namespace SellingKoi.Services
         Task LogoutAsync();
         Task<bool> ChangePasswordAsync(string userId, string currentPassword, string newPassword);
         Task<IEnumerable<Account>> GetAllAccountsAsync();
+        Task<List<Account>> SearchlistStaffbylistId(List<string> listaccountid);
 
         //Task<bool> UpdateProfileAsync(string userId, UserProfileModel model);
 
@@ -18,6 +19,7 @@ namespace SellingKoi.Services
         Task<Account> GetAccountByIdAsync(Guid id);
         Task NegateAccountAsync(Guid id);
         Task<List<Account>> GetStaffAccountAsync();
+        Task<List<Account>> GetSaleStaffAccountAsync();
 
 
     }

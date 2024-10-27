@@ -5,7 +5,7 @@
 }
 
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h2>Order Management</h2>
+    <h2>Quản lí đơn hàng</h2>
     <a asp-controller="Trip" asp-action="QuickCreateTrip" class="btn btn-primary">Quick create Trip</a>
 </div>
 
@@ -14,16 +14,16 @@
         <tr>
             <th>Order ID</th>
             <th>
-                <a asp-action="OrderShortenedManagementSort" asp-route-sortOrder="@ViewBag.OrderDateSortParm">Order Date</a>
+                <a asp-action="OrderShortenedManagementSort" asp-route-sortOrder="@ViewBag.OrderDateSortParm">Ngày tạo</a>
             </th>
             <th>
                 <a asp-action="OrderShortenedManagementSort" asp-route-sortOrder="@ViewBag.RouteNameSortParm">Lộ trình</a>
             </th>
             <th>
-                <a asp-action="OrderShortenedManagementSort" asp-route-sortOrder="@ViewBag.StatusSortParm">Status</a>
+                <a asp-action="OrderShortenedManagementSort" asp-route-sortOrder="@ViewBag.StatusSortParm">Trạng thái</a>
             </th>
             <th>Chuyến đi</th>
-            <th>Actions</th>
+            <th>Chọn chuyến đi</th>
         </tr>
     </thead>
     <tbody>
@@ -39,9 +39,9 @@
                     </span>
                 </td>
                 <td>
-                    @if (order != null && order.Trip != null)
+                    @if (order != null && order.TripNum != null)
                     {
-                        @order.Trip.TripNum
+                        @order.TripNum
                     }
                     else
                     {
@@ -51,12 +51,11 @@
                 <td>
                     <form asp-action="UpdateOrder" method="post" class="d-inline">
                         <select name="tripId" class="form-control">
-                            @* <option value="">-- Chọn Trip --</option> *@
-                            @if (order != null && order.Trip != null)
+                            @if (order != null && order.TripNum != null)
                             {
-                                <option value="0">-- Hủy chuyến đi --   </option>
+                                <option value="0">-- Hủy chọn chuyến đi --   </option>
                             }
-                            @if(order !=null && order.Trip == null)
+                            @if (order != null && order.TripNum == null)
                             {
                                 <option value="0">-- Chọn chuyến đi --   </option>
                             }

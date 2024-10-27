@@ -141,6 +141,19 @@ namespace SellingKoi.Controllers
             return View(koi);
         }
         [HttpGet]
+        public async Task<IActionResult> DetailsShoppingKoi(Guid id)
+        {
+            
+            var koi = await _koiService.GetKoiByIdAsync(id);
+            if (koi == null)
+            {
+                return NotFound($"Koi with ID '{id}' not found.");
+            }
+            return View(koi);
+        }
+
+
+        [HttpGet]
         public async Task <IActionResult> CreateKoi(Guid farmId)
         {
             
