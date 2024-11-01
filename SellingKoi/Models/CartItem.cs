@@ -9,6 +9,7 @@
         //public int? RouteId { get; set; } // ID của lộ trình nếu có
         //public string RouteName { get; set; } // Tên lộ trình nếu có
         public double Price { get; set; } = 0; // Giá lộ trình
+        public string FarmID { get; set; }
     }
 }
 

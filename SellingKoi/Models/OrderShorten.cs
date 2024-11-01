@@ -21,6 +21,9 @@ namespace SellingKoi.Models
         public string? buyer { get; set; }
         public string? TripId { get; set; }
         public string? TripNum { get; set; }
+
+        public string? participants { get; set; }
+        public string? participantsPhone { get;set; }
         //FK
 
 

@@ -26,9 +26,13 @@
             {
                 <option value="Ongoing">Ongoing</option>
             }
-            @if (Model.status != "Done")
+            @if (Model.status == "Ongoing")
             {
                 <option value="Done">Done</option>
+            }
+            else
+            {
+                <option value="Done" disabled>Done</option>
             }
         </select>
     </div>
@@ -84,6 +88,36 @@
 
     <button type="submit" class="btn btn-primary">Cập Nhật Chuyến Đi</button>
 </form>
+
+<h3>Danh Sách Đơn Hàng Thuộc Chuyến Đi</h3>
+@if (ViewBag.OrderList != null)
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Đơn Hàng ID</th>
+                <th>Ngày Đặt</th>
+                <th>Trạng Thái</th>
+                <th>Tổng Tiền</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in ViewBag.OrderList)
+            {
+                <tr>
+                    <td>@order.Id</td>
+                    <td>@order.Registration_date.ToString("dd/MM/yyyy")</td>
+                    <td>@order.Status</td>
+                    <td>@order.Price.ToString("N0") VNĐ</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Không có đơn hàng nào thuộc chuyến đi này.</p>
+}
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {

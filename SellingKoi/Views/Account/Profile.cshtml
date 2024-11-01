@@ -24,7 +24,7 @@
                 <strong>Tổng tiền:</strong> @order.Price.ToString("N0") VND <br />
                 <strong>Trạng thái:</strong> @order.Status <br />
                 <form asp-action="DetailsOrder" asp-controller="OrderShorten" method="get">
-                    <input type="hidden" name="orderId" value="@order.Id" /> <!-- Gửi order.Id -->
+                    <input type="hidden" name="id" value="@order.Id" /> <!-- Gửi order.Id -->
                     <button type="submit">Chi tiết đơn hàng</button> <!-- Nút gửi -->
                 </form>
                 <br />

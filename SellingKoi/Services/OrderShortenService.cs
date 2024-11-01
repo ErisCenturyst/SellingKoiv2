@@ -46,7 +46,7 @@ namespace SellingKoi.Services
 
         public async Task<IEnumerable<OrderShorten>> GetAllOrderWaitToShip()
         {
-            return await _dataContext.OrtherShortens.Where(o => o.Status.Equals("waittoship")).ToListAsync();
+            return await _dataContext.OrtherShortens.Where(o => o.Status.Equals("ongoing")).ToListAsync();
         }
 
         public async Task<OrderShorten> GetOrderByIdAsync(string id)
@@ -71,6 +71,19 @@ namespace SellingKoi.Services
             _dataContext.Entry(order).State = EntityState.Modified;
             await _dataContext.SaveChangesAsync();
         }
-        
+        public async Task PayOrder(string id)
+        {
+            var order = await _dataContext.OrtherShortens.FirstOrDefaultAsync(o => o.Id.ToString().ToUpper().Equals(id));
+            order.Status = "paid";
+            _dataContext.Entry(order).State = EntityState.Modified;
+            await _dataContext.SaveChangesAsync();
+        }
+        public async Task<IEnumerable<OrderShorten>> GetListOrderBelongToStrip(string tripid)
+        {
+            var orders = await _dataContext.OrtherShortens.Where(o=> o.TripId.Equals(tripid.ToUpper())).ToListAsync();
+            return orders;
+        }
+
+
     }
 }

@@ -44,12 +44,12 @@
             align-items: center;
         }
 
-        .farm-item img {
-            width: 50px;
-            height: 50px;
-            object-fit: cover;
-            margin-right: 10px;
-        }
+            .farm-item img {
+                width: 50px;
+                height: 50px;
+                object-fit: cover;
+                margin-right: 10px;
+            }
     </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
@@ -57,12 +57,33 @@
 
     <h1>Danh sách Lộ trình</h1>
 
+    <!-- Hiển thị thông báo và danh sách trang trại -->
+    <div>
+        <h2>Lộ trình mà bạn chọn nên có các trang trại sau:</h2>
+        <div class="farm-list">
+            @if (ViewBag.RecommendedFarms != null)
+            {
+                foreach (var farm in ViewBag.RecommendedFarms)
+                {
+                    <div class="farm-item">
+                        <img src="@farm.AvatarUrl" alt="Hình ảnh trang trại" />
+                        @farm.Name
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="farm-item">Không có trang trại nào được gợi ý.</div>
+            }
+        </div>
+    </div>
+
     @foreach (var route in Model)
     {
         <div class="route-container">
             <div class="route-title">@route.Name</div>
             <div>
-                <strong>Giá tiền :</strong> @route.Price.ToString("N0")VNĐ
+                <strong>Giá tiền :</strong> @route.Price.ToString("N0") VNĐ
             </div>
             <div class="farm-list">
                 <strong>Trang trại đi qua :</strong>
@@ -87,21 +108,35 @@
     }
     <script>
         function addToCart(routeId, routeName, routePrice) {
+            // Kiểm tra xem giỏ hàng đã có route nào chưa
             $.ajax({
-                url: '/Cart/AddToCart',
-                type: 'POST',
-                data: JSON.stringify({ Id: routeId, Name: routeName, Price: routePrice }),
-                contentType: 'application/json',
+                url: '/Cart/GetCartItems', // Đường dẫn để lấy các mục trong giỏ hàng
+                type: 'GET',
                 success: function (response) {
-                    if (response.success) {
-                        alert('Đã thêm vào giỏ hàng!');
+                    if (response.length > 0) {
+                        alert('Chỉ cho phép một route trong giỏ hàng. Vui lòng xóa route hiện tại trước khi thêm route mới.');
                     } else {
-                        // alert('Có lỗi xảy ra: ' + response.message);
-                        alert('Đã thêm vào giỏ hàng.');
+                        // Nếu giỏ hàng trống, thêm route mới
+                        $.ajax({
+                            url: '/Cart/AddToCart',
+                            type: 'POST',
+                            data: JSON.stringify({ Id: routeId, Name: routeName, Price: routePrice }),
+                            contentType: 'application/json',
+                            success: function (response) {
+                                if (response.success) {
+                                    alert('Đã thêm vào giỏ hàng!');
+                                } else {
+                                    alert('Đã thêm vào giỏ hàng.');
+                                }
+                            },
+                            error: function () {
+                                alert('Có lỗi xảy ra khi thêm vào giỏ hàng!');
+                            }
+                        });
                     }
                 },
                 error: function () {
-                    alert('Có lỗi xảy ra khi thêm vào giỏ hàng!');
+                    alert('Có lỗi xảy ra khi kiểm tra giỏ hàng!');
                 }
             });
         }

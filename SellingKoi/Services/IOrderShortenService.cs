@@ -16,5 +16,7 @@ namespace SellingKoi.Services
         Task UpdatOrderAsync(OrderShorten order);
         Task<List<OrderShorten>> GetOrdersByUser(string username);
         Task CancelOrderAsync(string id);
+        Task PayOrder(string id);
+        Task<IEnumerable<OrderShorten>> GetListOrderBelongToStrip(string tripid);
     }
 }

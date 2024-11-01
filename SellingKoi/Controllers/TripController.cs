@@ -8,12 +8,14 @@ namespace SellingKoi.Controllers
     {
         private readonly ITripService _tripService;
         private readonly IAccountService _accountService;
+        private readonly IOrderShortenService _orderShortenService;
         //private readonly DataContext _context;
 
-        public TripController(IAccountService accountService, ITripService tripService /*,DataContext context*/)
+        public TripController(IAccountService accountService, ITripService tripService, IOrderShortenService orderShortenService)
         {
             _tripService = tripService;
             _accountService = accountService;
+            _orderShortenService = orderShortenService;
             //_context = context;
         }
 
@@ -66,9 +68,11 @@ namespace SellingKoi.Controllers
             }
             var staffList = await _accountService.GetStaffAccountAsync();
             var salestaffList = await _accountService.GetSaleStaffAccountAsync();
+            var orderlist = await _orderShortenService.GetListOrderBelongToStrip(id);
 
             ViewBag.StaffList = staffList;
             ViewBag.SaleStaffList = salestaffList;
+            ViewBag.OrderList = orderlist;
             return View(trip);
         }
 

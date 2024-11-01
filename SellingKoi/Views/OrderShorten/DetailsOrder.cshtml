@@ -3,13 +3,16 @@
 <h2>Chi tiết đơn hàng</h2>
 
 <div>
-    <strong>Đơn hàng ID:</strong> @Model.Id <br />
+    <strong>Mã đơn hàng:</strong> @Model.Id <br />
     <strong>Ngày đặt:</strong> @Model.Registration_date.ToString("dd/MM/yyyy") <br />
     <strong>Tổng tiền:</strong> @Model.Price.ToString("N0") VND <br />
     <strong>Trạng thái:</strong> @Model.Status
+    <p><strong>Người tham gia chuyến đi:</strong> @Model.participants </p>
+    <p><strong>Số điện thoại:</strong> @Model.participantsPhone </p>
 </div>
 
-<h3>Chuyến đi : @Model.TripNum</h3>
+<h3>Chuyến đi : @Model.TripNum</h3> 
+<p>Thời gian khởi hành : @ViewBag.TripDepartureTime</p>
 <h3>Lộ trình: @ViewBag.RouteName</h3> <br />
 <h3>Danh sách cá koi trong đơn hàng:</h3>
 <ul>
@@ -24,7 +27,7 @@
     var userRole = Context.Session.GetString("UserRole"); // Giả sử bạn lưu vai trò người dùng trong session
 }
 
-@if (userRole == "Customer" || userRole == "ADMIN" && (Model.Status == "booked")) // Kiểm tra vai trò và trạng thái đơn hàng
+@if ((userRole == "Customer" || userRole == "ADMIN") && (Model.Status == "booked")) // Kiểm tra vai trò và trạng thái đơn hàng
 {
     <form asp-action="CancelOrder" asp-controller="OrderShorten" method="post">
         <input type="hidden" name="orderId" value="@Model.Id" /> <!-- Gửi order.Id để hủy đơn hàng -->
@@ -34,6 +37,13 @@
 else
 {
     <button disabled style="opacity: 0.5;">Hủy đơn hàng</button> <!-- Nút hủy bị bôi mờ -->
+}
+@if (userRole == "Customer" && Model.Status == "booked") // Kiểm tra vai trò và trạng thái đơn hàng để hiển thị nút thanh toán
+{
+    <form asp-action="Payment" asp-controller="OrderShorten" method="post">
+        <input type="hidden" name="orderId" value="@Model.Id" /> <!-- Gửi order.Id để thanh toán -->
+        <button type="submit" class="btn btn-success">Thanh toán</button> <!-- Nút thanh toán -->
+    </form>
 }
 
 @if (userRole == "Customer") // Chỉ hiển thị liên kết quay lại nếu người dùng là customer

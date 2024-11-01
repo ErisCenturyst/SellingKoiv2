@@ -29,7 +29,7 @@
             <tr>
                 <td>@trip.TripNum</td>
                 <td>@trip.Registration_date.ToString("dd/MM/yyyy")</td>
-                <td>@trip.Date_of_departure</td>
+                <td>@trip.Date_of_departure.Value.ToString("dd/MM/yyyy")</td>
                 <td>@(trip.SaleStaff != null ? trip.SaleStaff.Fullname : "Chưa có nhân viên")</td>
                 <td>@trip.status</td>
                 <td>

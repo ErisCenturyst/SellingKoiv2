@@ -71,9 +71,11 @@ namespace SellingKoi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateOrderShorten()
+        public async Task<IActionResult> CreateOrderShorten(string participantName, string phoneNumber)
         {
             // Lấy thông tin giỏ hàng từ session
+            string participantname = participantName;
+            string phoneNum = phoneNumber;
             var cartItems = HttpContext.Session.GetObjectFromJson<List<CartItem>>("Cart");
             if (cartItems == null || !cartItems.Any())
             {
@@ -103,13 +105,18 @@ namespace SellingKoi.Controllers
                 koisid = koiItem.Select(koi => koi.Id).ToList(), // Lưu danh sách id Koi
                 koisname = koiItem.Select(koi => koi.Name).ToList(), // Lưu danh sách tên Koi
                 Price = routeItem.Price,
-                buyer = HttpContext.Session.GetString("Username")
+                buyer = HttpContext.Session.GetString("Username"),
+                participants = participantname,
+                participantsPhone = phoneNum,
 
             };
+
             if (ModelState.IsValid)
             {
                 await _orderShortenService.CreateOrderAsync(order);
                 HttpContext.Session.Remove("Cart"); // Hoặc tên session mà bạn đã sử dụng để lưu giỏ hàng
+                HttpContext.Session.Remove("FarmShouldInclude"); // Xóa FarmShouldInclude
+
 
                 return View(order);
             }
@@ -158,8 +165,16 @@ namespace SellingKoi.Controllers
         }
         [HttpGet]
         public async Task<IActionResult> DetailsOrder(string id)
-        {
+        {   
             var order = await _orderShortenService.GetOrderByIdAsync(id);
+            if (order.TripId != null)
+            {
+                var trip = await _tripService.GetTripByIdAsync(order.TripId);
+                ViewBag.TripDepartureTime = trip.Date_of_departure;
+            } else
+            {
+                ViewBag.TripDepartureTime = null;
+            }
             if (order != null)
             {
                 var route = await _routeService.GetRouteByIdAsync(order.routeid.ToString().ToUpper());
@@ -175,9 +190,18 @@ namespace SellingKoi.Controllers
         {
             await _orderShortenService.CancelOrderAsync(orderId);
             //var account = _accountService.GetAccountByIdAsync(Guid.Parse(HttpContext.Session.GetString("UserId")));
-            return RedirectToAction("DetailsOrder", "OrderShorten", new { orderId = orderId });
+            return RedirectToAction("DetailsOrder", "OrderShorten", new { id = orderId });
 
         }
+        [HttpPost]
+        public async Task<IActionResult> Payment(string orderId)
+        {
+            await _orderShortenService.PayOrder(orderId);
+            //var account = _accountService.GetAccountByIdAsync(Guid.Parse(HttpContext.Session.GetString("UserId")));
+            return RedirectToAction("DetailsOrder", "OrderShorten", new { id = orderId });
+
+        }
+
 
     }
 }

@@ -7,7 +7,11 @@
     <h1>Thông tin đơn hàng</h1>
     <p><strong>ID Đơn hàng:</strong> @order.Id</p>
     <p><strong>Tên khách hàng:</strong> @order.buyer </p>
+    <p><strong>Người tham gia chuyến đi:</strong> @order.participants </p>
+    <p><strong>Số điện thoại:</strong> @order.participantsPhone </p>
     <p><strong>Ngày tạo:</strong> @order.Registration_date.ToString("dd/MM/yyyy")</p>
     <p><strong>Tổng số tiền:</strong> @order.Price.ToString("N0") VNĐ</p>
     <p><strong>Trạng thái:</strong> @order.Status</p>
+    <p>Đơn hàng của bạn sẽ được lên lịch để sang Nhật trong 1 tuần</p>
+
 </div>

@@ -60,7 +60,7 @@
                         <h5 class="mt-3">@koi.Name</h5>
                         <p class="mb-1">Trang trại: @koi.Farm.Name</p>
                         <p class="mb-3">Tuổi: @koi.Age</p>
-                        <button class="btn btn-success btn-block" onclick="addToCart('@koi.Id', '@koi.Name')">Thêm vào giỏ hàng</button>
+                        <button class="btn btn-success btn-block" onclick="addToCart('@koi.Id', '@koi.Name', '@koi.Farm.Id')">Thêm vào giỏ hàng</button>
                     </div>
                 </div>
             }
@@ -68,13 +68,13 @@
     </div>
 
     <script>
-        function addToCart(koiId, koiName) {
+        function addToCart(koiId, koiName, farmId) {
             fetch('/Cart/AddToCart', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ Id: koiId, Name: koiName })
+                body: JSON.stringify({ Id: koiId, Name: koiName, FarmId: farmId })
             })
             .then(response => {
                 if (response.ok) {

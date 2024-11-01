@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using SellingKoi.Data;
 using SellingKoi.Models;
 using SellingKoi.Services;
@@ -22,7 +24,16 @@ namespace SellingKoi.Controllers
         [HttpGet]
         public async Task<IActionResult> RouteShopping()
         {
+            // Lấy danh sách FarmID từ session
+            var farmListJson = HttpContext.Session.GetString("FarmShouldInclude");
+            List<string> farmIds = string.IsNullOrEmpty(farmListJson) ? new List<string>() : JsonConvert.DeserializeObject<List<string>>(farmListJson);
+            
+            // Lấy danh sách lộ trình từ cơ sở dữ liệu
             var routes = await _routeService.GetAllRoutesAsync();
+
+            // Lấy danh sách trang trại dựa trên FarmID
+            var recommendedFarms = _dataContext.Farms.Where(f => farmIds.Contains(f.Id.ToString())).ToList();
+            ViewBag.RecommendedFarms = recommendedFarms; // Lưu danh sách trang trại vào ViewBag
 
             if (routes == null)
             {
