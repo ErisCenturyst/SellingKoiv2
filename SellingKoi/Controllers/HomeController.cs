@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using SellingKoi.Models;
 using System.Diagnostics;
-using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace SellingKoi.Controllers
 {

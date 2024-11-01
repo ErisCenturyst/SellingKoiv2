@@ -22,13 +22,16 @@
               @*   <td>@route.Id</td> *@
                 <td>@route.Name</td>
                 <td> 
-                    @foreach (var farms in route.Farms.Where(f => f.Status))
-                    {
-                           <p>@farms.Name</p>
-                    }
-
+                    <div style="display: flex; flex-wrap: wrap;">
+                        @foreach (var farms in route.Farms.Where(f => f.Status))
+                        {
+                            <div style="margin-right: 10px; text-align: center;">
+                                <img src="@farms.AvatarUrl" alt="Hình ảnh trang trại" style="width: 100px; height: 100px; object-fit: cover;">
+                                <p>@farms.Name</p>
+                            </div>
+                        }
+                    </div>
                 </td>
-
 
                 <td>
                     @* <a asp-controller="Route" asp-action="UpdateRoute" asp-route-id="@route.Id  " class="btn btn-warning">Chỉnh sửa</a> *@
@@ -37,8 +40,6 @@
                     </form>
                     <a asp-controller="Route" asp-action="DetailsRoute" asp-route-id="@route.Id" class="btn btn-primary">Chi tiết</a>
                 </td>
-
-
             </tr>
         }
     </tbody>

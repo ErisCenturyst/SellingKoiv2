@@ -7,6 +7,9 @@
     ViewData["Title"] = "Chi tiết cá Koi";
 }
 
+<div>
+    <a asp-action="KoiManagement" class="btn btn-secondary">Quay lại</a>
+</div>
 
 <h2>Chi tiết cá Koi</h2>
 
@@ -17,7 +20,6 @@
     }
 
     <h4>@Model.Name</h4>
-    <hr />
     <dl class="row">
         <dt class="col-sm-2">Loại cá</dt>
         <dd class="col-sm-10">@Model.Type</dd>
@@ -31,13 +33,7 @@
         <dt class="col-sm-2">Trang trại</dt>
         <dd class="col-sm-10">@Model.Farm.Name</dd>
     </dl>
-</div>
-
-
-
-<div>
-    <a asp-action="KoiManagement" class="btn btn-secondary">Quay lại</a>
-</div>
+</div
 
 <div class="col-sm-6">
 
@@ -57,4 +53,26 @@
     </dl>
     <a asp-controller="Farm" asp-action="DetailsShoppingFarm" asp-route-id="@Model.Farm.Id" class="btn btn-info">Chi tiết trang trại</a> <!-- Thêm nút này -->
 
+</div>
+
+<!-- Hiển thị các cá Koi liên quan -->
+<div>
+    <h3>Cá Koi liên quan</h3>
+    @if (ViewBag.RelatedKois != null && ViewBag.RelatedKois.Any())
+    {
+        <ul>
+            @foreach (var relatedKoi in ViewBag.RelatedKois)
+            {
+                <li>
+                    <a asp-controller="Koi" asp-action="DetailsShoppingKoi" asp-route-id="@relatedKoi.Id">
+                        @relatedKoi.Name
+                    </a>
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>Không có cá Koi liên quan.</p>
+    }
 </div>

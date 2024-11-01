@@ -7,7 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Views\OrderShorten\ShowOrderHaveCreated.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="FirebaseAdmin" Version="3.0.1" />
+    <PackageReference Include="FirebaseStorage.net" Version="1.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.8" />
@@ -22,6 +27,18 @@
     <Folder Include="Image\" />
     <Folder Include="Migrations\" />
     <Folder Include="wwwroot\Images\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\OrderShorten\ShowOrderHaveCreated.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\OrderShorten\ShowOrderHaveCreated.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\OrderShorten\ShowOrderHaveCreated.cshtml" />
   </ItemGroup>
 
 </Project>

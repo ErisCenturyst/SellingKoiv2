@@ -9,7 +9,7 @@ namespace SellingKoi.Services
         private readonly DataContext _context;
         private readonly IOrderShortenService _orderShortenService;
 
-        public TripService(DataContext context,IOrderShortenService orderShortenService)
+        public TripService(DataContext context, IOrderShortenService orderShortenService)
         {
             _context = context;
             _orderShortenService = orderShortenService;
@@ -21,9 +21,9 @@ namespace SellingKoi.Services
             {
                 var listorder = await _orderShortenService.SearchOrderList(model.OrderShortensID);
                 double price_temp = 0;
-                foreach (var item in listorder) 
+                foreach (var item in listorder)
                 {
-                    price_temp += item.Price;   
+                    price_temp += item.Price;
                 }
                 model.Price = price_temp.ToString();
             }

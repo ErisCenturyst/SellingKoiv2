@@ -1,8 +1,5 @@
-﻿
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using SellingKoi.Data;
-using SellingKoi.Models;
 
 namespace SellingKoi.Services
 {
@@ -19,7 +16,7 @@ namespace SellingKoi.Services
         public async Task<IEnumerable<Models.Route>> GetAllRoutesAsync()
         {
             return await _dataContext.Routes.Include(r => r.Farms).Where(r => r.Status).ToListAsync();
-            
+
         }
 
         public async Task<Models.Route> GetRouteByIdAsync(string id)

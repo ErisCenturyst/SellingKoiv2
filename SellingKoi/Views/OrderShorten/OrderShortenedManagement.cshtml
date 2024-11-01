@@ -4,9 +4,8 @@
     ViewData["Title"] = "Order Management";
 }
 
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <h2>Quản lí đơn hàng</h2>
-    <a asp-controller="Trip" asp-action="QuickCreateTrip" class="btn btn-primary">Quick create Trip</a>
+<div class="justify-content-between align-items-center mb-3">
+    <h2>Quản lí đơn hàng</h2
 </div>
 
 <table class="table table-striped table-hover">
@@ -30,7 +29,11 @@
         @foreach (var order in Model)
         {
             <tr>
-                <td>@order.Id</td>
+                <td>
+                     <a asp-action="DetailsOrder" asp-controller="OrderShorten" asp-route-id="@order.Id">
+                             @order.Id
+                        </a>
+                </td>
                 <td>@order.Registration_date.ToShortDateString()</td>
                 <td>@order.routename.ToString()</td>
                 <td>
@@ -50,26 +53,26 @@
                 </td>
                 <td>
                     <form asp-action="UpdateOrder" method="post" class="d-inline">
-                        <select name="tripId" class="form-control">
+                        <select name="tripId" class="form-control" @(order.Status != "paid" ? "disabled" : "")>
                             @if (order != null && order.TripNum != null)
                             {
-                                <option value="0">-- Hủy chọn chuyến đi --   </option>
+                                <option value="0">-- Hủy chọn chuyến đi --</option>
                             }
                             @if (order != null && order.TripNum == null)
                             {
-                                <option value="0">-- Chọn chuyến đi --   </option>
+                                <option value="0">-- Chọn chuyến đi --</option>
                             }
                             
                             @if (ViewBag.TripList != null)
                             {
                                 foreach (var trip in ViewBag.TripList as List<Trip>)
                                 {   
-                                     <option value="@trip.Id">@trip.TripNum</option>
+                                    <option value="@trip.Id">@trip.TripNum</option>
                                 }
                             }
                         </select>
                         <input type="hidden" name="orderId" value="@order.Id" /> <!-- Thêm hidden field để gửi Order ID -->
-                        <button type="submit" class="btn btn-success btn-sm">Cập nhật</button> <!-- Nút cập nhật -->
+                        <button type="submit" class="btn btn-success btn-sm" @(order.Status != "paid" ? "disabled" : "")>Cập nhật</button> <!-- Nút cập nhật -->
                     </form>
                 </td>
             </tr>

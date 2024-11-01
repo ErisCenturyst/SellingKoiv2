@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Mvc;
 using SellingKoi.Data;
 using SellingKoi.Models;
 using SellingKoi.Services;
-using System.Collections.Immutable;
 
 namespace SellingKoi.Controllers
 {
@@ -12,12 +11,15 @@ namespace SellingKoi.Controllers
         private readonly IOrderShortenService _orderShortenService;
         private readonly DataContext _datacontext;
         private readonly ITripService _tripService;
-
-        public OrderShortenController(IOrderShortenService orderShortenService,ITripService tripService,DataContext datacontext)
+        private readonly IRouteService _routeService;
+        private readonly IAccountService _accountService;
+        public OrderShortenController(IOrderShortenService orderShortenService, ITripService tripService, DataContext datacontext, IRouteService routeService,IAccountService accountService)
         {
             _orderShortenService = orderShortenService;
             _datacontext = datacontext;
             _tripService = tripService;
+            _routeService = routeService;
+            _accountService = accountService;
         }
         [HttpGet]
         public async Task<IActionResult> ShowOrderHaveCreated(string orderid) //by customer
@@ -61,6 +63,7 @@ namespace SellingKoi.Controllers
             else
             {
                 order.TripId = null;
+                order.TripNum = null;
             }
             await _orderShortenService.UpdatOrderAsync(order);
             return RedirectToAction("OrderShortenedManagement");
@@ -87,11 +90,11 @@ namespace SellingKoi.Controllers
             }
             //tìm cá trong giỏ hàng.
             var koiItem = cartItems.Where(item => item.Price == 0).ToList(); // Chuyển đổi thành danh sách
-            if (!koiItem.Any()) // Kiểm tra xem danh sách có rỗng không
-            {
-                var errorMessage = "Không tìm thấy cá Koi trong giỏ hàng.";
-                return RedirectToAction("Error", "Home", new { errorMessage });
-            }
+            //if (!koiItem.Any()) // Kiểm tra xem danh sách có rỗng không
+            //{
+            //    var errorMessage = "Không tìm thấy cá Koi trong giỏ hàng.";
+            //    return RedirectToAction("Error", "Home", new { errorMessage });
+            //}
             // Tạo đơn hàng mới từ thông tin giỏ hàng
             var order = new OrderShorten
             {
@@ -106,7 +109,8 @@ namespace SellingKoi.Controllers
             if (ModelState.IsValid)
             {
                 await _orderShortenService.CreateOrderAsync(order);
-                //return RedirectToAction(nameof(ShowOrderHaveCreated), new { orderid = order.Id });
+                HttpContext.Session.Remove("Cart"); // Hoặc tên session mà bạn đã sử dụng để lưu giỏ hàng
+
                 return View(order);
             }
             else
@@ -150,6 +154,28 @@ namespace SellingKoi.Controllers
 
             //return View(orders.ToList());
             return RedirectToAction("OrderShortenedManagement", "OrderShorten", new { sortedOrders = orders.ToList() });
+
+        }
+        [HttpGet]
+        public async Task<IActionResult> DetailsOrder(string id)
+        {
+            var order = await _orderShortenService.GetOrderByIdAsync(id);
+            if (order != null)
+            {
+                var route = await _routeService.GetRouteByIdAsync(order.routeid.ToString().ToUpper());
+                if(route != null)
+                {
+                    ViewBag.RouteName = route.Name;
+                    return View(order);
+                } else return RedirectToAction("Profile", "Account");
+            } return RedirectToAction("Profile", "Account" );
+        }
+        [HttpPost]
+        public async Task<IActionResult> CancelOrder(string orderId)
+        {
+            await _orderShortenService.CancelOrderAsync(orderId);
+            //var account = _accountService.GetAccountByIdAsync(Guid.Parse(HttpContext.Session.GetString("UserId")));
+            return RedirectToAction("DetailsOrder", "OrderShorten", new { orderId = orderId });
 
         }
 

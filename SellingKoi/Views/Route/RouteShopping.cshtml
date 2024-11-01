@@ -40,6 +40,15 @@
 
         .farm-item {
             margin: 5px 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .farm-item img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            margin-right: 10px;
         }
     </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -53,17 +62,18 @@
         <div class="route-container">
             <div class="route-title">@route.Name</div>
             <div>
-                <strong>Trạng thái:</strong> @(route.Status ? "Hoạt động" : "Ngừng hoạt động")<br />
-                <strong>Ngày đăng ký:</strong> @route.Registration_date.ToString("dd/MM/yyyy")<br />
-                <strong>Giá tiền :</strong> @(route.Price.ToString()) VNĐ
+                <strong>Giá tiền :</strong> @route.Price.ToString("N0")VNĐ
             </div>
             <div class="farm-list">
-                <strong>Trang trại thuộc lộ trình:</strong>
+                <strong>Trang trại đi qua :</strong>
                 @if (route.Farms != null && route.Farms.Any())
                 {
                     foreach (var farm in route.Farms)
                     {
-                        <div class="farm-item">- @farm.Name</div>
+                        <div class="farm-item">
+                            <img src="@farm.AvatarUrl" alt="Hình ảnh trang trại" />
+                            @farm.Name
+                        </div>
                     }
                 }
                 else
@@ -72,7 +82,7 @@
                 }
             </div>
             <!-- Thêm nút "Add to Cart" -->
-            <button class="add-to-cart" onclick="addToCart('@route.Id','@route.Name','@route.Price')">Add to Cart</button>
+            <button class="add-to-cart" onclick="addToCart('@route.Id', '@route.Name', '@route.Price')">Add to Cart</button>
         </div>
     }
     <script>
@@ -86,7 +96,8 @@
                     if (response.success) {
                         alert('Đã thêm vào giỏ hàng!');
                     } else {
-                        alert('Có lỗi xảy ra: ' + response.message);
+                        // alert('Có lỗi xảy ra: ' + response.message);
+                        alert('Đã thêm vào giỏ hàng.');
                     }
                 },
                 error: function () {

@@ -1,19 +1,18 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SellingKoi.Models;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 
 namespace SellingKoi.Data
 {
     public class DataContext : DbContext
     {
-        public DataContext(DbContextOptions<DataContext> options):base(options) { }
+        public DataContext(DbContextOptions<DataContext> options) : base(options) { }
         public DbSet<Account> Accounts { get; set; }
         public DbSet<Farm> Farms { get; set; }
         public DbSet<KOI> KOIs { get; set; }
         public DbSet<Models.Route> Routes { get; set; }
         public DbSet<OrderShorten> OrtherShortens { get; set; }
-        public DbSet<Trip> Trips { get; set; } 
+        public DbSet<Trip> Trips { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -47,7 +46,7 @@ namespace SellingKoi.Data
                 .HasForeignKey(k => k.RouteId);
 
             modelBuilder.Entity<Trip>()
-                .HasKey(e => e.Id); 
+                .HasKey(e => e.Id);
 
         }
 

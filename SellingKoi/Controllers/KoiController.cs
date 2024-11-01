@@ -1,48 +1,21 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using SellingKoi.Data;
 using SellingKoi.Models;
 using SellingKoi.Services;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-//using Firebase.Auth;
-//using Firebase.Storage;
-using Microsoft.AspNetCore.Hosting;
-
-
-
-
-using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace SellingKoi.Controllers
 {
     public class KoiController : Controller
     {
-        //private readonly IHostingEnvironment _env;
-        //private static string ApiKey = "AIzaSyAapLIXv7mHhOTxLE-OVNPL_ATkeMJ8qY8\r\n";
-        //private static string Bucket = "gs://sellingkoi-986f6.appspot.com";
-        //private static string AuthEmail = "phatctse172611@fpt.edu.vn";
-        //private static string AuthPassword = "test@123";
 
         private readonly IKoiService _koiService;
         private readonly IFarmService _farmService;
 
-        //public KoiController(IHostingEnvironment env)
-        //{
-        //    _env = env;
-        //}
-       
-
-        public KoiController(IKoiService koiService,IFarmService farmService,DataContext dataContext)
+        public KoiController(IKoiService koiService, IFarmService farmService, DataContext dataContext)
         {
             _koiService = koiService;
             _farmService = farmService;
- 
+
         }
 
         //upload imgage
@@ -105,9 +78,9 @@ namespace SellingKoi.Controllers
         public async Task<IActionResult> KoiManagement()
         {
             var kois = await _koiService.GetAllKoisAsync();
-            if(kois == null)
+            if (kois == null)
             {
-                return NotFound("No Koi are found !"); 
+                return NotFound("No Koi are found !");
             }
             return View(kois);
         }
@@ -115,7 +88,7 @@ namespace SellingKoi.Controllers
         public async Task<IActionResult> KoiShopping()
         {
             var kois = await _koiService.GetAllKoisAsync();
-          
+
 
             if (kois == null)
             {
@@ -127,7 +100,7 @@ namespace SellingKoi.Controllers
         [HttpGet]
         public async Task<IActionResult> DetailsKoi(Guid id)
         {
-  
+
             if (id == null)
             {
                 return NotFound($"Koi with id '{id}' not found.");
@@ -143,20 +116,21 @@ namespace SellingKoi.Controllers
         [HttpGet]
         public async Task<IActionResult> DetailsShoppingKoi(Guid id)
         {
-            
             var koi = await _koiService.GetKoiByIdAsync(id);
             if (koi == null)
             {
                 return NotFound($"Koi with ID '{id}' not found.");
             }
+            var relatedKois = await _koiService.GetKoisWithType(koi.Type.ToString());
+            ViewBag.RelatedKois = relatedKois;
             return View(koi);
         }
 
 
         [HttpGet]
-        public async Task <IActionResult> CreateKoi(Guid farmId)
+        public async Task<IActionResult> CreateKoi(Guid farmId)
         {
-            
+
             var koi = new KOI
             {
                 FarmID = farmId, // Gán FarmID cho Koi mới
@@ -166,10 +140,27 @@ namespace SellingKoi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateKoi(KOI koi)
+        public async Task<IActionResult> CreateKoi(KOI koi, IFormFile AvatarUpload)
         {
             var farm = await _farmService.GetFarmByIdAsync(koi.FarmID.ToString().ToUpper());
             koi.Farm = farm;
+            // Xử lý URL ảnh đại diện nếu có
+            if (!string.IsNullOrEmpty(koi.AvatarUrl))
+            {
+                // AvatarUrl đã được set bởi JavaScript khi tải lên Firebase
+                // Không cần xử lý thêm ở đây
+                //koidb.AvatarUrl = koi.AvatarUrl; // Cập nhật trường Avatar (chỉnh cần khi update, tạo mới ko cần dòng này)
+
+            }
+            else if (AvatarUpload != null)
+            {
+                // Nếu có file được tải lên nhưng chưa được xử lý bởi Firebase
+                // Bạn có thể xử lý tải lên ở đây nếu cần
+                // Ví dụ: tải lên Firebase và lấy URL
+                //koi.AvatarUrl = await UploadFileToFirebase(AvatarUpload);
+            }
+
+
             if (koi != null)
             {
                 await _koiService.CreateKoiAsync(koi);
@@ -187,35 +178,61 @@ namespace SellingKoi.Controllers
         [HttpGet]
         public async Task<IActionResult> EditKoi(Guid id)
         {
-            var koi= await _koiService.GetKoiByIdAsync(id);
+            var koi = await _koiService.GetKoiByIdAsync(id);
             if (koi == null)
             {
                 return NotFound();
-            }   
+            }
             return View(koi);
         }
 
         [HttpPost]
-        //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditKoi(Guid id, [Bind("Id,Name,Type,Age,Description,FarmID")] KOI koi)
+        public async Task<IActionResult> EditKoi(Guid id, KOI koi, IFormFile AvatarUpload)
         {
-            if (id != koi.Id)
+            try
             {
-                return NotFound();
+
+                var koidb = await _koiService.GetKoiByIdAsync(id);
+                if (koidb == null)
+                {
+                    return NotFound();
+                }
+
+                // Xử lý URL ảnh đại diện nếu có
+                if (!string.IsNullOrEmpty(koi.AvatarUrl))
+                {
+                    // AvatarUrl đã được set bởi JavaScript khi tải lên Firebase
+                    // Không cần xử lý thêm ở đây
+                    koidb.AvatarUrl = koi.AvatarUrl; // Cập nhật trường Avatar (chỉnh cần khi update, tạo mới ko cần dòng này)
+
+                }
+                else if (AvatarUpload != null)
+                {
+                    // Nếu có file được tải lên nhưng chưa được xử lý bởi Firebase
+                    // Bạn có thể xử lý tải lên ở đây nếu cần
+                    // Ví dụ: tải lên Firebase và lấy URL
+                    //koi.AvatarUrl = await UploadFileToFirebase(AvatarUpload);
+                }
+
+
+                // Cập nhật các thuộc tính của thực thể đã được theo dõi
+                koidb.Status = koi.Status;
+                koidb.Name = koi.Name;
+                koidb.Description = koi.Description;
+                koidb.AlbumUrl = koi.AlbumUrl;
+                koidb.Age = koi.Age;
+                koidb.Type = koi.Type;
+                await _koiService.UpdateKoiAsync(koidb); // Cập nhật thực thể đã được theo dõi
+                return RedirectToAction("KoiManagement", "Koi");
             }
-             try
-             {
-                 await _koiService.UpdateKoiAsync(koi);
-             //return RedirectToAction(nameof(KoiManagement));
-             return RedirectToAction("DetailsFarm", "Farm", new { id = koi.FarmID });
-             }   
-             catch (Exception ex)
-             {
-             // Log the error
-             ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
-             return NotFound();
-             }
+            catch (Exception ex)
+            {
+                // Log the error
+                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                return View(koi); // Trả về view với model để hiển thị lỗi
+            }
         }
+
 
         [HttpPost]
         //[ValidateAntiForgeryToken]
@@ -226,9 +243,9 @@ namespace SellingKoi.Controllers
                 var koi = await _koiService.GetKoiByIdAsync(id);
                 await _koiService.NegateKoiAsync(id);
                 TempData["SuccessMessage"] = "Koi has been negated successfully.";
-                return RedirectToAction("DetailsFarm", "Farm", new { id = koi.FarmID });
+                return RedirectToAction("KoiManagement", "Koi");
             }
-            catch (KeyNotFoundException)    
+            catch (KeyNotFoundException)
             {
                 TempData["ErrorMessage"] = $"Koi with ID {id} not found.";
                 return NotFound();
@@ -240,6 +257,6 @@ namespace SellingKoi.Controllers
                 return NotFound();
             }
         }
-        
+
     }
 }

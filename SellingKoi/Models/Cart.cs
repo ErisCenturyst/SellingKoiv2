@@ -1,11 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SellingKoi.Models
 {
     public class Cart
     {
-        
+
         [Key]
         public Guid Id { get; set; } // Khóa chính
 

@@ -7,6 +7,9 @@
 @{
     ViewData["Title"] = "Chi tiết Farm";
 }
+<div class="mb-3">
+    <a asp-action="FarmShopping" class="btn btn-secondary">Quay lại</a>
+</div>
 
 <div class="container mt-4">
     <h2 class="text-center">Chi tiết Trang trại</h2>
@@ -35,10 +38,7 @@
         </div>
     </div>
 
-    <div class="mb-3">
-        <a asp-action="FarmManagement" class="btn btn-secondary">Quay lại</a>
-    </div>
-
+   
     <div>
         <h4>Danh sách cá thuộc farm này</h4>
         @if (Model.KOIs.Any())

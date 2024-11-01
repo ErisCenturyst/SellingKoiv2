@@ -7,55 +7,63 @@
     ViewData["Title"] = "Chi tiết Koi";
 }
 
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Chi tiết cá Koi</h2>
 
-<h2>Chi tiết Koi</h2>
+    <div class="card shadow-lg p-4 mb-4">
+        @if (Model == null)
+        {
+            <p class="text-danger text-center">Không tìm thấy thông tin Koi.</p>
+        }
+        else
+        {
+            <div class="row">
+                <div class="col-md-6 text-center">
+                    <img src="@Model.AvatarUrl" class="card-img-top rounded" alt="Koi Image" style="width: 100%; height: auto; max-height: 300px; object-fit: cover;">
+                </div>
+                <div class="col-md-6">
+                    <h3>@Model.Name</h3>
+                    <hr />
+                    <dl class="row">
+                        <dt class="col-sm-4">Loại cá</dt>
+                        <dd class="col-sm-8">@Model.Type</dd>
 
-<div>
-    @if(Model == null)
-    {
-        <p>Không tìm thấy thông tin Koi.</p>
-    }
+                        <dt class="col-sm-4">Tuổi</dt>
+                        <dd class="col-sm-8">@Model.Age</dd>
 
-    <h4>@Model.Name</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">Loại cá</dt>
-        <dd class="col-sm-10">@Model.Type</dd>
+                        <dt class="col-sm-4">Mô tả</dt>
+                        <dd class="col-sm-8">@Model.Description</dd>
 
-        <dt class="col-sm-2">Tuổi</dt>
-        <dd class="col-sm-10">@Model.Age</dd>
+                        <dt class="col-sm-4">Trang trại</dt>
+                        <dd class="col-sm-8">@Model.Farm.Name</dd>
+                    </dl>
+                </div>
+            </div>
+        }
+    </div>
 
-        <dt class="col-sm-2">Mô tả</dt>
-        <dd class="col-sm-10">@Model.Description</dd>
+    <div class="text-center mb-4">
+        <a asp-action="KoiManagement" class="btn btn-secondary mx-1">Quay lại</a>
+        <a asp-action="EditKoi" asp-route-id="@Model.Id" class="btn btn-warning mx-1">Chỉnh sửa</a>
+        <form asp-action="DeleteKoi" asp-route-id="@Model.Id" method="post" class="d-inline">
+            <button type="submit" class="btn btn-danger mx-1" onclick="return confirm('Bạn có chắc chắn muốn xóa cá này?');">Xóa</button>
+        </form>
+    </div>
 
-        <dt class="col-sm-2">Trang trại</dt>
-        <dd class="col-sm-10">@Model.Farm.Name</dd>
-    </dl>
-</div>
+    <div class="card shadow-lg p-4 mb-4">
+        <h4>Thông tin trang trại</h4>
+        <dl class="row">
+            <dt class="col-sm-4">Tên</dt>
+            <dd class="col-sm-8">@Model.Farm.Name</dd>
 
+            <dt class="col-sm-4">Chủ trại</dt>
+            <dd class="col-sm-8">@Model.Farm.Owner</dd>
 
-
-<div>
-    <a asp-action="KoiManagement" class="btn btn-secondary">Quay lại</a>
-    <a asp-action="EditKoi" asp-route-id="@Model.Id" class="btn btn-warning">Chỉnh sửa</a>
-    <form asp-action="DeleteKoi" asp-route-id="@Model.Id" method="post" style="display:inline;">
-        <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa cá này?');">Xóa</button>
-    </form>
-</div>
-
-<div class="col-sm-6">
-
-    <h4>Thông tin trang trại</h4>
-    <dl class="row">
-        <dt class="col-sm-4">Tên</dt>
-        <dd class="col-sm-8">@Model.Farm.Name</dd>
-
-        <dt class="col-sm-4">Chủ trại</dt>
-        <dd class="col-sm-8">@Model.Farm.Owner</dd>
-
-        <dt class="col-sm-4">Chú thích</dt>
-        <dd class="col-sm-8">@Model.Farm.Description</dd>
-    </dl>
-    <a asp-controller="Farm" asp-action="DetailsFarm" asp-route-id="@Model.Farm.Id" class="btn btn-info">Chi tiết trang trại</a> <!-- Thêm nút này -->
-
+            <dt class="col-sm-4">Chú thích</dt>
+            <dd class="col-sm-8">@Model.Farm.Description</dd>
+        </dl>
+        <div class="text-center mt-3">
+            <a asp-controller="Farm" asp-action="DetailsFarm" asp-route-id="@Model.Farm.Id" class="btn btn-info">Chi tiết trang trại</a>
+        </div>
+    </div>
 </div>

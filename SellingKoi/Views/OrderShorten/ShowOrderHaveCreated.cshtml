@@ -8,6 +8,7 @@
     <p><strong>ID Đơn hàng:</strong> @order.Id</p>
     <p><strong>Tên khách hàng:</strong> @order.buyer </p>
     <p><strong>Ngày tạo:</strong> @order.Registration_date.ToString("dd/MM/yyyy")</p>
-    <p><strong>Tổng số tiền:</strong> @order.Price.ToString("N0") VNĐ</p>
+
+    @* <p><strong>Tổng số tiền:</strong> @order.TotalAmount.ToString("C")</p> *@
     <p><strong>Trạng thái:</strong> @order.Status</p>
 </div>

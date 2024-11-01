@@ -19,16 +19,21 @@ namespace SellingKoi.Services
             {
                 throw new ArgumentException("FarmID không hợp lệ.");
             }
-                
+
             _context.KOIs.Add(koi);
             await _context.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<KOI>> GetAllKoisAsync()
         {
-            return await _context.KOIs.Where(k => k.Status ).Include(k => k.Farm).ToListAsync();
+            return await _context.KOIs.Where(k => k.Status).Include(k => k.Farm).ToListAsync();
         }
-        
+
+        public async Task<List<KOI>> GetKoisWithType(string type)
+        {
+            return await _context.KOIs.Where(k => k.Status && k.Type.Equals(type)).Include(k => k.Farm).ToListAsync();
+        }
+
         //not use
         public Task<Guid?> GetIdByNameAsync(string name)
         {

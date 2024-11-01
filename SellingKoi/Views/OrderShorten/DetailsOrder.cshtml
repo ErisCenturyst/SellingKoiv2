@@ -1,0 +1,42 @@
+﻿@model SellingKoi.Models.OrderShorten
+
+<h2>Chi tiết đơn hàng</h2>
+
+<div>
+    <strong>Đơn hàng ID:</strong> @Model.Id <br />
+    <strong>Ngày đặt:</strong> @Model.Registration_date.ToString("dd/MM/yyyy") <br />
+    <strong>Tổng tiền:</strong> @Model.Price.ToString("N0") VND <br />
+    <strong>Trạng thái:</strong> @Model.Status
+</div>
+
+<h3>Chuyến đi : @Model.TripNum</h3>
+<h3>Lộ trình: @ViewBag.RouteName</h3> <br />
+<h3>Danh sách cá koi trong đơn hàng:</h3>
+<ul>
+    @foreach (var koi in Model.koisname) // Giả sử Model.KoiList chứa danh sách cá koi
+    {
+        <li>@koi</li> <!-- Hiển thị tên cá koi -->
+    }
+</ul>
+
+@{
+    var userId = Context.Session.GetString("UserId");
+    var userRole = Context.Session.GetString("UserRole"); // Giả sử bạn lưu vai trò người dùng trong session
+}
+
+@if (userRole == "Customer" || userRole == "ADMIN" && (Model.Status == "booked")) // Kiểm tra vai trò và trạng thái đơn hàng
+{
+    <form asp-action="CancelOrder" asp-controller="OrderShorten" method="post">
+        <input type="hidden" name="orderId" value="@Model.Id" /> <!-- Gửi order.Id để hủy đơn hàng -->
+        <button type="submit">Hủy đơn hàng</button> <!-- Nút hủy đơn hàng -->
+    </form>
+}
+else
+{
+    <button disabled style="opacity: 0.5;">Hủy đơn hàng</button> <!-- Nút hủy bị bôi mờ -->
+}
+
+@if (userRole == "Customer") // Chỉ hiển thị liên kết quay lại nếu người dùng là customer
+{
+    <a asp-action="Profile" asp-controller="Account" asp-route-id="@userId">Quay lại danh sách đơn hàng</a> <!-- Liên kết quay lại -->
+}

@@ -1,7 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Linq;
-using Newtonsoft.Json;
 using SellingKoi.Models;
 
 namespace SellingKoi.Controllers
@@ -18,17 +15,7 @@ namespace SellingKoi.Controllers
         {
 
             var cart = HttpContext.Session.GetObjectFromJson<List<CartItem>>("Cart") ?? new List<CartItem>();
-
-            // Kiểm tra xem Koi đã có trong giỏ hàng chưa
-            //var existingKoi = cart.FirstOrDefault(i => i.Id == item.Id);
-            //if (existingKoi != null)
-            //{
-            //    existingKoi.Quantity += 1; // Tăng số lượng nếu đã có
-            //}
-            //else
-            //{
-            cart.Add(new CartItem { Id = item.Id, Name = item.Name, Price =item.Price }); // Thêm mới
-            //}
+            cart.Add(new CartItem { Id = item.Id, Name = item.Name, Price = item.Price }); // Thêm 
 
             // Lưu giỏ hàng vào session
             HttpContext.Session.SetObjectAsJson("Cart", cart);
@@ -36,8 +23,9 @@ namespace SellingKoi.Controllers
         }
 
         [HttpPost]
-        public IActionResult RemoveFromCart(string itemId)
+        public IActionResult RemoveFromCart([FromBody] RemoveFromCartRequest request)
         {
+            string itemId = request.ItemId; // Lấy itemId từ request
             var cart = HttpContext.Session.GetObjectFromJson<List<CartItem>>("Cart") ?? new List<CartItem>();
 
             // Tìm item trong giỏ hàng
@@ -96,6 +84,9 @@ namespace SellingKoi.Controllers
         //    AddToCart(cartItem); // Thêm vào giỏ hàng
         //    return Ok();
         //}
-
+        public class RemoveFromCartRequest
+        {
+            public string ItemId { get; set; }
+        }
     }
 }

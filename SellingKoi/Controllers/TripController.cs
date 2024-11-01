@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SellingKoi.Models;
 using SellingKoi.Services;
-using Microsoft.EntityFrameworkCore;
-using SellingKoi.Data;
-using Microsoft.IdentityModel.Tokens;
 
 namespace SellingKoi.Controllers
 {
@@ -13,8 +10,8 @@ namespace SellingKoi.Controllers
         private readonly IAccountService _accountService;
         //private readonly DataContext _context;
 
-        public TripController(IAccountService accountService,ITripService tripService /*,DataContext context*/)
-        {   
+        public TripController(IAccountService accountService, ITripService tripService /*,DataContext context*/)
+        {
             _tripService = tripService;
             _accountService = accountService;
             //_context = context;
@@ -34,12 +31,12 @@ namespace SellingKoi.Controllers
             var staffList = await _accountService.GetStaffAccountAsync();
             var salestaffList = await _accountService.GetSaleStaffAccountAsync();
 
-            ViewBag.StaffList =  staffList;
+            ViewBag.StaffList = staffList;
             ViewBag.SaleStaffList = salestaffList;
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> CreateTrip(Trip trip,List<string> FollowAccountsID,string SaleStaffID)
+        public async Task<IActionResult> CreateTrip(Trip trip, List<string> FollowAccountsID, string SaleStaffID)
         {
             // Lấy thông tin đầy đủ của nhân viên từ database để kiểm tra
             var stafflist = await _accountService.SearchlistStaffbylistId(FollowAccountsID);
@@ -62,7 +59,7 @@ namespace SellingKoi.Controllers
             {
                 return NotFound();
             }
-            var trip =  await _tripService.GetTripByIdAsync(id);
+            var trip = await _tripService.GetTripByIdAsync(id);
             if (trip == null)
             {
                 return NotFound();
@@ -74,7 +71,7 @@ namespace SellingKoi.Controllers
             ViewBag.SaleStaffList = salestaffList;
             return View(trip);
         }
-        
+
         [HttpPost]
         public async Task<IActionResult> UpdateTrip(string tripid, string Status, List<string> FollowAccountsID, string SaleStaffID, DateTime Date_of_Departure)
         {
@@ -141,7 +138,7 @@ namespace SellingKoi.Controllers
             {
                 return Json(new { success = false, message = "ID chuyến đi không hợp lệ" });
             }
-            
+
 
             var trip = await _tripService.GetTripByIdAsync(model.TripId);
             if (trip == null)

@@ -14,7 +14,8 @@
         <tr>
             <th>Tên tài khoản</th>
             <th>Họ tên</th>
-            <th>Ngày đăng kí</th>   
+            <th>Ngày đăng kí</th>
+            <th>Vai trò</th>
         </tr>
     </thead>
     <tbody>
@@ -25,6 +26,19 @@
                 <td>@account.Username</td>
                 <td>@account.Fullname</td>
                 <td>@account.Registration_date</td>
+                <td>
+                    @{
+                        string roleDisplay = account.Role switch
+                        {
+                            "Staff" => "Nhân viên",
+                            "SaleStaff" => "Nhân viên bán hàng",
+                            "Customer" => "Khách hàng",
+                            "Manager" => "Quản lý",
+                            _ => account.Role // Giữ nguyên nếu không khớp với bất kỳ vai trò nào
+                        };
+                    }
+                    @roleDisplay
+                </td>
                 <td>
                     <a asp-action="DetailsAccount" asp-route-id="@account.Id" class="btn btn-warning">Chi tiết </a>
                     <form asp-action="NegateAccount" asp-route-id="@account.Id" method="post" style="display:inline;">

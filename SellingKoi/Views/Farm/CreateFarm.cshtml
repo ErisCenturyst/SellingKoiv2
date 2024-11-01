@@ -36,11 +36,79 @@
         <span asp-validation-for="Size" class="text-danger"></span>
     </div>
     <div class="form-group">
+        <label for="AvatarUpload">Ảnh đại diện</label>
+        <input type="file" id="AvatarUpload" name="AvatarUpload" accept="image/*" class="form-control-file" />
+    </div>
+    <div class="form-group">
         <button type="submit" class="btn btn-primary">Thêm Farm</button>
         <a asp-action="FarmManagement" class="btn btn-secondary">Quay lại</a>
     </div>
 </form>
 
+
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+    <script>
+        // Cấu hình Firebase của bạn
+        var firebaseConfig = {
+            // Thêm cấu hình Firebase của bạn ở đây
+            apiKey: "AIzaSyAapLIXv7mHhOTxLE-OVNPL_ATkeMJ8qY8",
+            authDomain: "sellingkoi-986f6.firebaseapp.com",
+            projectId: "sellingkoi-986f6",
+            storageBucket: "sellingkoi-986f6.appspot.com",
+            messagingSenderId: "629338546928",
+            appId: "1:629338546928:web:c7230ff3c1a50506b19835",
+            measurementId: "G-9W9F95BQ8F"
+        };
+
+        // Khởi tạo Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        // Xử lý việc tải lên ảnh
+        document.querySelector('form').addEventListener('submit', function (e) {
+            console.log('Form submission intercepted'); // Thêm log để kiểm tra xem sự kiện có được kích hoạt không
+
+            var file = document.getElementById('AvatarUpload').files[0]; //TÊN BIẾN, ĐỂ HÀM CONTROLLER GỌI
+            if (file) {
+                e.preventDefault(); // Chỉ ngăn chặn gửi form mặc định khi có file
+
+                var storageRef = firebase.storage().ref('FarmAvatars/' + file.name); //CHỈNH ĐỊNH THƯ MỤC LƯU HÌNH Ở FIREBASE, CÙNG TÊN THƯ MỤC Ở RULE CỦA FIREBASE
+                var uploadTask = storageRef.put(file);
+
+                uploadTask.on('state_changed',
+                    function progress(snapshot) {
+                        // Xử lý tiến trình tải lên nếu cần
+                        var percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        console.log('Upload is ' + percentage + '% done');
+                    },
+                    function error(err) {
+                        console.error('Lỗi tải lên:', err);
+                    },
+                    function complete() {
+                        uploadTask.snapshot.ref.getDownloadURL().then(function (downloadURL) {
+                            console.log('File available at', downloadURL);
+                            // Thêm URL ảnh vào form
+                            var input = document.createElement('input');
+                            input.type = 'hidden';
+                            input.name = 'AvatarUrl'; //TRÙNG TÊN VỚI FIELD CỦA BẢNG CẦN LƯU
+                            input.value = downloadURL;
+                            e.target.appendChild(input);
+
+                            // Gửi form sau khi đã thêm URL ảnh
+                            e.target.submit();
+                        });
+                    }
+                );
+            } else {
+                console.log('No file selected, submitting form directly');
+                // Nếu không có file, form sẽ được gửi trực tiếp
+                // Không cần e.preventDefault() ở đây
+            }
+        });
+    </script>
 }

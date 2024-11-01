@@ -2,7 +2,7 @@
 {
     public class CartItem
     {
-        
+
         public string Id { get; set; } // ID của cá Koi hoặc lộ trình
         public string Name { get; set; } // Tên cá Koi hoặc lộ trình
         //public int Quantity { get; set; } // Số lượng

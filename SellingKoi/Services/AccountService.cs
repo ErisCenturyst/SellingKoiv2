@@ -1,14 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SellingKoi.Data;
 using SellingKoi.Models;
-using System.Linq;
 
 namespace SellingKoi.Services
 {
     public class AccountService : IAccountService
     {
         private readonly DataContext _dataContext;
-        public AccountService(DataContext context)  
+        public AccountService(DataContext context)
         {
             _dataContext = context;
         }
@@ -80,7 +79,7 @@ namespace SellingKoi.Services
             var account = new Account
             {
                 Username = username,
-                Password =password,
+                Password = password,
                 Fullname = fullname,
                 Role = "Customer"
             };

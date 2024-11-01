@@ -8,8 +8,10 @@ namespace SellingKoi.Services
     public class FarmService : IFarmService
     {
         private readonly DataContext _dataContext;
-        public FarmService(DataContext dataContext) {
-            _dataContext = dataContext;}
+        public FarmService(DataContext dataContext)
+        {
+            _dataContext = dataContext;
+        }
 
         public async Task CreateFarmAsync(Farm farm)
         {
@@ -26,7 +28,7 @@ namespace SellingKoi.Services
         public async Task<Farm> GetFarmByIdAsync(string id)
         {
             //return await _dataContext.Farms.Where(f => f.Status).FirstAsync(id);
-            return await _dataContext.Farms.Include(f => f.KOIs).Where(f=>f.Status).FirstOrDefaultAsync(f => f.Id.ToString() == id);
+            return await _dataContext.Farms.Include(f => f.KOIs).Where(f => f.Status).FirstOrDefaultAsync(f => f.Id.ToString() == id);
         }
 
         public Task<Guid?> GetIdByNameAsync(string name)

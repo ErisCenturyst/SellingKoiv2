@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using SellingKoi.Data;
 using SellingKoi.Models;
 using SellingKoi.Services;
 
@@ -7,9 +9,11 @@ namespace SellingKoi.Controllers
     public class FarmController : Controller
     {
         private readonly IFarmService _farmService;
-        public FarmController(IFarmService farmService)
+        private readonly DataContext _context;
+        public FarmController(IFarmService farmService, DataContext context)
         {
             _farmService = farmService;
+            _context = context;
         }
         [HttpGet]
         public async Task<IActionResult> FarmManagement()
@@ -68,34 +72,40 @@ namespace SellingKoi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateFarm(Farm farm)
+        public async Task<IActionResult> CreateFarm(Farm farm, IFormFile AvatarUpload)
         {
 
-           if (ModelState.IsValid)
-           {
-                // Kiểm tra và xử lý các thuộc tính Location và Size nếu cần
-                if (string.IsNullOrWhiteSpace(farm.Location))
-                {
-                    ModelState.AddModelError("Location", "Vị trí farm không được để trống.");
-                }
-        
-                if (farm.Size <= 0)
-                {
-                    ModelState.AddModelError("Size", "Diện tích phải lớn hơn 0.");
-                }
-        
-                if (ModelState.IsValid) // Kiểm tra lại ModelState sau khi thêm các lỗi
-                {
-                    await _farmService.CreateFarmAsync(farm);
-                    return RedirectToAction(nameof(FarmManagement));
-                }
+            // Xử lý URL ảnh đại diện nếu có
+            if (!string.IsNullOrEmpty(farm.AvatarUrl))
+            {
+                // AvatarUrl đã được set bởi JavaScript khi tải lên Firebase
+                // Không cần xử lý thêm ở đây
+                //koidb.AvatarUrl = koi.AvatarUrl; // Cập nhật trường Avatar (chỉnh cần khi update, tạo mới ko cần dòng này)
+
             }
-           else
-           {
-               ModelState.AddModelError("", "There was an issue with the data provided. Please check your inputs.");
-           }
-           return View(farm);
-        }       
+            else if (AvatarUpload != null)
+            {
+                // Nếu có file được tải lên nhưng chưa được xử lý bởi Firebase
+                // Bạn có thể xử lý tải lên ở đây nếu cần
+                // Ví dụ: tải lên Firebase và lấy URL
+                //koi.AvatarUrl = await UploadFileToFirebase(AvatarUpload);
+            }
+
+
+            // Kiểm tra và xử lý các thuộc tính Location và Size nếu cần
+            if (string.IsNullOrWhiteSpace(farm.Location))
+            {
+                ModelState.AddModelError("Location", "Vị trí farm không được để trống.");
+            }
+
+            if (farm.Size <= 0)
+            {
+                ModelState.AddModelError("Size", "Diện tích phải lớn hơn 0.");
+            }
+
+            await _farmService.CreateFarmAsync(farm);
+            return RedirectToAction(nameof(FarmManagement));
+        }
 
 
         [HttpGet]
@@ -111,43 +121,53 @@ namespace SellingKoi.Controllers
             return View(farm);
         }
 
-[HttpPost]
-public async Task<IActionResult> UpdateFarm(Guid id, Farm farm)
-{
-    if (id != farm.Id)
-    {
-        return NotFound();
-    }
-
-    if (ModelState.IsValid)
-    {
-        // Kiểm tra và xử lý các thuộc tính Location và Size nếu cần
-        if (string.IsNullOrWhiteSpace(farm.Location))
+        [HttpPost]
+        public async Task<IActionResult> UpdateFarm(Guid id, Farm farm/*, IFormFile AvatarUpload*/)
         {
-            ModelState.AddModelError("Location", "Vị trí farm không được để trống.");
-        }
-
-        if (farm.Size <= 0)
-        {
-            ModelState.AddModelError("Size", "Diện tích phải lớn hơn 0.");
-        }
-
-        if (ModelState.IsValid) // Kiểm tra lại ModelState sau khi thêm các lỗi
-        {
-            try
+            var existedfarm = await _farmService.GetFarmByIdAsync(id.ToString());
+            farm.KOIs = existedfarm.KOIs;
+            // Xử lý URL ảnh đại diện nếu có
+            if (string.IsNullOrEmpty(farm.AvatarUrl))
             {
-                await _farmService.UpdateFarmAsync(farm);
-                return RedirectToAction("DetailsFarm", "Farm", new { id = farm.Id });
+                farm.AvatarUrl = existedfarm.AvatarUrl;
+                // AvatarUrl đã được set bởi JavaScript khi tải lên Firebase
+                // Không cần xử lý thêm ở đây
+                //farmdb.AvatarUrl = farm.AvatarUrl; // Cập nhật trường Avatar (chỉnh cần khi update, tạo mới ko cần dòng này)
             }
-            catch (Exception ex)
+            //else if (AvatarUpload != null)
+            //{
+            //    // Nếu có file được tải lên nhưng chưa được xử lý bởi Firebase
+            //    // Bạn có thể xử lý tải lên ở đây nếu cần
+            //    // Ví dụ: tải lên Firebase và lấy URL
+            //    //koi.AvatarUrl = await UploadFileToFirebase(AvatarUpload);
+            //}
+            // Kiểm tra và xử lý các thuộc tính Location và Size nếu cần
+            if (ModelState.IsValid)
             {
-                // Log the error
-                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                if (string.IsNullOrWhiteSpace(farm.Location))
+                {
+                    ModelState.AddModelError("Location", "Vị trí farm không được để trống.");
+                }
+
+                if (farm.Size <= 0)
+                {
+                    ModelState.AddModelError("Size", "Diện tích phải lớn hơn 0.");
+                }
+                try
+                {
+                    
+                    _context.Entry(existedfarm).State = EntityState.Detached; // Detach thực thể cũ
+                    await _farmService.UpdateFarmAsync(farm);
+                    return RedirectToAction("FarmManagement", "Farm");
+                }
+                catch (Exception ex)
+                {
+                    // Log the error
+                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                }
             }
+            return View(farm);
         }
-    }
-    return View(farm);
-}
 
         public async Task<IActionResult> NegateFarm(Guid id)
         {

@@ -1,12 +1,11 @@
-﻿using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
 
 namespace SellingKoi.Models
 {
     public enum KoiType
     {
-        Kohaku, Sanke, Showa, Utsuri, Ogon, Chagoi,Butterfly
+        Kohaku, Sanke, Showa, Utsuri, Ogon, Chagoi, Butterfly
     }
 
     public class KOI
@@ -16,7 +15,7 @@ namespace SellingKoi.Models
         [Column(TypeName = "nvarchar(50)")]
         public string Name { get; set; }
         public KoiType Type { get; set; }
-        
+
         public int Age { get; set; }
         [StringLength(250)]
         [Column(TypeName = "nvarchar(250)")]
@@ -26,9 +25,9 @@ namespace SellingKoi.Models
 
 
         //luu tru hinh anh
-        [StringLength(100)]
+        [StringLength(500)]
         [Column(TypeName = "nvarchar(100)")]
-        public string ?AvatarUrl { get; set; } // Thêm trường lưu hình ảnh avatar
+        public string? AvatarUrl { get; set; } // Thêm trường lưu hình ảnh avatar
 
         [NotMapped]
         public List<string> AlbumUrl { get; set; } = new List<string>(); // Thêm trường lưu các hình ảnh liên quan

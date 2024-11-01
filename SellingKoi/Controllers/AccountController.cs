@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client;
 using SellingKoi.Services;
 
 namespace SellingKoi.Controllers
@@ -8,9 +6,12 @@ namespace SellingKoi.Controllers
     public class AccountController : Controller
     {
         private readonly IAccountService _accountService;
-        public AccountController(IAccountService accountservice)
+        private readonly IOrderShortenService _orderShortenService;
+        //private readonly I
+        public AccountController(IAccountService accountservice, IOrderShortenService orderShortenService)
         {
             _accountService = accountservice;
+            _orderShortenService = orderShortenService;
         }
 
         [HttpGet]
@@ -21,7 +22,7 @@ namespace SellingKoi.Controllers
             {
                 return NotFound("No account are found !");
             }
-            
+
             return View(accounts);
         }
 
@@ -29,17 +30,23 @@ namespace SellingKoi.Controllers
         [HttpGet]
         public async Task<IActionResult> DetailsAccount(Guid id)
         {
-
-            if (id == null)
-            {
-                return NotFound($"Account with id '{id}' not found.");
-            }
-
             var account = await _accountService.GetAccountByIdAsync(id);
             if (account == null)
             {
                 return NotFound($"Account with ID '{id}' not found.");
             }
+            return View(account);
+        }
+        [HttpGet]
+        public async Task<IActionResult> Profile(Guid id)
+        {
+            var account = await _accountService.GetAccountByIdAsync(id);
+            if (account == null)
+            {
+                return NotFound($"Account with ID '{id}' not found.");
+            }
+            var orders = await _orderShortenService.GetOrdersByUser(account.Username);
+            ViewBag.Orders = orders;
             return View(account);
         }
 
@@ -132,11 +139,12 @@ namespace SellingKoi.Controllers
             if (accountlogin != null)
             {
                 var role = accountlogin.Role;
+                HttpContext.Session.SetString("UserId", accountlogin.Id.ToString());
                 HttpContext.Session.SetString("Username", username);
                 HttpContext.Session.SetString("UserRole", role); // Lưu vai trò vào 
-                if(role == "ADMIN")
+                if (role == "ADMIN")
                     return RedirectToAction("AdminPage", "Home");
-                if(role == "Customer")
+                if (role == "Customer")
                     return RedirectToAction("Index", "Home");
 
             }
@@ -150,5 +158,5 @@ namespace SellingKoi.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-    } 
+    }
 }

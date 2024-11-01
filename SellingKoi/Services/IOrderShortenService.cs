@@ -11,9 +11,10 @@ namespace SellingKoi.Services
         Task<IEnumerable<OrderShorten>> GetAllOrder();
         Task<IEnumerable<OrderShorten>> SearchOrderList(List<string> listorderid);
 
-
         Task<OrderShorten> GetOrderByIdAsync(string id);
         Task CreateOrderAsync(OrderShorten order);
         Task UpdatOrderAsync(OrderShorten order);
+        Task<List<OrderShorten>> GetOrdersByUser(string username);
+        Task CancelOrderAsync(string id);
     }
 }

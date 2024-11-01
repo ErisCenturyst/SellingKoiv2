@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using SellingKoi.Data;
 using SellingKoi.Models;
 using SellingKoi.Services;
@@ -13,7 +12,7 @@ namespace SellingKoi.Controllers
         private readonly IFarmService _farmService; // Dịch vụ để lấy Farm
         private readonly DataContext _dataContext;
 
-        public RouteController(IRouteService routeService, IFarmService farmService,DataContext dataContext )
+        public RouteController(IRouteService routeService, IFarmService farmService, DataContext dataContext)
         {
             _routeService = routeService;
             _farmService = farmService;
@@ -101,7 +100,7 @@ namespace SellingKoi.Controllers
         [HttpGet]
         public async Task<IActionResult> UpdateRoute(Guid id)
         {
-            
+
             //return View();
 
             string idUpperCase = id.ToString().ToUpper();
@@ -181,7 +180,7 @@ namespace SellingKoi.Controllers
                 return RedirectToAction(nameof(RouteManagement));
             }
         }
-        
+
 
 
     }

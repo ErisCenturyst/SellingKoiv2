@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Routing;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using SellingKoi.Data;
 using SellingKoi.Models;
-using System.Linq;
 
 namespace SellingKoi.Services
 {
@@ -56,13 +54,23 @@ namespace SellingKoi.Services
             return await _dataContext.OrtherShortens.FirstOrDefaultAsync(o => o.Id.ToString().ToUpper().Equals(id));
         }
 
-
-
         public async Task UpdatOrderAsync(OrderShorten order)
         {
             _dataContext.Entry(order).State = EntityState.Modified;
             await _dataContext.SaveChangesAsync();
         }
 
+        public async Task<List<OrderShorten>> GetOrdersByUser(string username)
+        { 
+            return await _dataContext.OrtherShortens.Where(o => o.buyer.Equals(username)).ToListAsync();
+        }
+        public async Task CancelOrderAsync(string id)
+        {
+            var order = await _dataContext.OrtherShortens.FirstOrDefaultAsync(o => o.Id.ToString().ToUpper().Equals(id));
+            order.Status = "cancle";
+            _dataContext.Entry(order).State = EntityState.Modified;
+            await _dataContext.SaveChangesAsync();
+        }
+        
     }
 }
