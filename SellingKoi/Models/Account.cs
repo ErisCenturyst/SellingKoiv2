@@ -24,6 +24,7 @@ namespace SellingKoi.Models
 
         public Guid? CartId { get; set; }
         public virtual Cart? Cart { get; set; }
+        public string? TripId { get; set; }
         public bool Status { get; set; } = true;
         public DateTime Registration_date { get; set; } = DateTime.Now;
 

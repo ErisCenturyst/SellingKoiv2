@@ -146,6 +146,9 @@ namespace SellingKoi.Controllers
                     return RedirectToAction("AdminPage", "Home");
                 if (role == "Customer")
                     return RedirectToAction("Index", "Home");
+                if(role == "Staff")
+                    return RedirectToAction("TaskOfStaff", "Task");
+                
 
             }
             ModelState.AddModelError("", "Tên đăng nhập hoặc mật khẩu không đúng");

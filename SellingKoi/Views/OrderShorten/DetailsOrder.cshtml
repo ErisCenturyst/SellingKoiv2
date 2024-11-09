@@ -6,13 +6,26 @@
     <strong>Mã đơn hàng:</strong> @Model.Id <br />
     <strong>Ngày đặt:</strong> @Model.Registration_date.ToString("dd/MM/yyyy") <br />
     <strong>Tổng tiền:</strong> @Model.Price.ToString("N0") VND <br />
-    <strong>Trạng thái:</strong> @Model.Status
+    <strong>Trạng thái:</strong> @Model.Status <br />
+    <strong>Có thể tham gia chuyến đi từ:</strong> @(Model.DepartureFrom?.ToShortDateString() ?? "N/A")
+    <strong> Đến:</strong> @(Model.DepartureTo?.ToShortDateString() ?? "N/A") <br />
     <p><strong>Người tham gia chuyến đi:</strong> @Model.participants </p>
     <p><strong>Số điện thoại:</strong> @Model.participantsPhone </p>
 </div>
 
 <h3>Chuyến đi : @Model.TripNum</h3> 
 <p>Thời gian khởi hành : @ViewBag.TripDepartureTime</p>
+@if(Model.TripId != null && !Model.Status.Equals("confirmed"))
+{
+    <form asp-action="Confirm" asp-controller="OrderShorten" method="post">
+        <input type="hidden" name="orderId" value="@Model.Id" /> <!-- Gửi order.Id để thanh toán -->
+        <button type="submit" class="btn btn-success">Xác nhận</button> <!-- Nút thanh toán -->
+    </form>
+}else
+{
+    <button disabled >Xác nhận</button>
+}
+
 <h3>Lộ trình: @ViewBag.RouteName</h3> <br />
 <h3>Danh sách cá koi trong đơn hàng:</h3>
 <ul>
@@ -27,7 +40,7 @@
     var userRole = Context.Session.GetString("UserRole"); // Giả sử bạn lưu vai trò người dùng trong session
 }
 
-@if ((userRole == "Customer" || userRole == "ADMIN") && (Model.Status == "booked")) // Kiểm tra vai trò và trạng thái đơn hàng
+@if ((userRole == "Customer" || userRole == "ADMIN") && (Model.Status == "booked" || Model.Status == "paid")) // Kiểm tra vai trò và trạng thái đơn hàng
 {
     <form asp-action="CancelOrder" asp-controller="OrderShorten" method="post">
         <input type="hidden" name="orderId" value="@Model.Id" /> <!-- Gửi order.Id để hủy đơn hàng -->

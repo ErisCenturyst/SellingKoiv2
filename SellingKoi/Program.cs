@@ -21,7 +21,10 @@ builder.Services.AddScoped<IFarmService, FarmService>();
 builder.Services.AddScoped<IRouteService, RouteService>();
 
 builder.Services.AddScoped<IOrderShortenService, OrderShortenService>();
+
 builder.Services.AddScoped<ITripService, TripService>();
+
+builder.Services.AddScoped<ITaskService, TaskService>();
 
 
 

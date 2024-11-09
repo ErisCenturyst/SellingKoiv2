@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SellingKoi.Data;
 using SellingKoi.Models;
 using SellingKoi.Services;
@@ -44,6 +45,37 @@ namespace SellingKoi.Controllers
             ViewBag.TripList = trips;
             return View(models);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> UnasignOrderFromTrip(string orderid, string tripid)
+        {
+
+            var order = await _orderShortenService.GetOrderByIdAsync(orderid);
+            string sampletripid = "0";
+            if (order == null)
+            {
+                return BadRequest();
+            }
+            if (!sampletripid.Equals("0"))
+            {
+                var trip = await _tripService.GetTripByIdAsync(tripid);
+                order.TripId = trip.Id.ToString();
+                order.TripNum = trip.TripNum.ToString();
+
+            }
+            else
+            {
+                order.Status = "CancleByAdmin";
+                order.TripId = null;
+                order.TripNum = null;
+            }                                           
+
+            await _orderShortenService.UpdatOrderAsync(order);
+                                           
+            return RedirectToAction("DetailsTrip", "Trip", new { id = tripid });
+
+        }
+
         [HttpPost]
         public async Task<IActionResult> UpdateOrder(string orderid, string tripid)
         {
@@ -71,7 +103,7 @@ namespace SellingKoi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateOrderShorten(string participantName, string phoneNumber)
+        public async Task<IActionResult> CreateOrderShorten(string participantName, string phoneNumber, DateTime departureFrom, DateTime departureTo)
         {
             // Lấy thông tin giỏ hàng từ session
             string participantname = participantName;
@@ -108,6 +140,8 @@ namespace SellingKoi.Controllers
                 buyer = HttpContext.Session.GetString("Username"),
                 participants = participantname,
                 participantsPhone = phoneNum,
+                DepartureFrom = departureFrom, // Gán giá trị cho DepartureFrom
+                DepartureTo = departureTo // Gán giá trị cho DepartureTo
 
             };
 
@@ -129,23 +163,25 @@ namespace SellingKoi.Controllers
 
 
         [HttpGet]
-        public IActionResult OrderShortenedManagementSort(string sortOrder)
+        public async Task<IActionResult> OrderShortenedManagementSort(string sortOrder)
         {
-            ViewBag.OrderDateSortParm = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
-            ViewBag.RouteNameSortParm = sortOrder == "route" ? "route_desc" : "route";
+            ViewBag.RegistrationDateSortParm = String.IsNullOrEmpty(sortOrder) ? "registration_date_desc" : "";
+            ViewBag.RouteNameSortParm = sortOrder == "route_name" ? "route_name_desc" : "route_name";
             ViewBag.StatusSortParm = sortOrder == "status" ? "status_desc" : "status";
+            ViewBag.DepartureFromSortParm = sortOrder == "departure_from" ? "departure_from_desc" : "departure_from";
 
-            var orders = _datacontext.OrtherShortens.AsQueryable();
+            var orders = from o in _datacontext.OrtherShortens
+                         select o;
 
             switch (sortOrder)
             {
-                case "date_desc":
+                case "registration_date_desc":
                     orders = orders.OrderByDescending(o => o.Registration_date);
                     break;
-                case "route":
+                case "route_name":
                     orders = orders.OrderBy(o => o.routename);
                     break;
-                case "route_desc":
+                case "route_name_desc":
                     orders = orders.OrderByDescending(o => o.routename);
                     break;
                 case "status":
@@ -154,14 +190,15 @@ namespace SellingKoi.Controllers
                 case "status_desc":
                     orders = orders.OrderByDescending(o => o.Status);
                     break;
+                case "departure_from_desc":
+                    orders = orders.OrderByDescending(o => o.DepartureFrom);
+                    break;
                 default:
                     orders = orders.OrderBy(o => o.Registration_date);
                     break;
             }
 
-            //return View(orders.ToList());
-            return RedirectToAction("OrderShortenedManagement", "OrderShorten", new { sortedOrders = orders.ToList() });
-
+            return View("OrderShortenedManagement", await orders.ToListAsync());
         }
         [HttpGet]
         public async Task<IActionResult> DetailsOrder(string id)
@@ -199,7 +236,27 @@ namespace SellingKoi.Controllers
             await _orderShortenService.PayOrder(orderId);
             //var account = _accountService.GetAccountByIdAsync(Guid.Parse(HttpContext.Session.GetString("UserId")));
             return RedirectToAction("DetailsOrder", "OrderShorten", new { id = orderId });
+        }
+        [HttpPost]
+        public async Task<IActionResult> Confirm(string orderId)
+        {
+            await _orderShortenService.Confirm(orderId);
+            //var account = _accountService.GetAccountByIdAsync(Guid.Parse(HttpContext.Session.GetString("UserId")));
+            return RedirectToAction("DetailsOrder", "OrderShorten", new { id = orderId });
 
+        }
+        [HttpGet]
+        public async Task<IActionResult> SearchOrderByID(string searchId)
+        {
+            var orders = await _orderShortenService.GetAllOrder();
+
+            if (!string.IsNullOrEmpty(searchId))
+            {
+                orders = orders.Where(o => o.Id.ToString().Contains(searchId)).ToList();
+            }
+
+            ViewBag.TripList = await _tripService.GetAllTripAsync();
+            return View("OrderShortenedManagement", orders); // Trả về view OrderShortenedManagement với danh sách đã lọc
         }
 
 

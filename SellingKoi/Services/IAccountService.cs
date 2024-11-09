@@ -20,7 +20,12 @@ namespace SellingKoi.Services
         Task NegateAccountAsync(Guid id);
         Task<List<Account>> GetStaffAccountAsync();
         Task<List<Account>> GetSaleStaffAccountAsync();
-
+        Task UnassignTripFromSaleStaffAsync(string accountId);
+        Task UnassignTripFromFollowStaffAsync(List<string> accountIds);
+        Task<List<Account>> GetSaleStaffWithNoTrip();
+        Task<List<Account>> GetStaffWithNoTrip();
+        Task<Account> GetSaleStaffByTripIdAsync(string tripId);
+        Task<List<Account>> GetStaffByTripIdAsync(string tripId);
 
     }
 }

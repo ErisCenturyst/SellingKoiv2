@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Client;
+using SellingKoi.Data;
 using SellingKoi.Models;
 using SellingKoi.Services;
 
@@ -9,7 +11,7 @@ namespace SellingKoi.Controllers
         private readonly ITripService _tripService;
         private readonly IAccountService _accountService;
         private readonly IOrderShortenService _orderShortenService;
-        //private readonly DataContext _context;
+        private readonly DataContext _context;
 
         public TripController(IAccountService accountService, ITripService tripService, IOrderShortenService orderShortenService)
         {
@@ -66,13 +68,32 @@ namespace SellingKoi.Controllers
             {
                 return NotFound();
             }
-            var staffList = await _accountService.GetStaffAccountAsync();
-            var salestaffList = await _accountService.GetSaleStaffAccountAsync();
+            //check staff, salestaff ko co tripid (account ko co tripid)
+            var salestaffList = await _accountService.GetSaleStaffWithNoTrip();
+            var staffList = await _accountService.GetStaffWithNoTrip();
             var orderlist = await _orderShortenService.GetListOrderBelongToStrip(id);
 
-            ViewBag.StaffList = staffList;
-            ViewBag.SaleStaffList = salestaffList;
+            //danh sach sale staff thuoc trip
+            var salestaffBelongToTrip = await _accountService.GetSaleStaffByTripIdAsync(id);
+
+            //danh sach staff thuoc trip
+            var ListStaffBelongToTrip = await _accountService.GetStaffByTripIdAsync(id);
+
+            var combinedSaleStaffList = salestaffList;
+            var combinedStaffList = staffList.Concat(ListStaffBelongToTrip).Distinct().ToList(); // Kết hợp và loại bỏ trùng lặp
+
+
+            // Kết hợp salestaffList và salestaffBelongToTrip
+            // Kiểm tra nếu salestaffBelongToTrip không phải là null và không có trong danh sách
+            if (salestaffBelongToTrip != null && !salestaffList.Any(s => s.Id == salestaffBelongToTrip.Id))
+            {
+                combinedSaleStaffList.Add(salestaffBelongToTrip); // Thêm vào danh sách
+            }
+
+            ViewBag.StaffList = combinedStaffList; 
+            ViewBag.SaleStaffList = salestaffList; 
             ViewBag.OrderList = orderlist;
+
             return View(trip);
         }
 
@@ -89,11 +110,17 @@ namespace SellingKoi.Controllers
             {
                 return NotFound();
             }
+            //var salestaff = await _accountService.GetAccountByIdAsync(Guid.Parse(SaleStaffID));
 
             // Hủy assign sale staff nếu SaleStaffID là null
             if (string.IsNullOrEmpty(SaleStaffID))
             {
+                if (trip.SaleStaff != null)
+                {
+                    await _accountService.UnassignTripFromSaleStaffAsync(trip.SaleStaff.Id.ToString().ToUpper());
+                }
                 await _tripService.UnasignSaleStaffAsync(tripid);
+                
             }
             else
             {
@@ -101,12 +128,20 @@ namespace SellingKoi.Controllers
                 if (salestaff != null)
                 {
                     trip.SaleStaff = salestaff;
+                    //Gán tripid vào các sale staff - trưởng đoàn của chuyến 
+                    salestaff.TripId = trip.Id.ToString(); // Gán tripId vào account
                 }
+
+
             }
 
             // Hủy assign list staffs nếu FollowAccountsID là null hoặc rỗng
-            if (FollowAccountsID == null || !FollowAccountsID.Any())
+            if (FollowAccountsID == null)
             {
+                if (trip.FollowAccountsID.Any()) 
+                {
+                    await _accountService.UnassignTripFromFollowStaffAsync(trip.FollowAccountsID);
+                }
                 await _tripService.UnasignListStaffsAsync(tripid);
             }
             else
@@ -115,13 +150,38 @@ namespace SellingKoi.Controllers
                 if (stafflist != null)
                 {
                     trip.FollowAccountsID = FollowAccountsID;
+
+                    // Gán tripId cho các tài khoản có id tương ứng
+                    foreach (var accountId in FollowAccountsID)
+                    {
+                        var account = await _accountService.GetAccountByIdAsync(Guid.Parse(accountId));
+                        if (account != null)
+                        {
+                            account.TripId = trip.Id.ToString(); // Gán tripId vào account
+                        }
+                    }
+
+                    //await _context.SaveChangesAsync(); // Lưu thay đổi vào cơ sở dữ liệu
                 }
             }
+            // Kiểm tra trạng thái
+            if (Status == "Ongoing")
+            {
+                var orders = await _orderShortenService.GetOrdersByTrip(tripid); // Lấy danh sách đơn hàng thuộc chuyến đi
+                if (orders.Any(order => order.Status != "Confirmed"))
+                {
+                    //ModelState.AddModelError("", "Tất cả đơn hàng phải được khách hàng xác nhận trước khi cập nhật chuyến đi sẵn sàng sang Nhật.");
+                    //return View(trip); // Trả về view với thông báo lỗi
+                    TempData["ErrorMessage"] = "Tất cả đơn hàng phải được khách hàng xác nhận trước khi cập nhật chuyến đi sẵn sàng sang Nhật.";
+                    return RedirectToAction("DetailsTrip", "Trip", new { id = tripid }); // Chuyển hướng đến DetailsTrip với 
+                }
+            }
+
 
             // Cập nhật các thông tin khác
             trip.status = Status;
             trip.Date_of_departure = Date_of_Departure;
-
+            
             try
             {
                 await _tripService.UpdateTripAsync(trip);
@@ -149,6 +209,7 @@ namespace SellingKoi.Controllers
             {
                 return Json(new { success = false, message = "Không tìm thấy chuyến đi" });
             }
+
 
             // Kiểm tra xem chuyến đi có nhân viên không
             if (trip.SaleStaff != null || (trip.FollowAccountsID != null && trip.FollowAccountsID.Any()))

@@ -18,5 +18,7 @@ namespace SellingKoi.Services
         Task CancelOrderAsync(string id);
         Task PayOrder(string id);
         Task<IEnumerable<OrderShorten>> GetListOrderBelongToStrip(string tripid);
+        Task Confirm(string id);
+        Task<IEnumerable<OrderShorten>> GetOrdersByTrip(string tripid);
     }
 }

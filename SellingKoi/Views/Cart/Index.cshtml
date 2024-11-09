@@ -48,7 +48,7 @@
         }
         <!-- Nút tạo đơn hàng -->
         <div class="create-order">
-            <form asp-controller="OrderShorten" asp-action="CreateOrderShorten" method="post">
+            <form asp-controller="OrderShorten" asp-action="CreateOrderShorten" method="post" id="createOrderForm">
                 <div class="form-group">
                     <label for="participantName">Tên người tham gia:</label>
                     <input type="text" id="participantName" name="participantName" class="form-control" required />
@@ -56,6 +56,14 @@
                 <div class="form-group">
                     <label for="phoneNumber">Số điện thoại:</label>
                     <input type="tel" id="phoneNumber" name="phoneNumber" class="form-control" required />
+                </div>
+                <div class="form-group">
+                    <label for="departureFrom">Ngày khởi hành từ (Tháng, Ngày, Năm):</label>
+                    <input type="date" id="departureFrom" name="departureFrom" class="form-control" required />
+                </div>
+                <div class="form-group">
+                    <label for="departureTo">Ngày khởi hành đến (Tháng, Ngày, Năm):</label>
+                    <input type="date" id="departureTo" name="departureTo" class="form-control" required />
                 </div>
                 <button type="submit" class="btn btn-primary btn-create-order">Tạo Đơn Hàng</button>
             </form>
@@ -86,6 +94,34 @@
             alert('Có lỗi xảy ra khi xóa mục khỏi giỏ hàng!');
         });
     }
+
+    document.getElementById('createOrderForm').addEventListener('submit', function (event) {
+        var departureFrom = new Date(document.getElementById('departureFrom').value);
+        var departureTo = new Date(document.getElementById('departureTo').value);
+        var today = new Date();
+        today.setHours(0, 0, 0, 0); // Đặt giờ, phút, giây, mili giây về 0 để so sánh chỉ ngày
+
+        // Kiểm tra ngày khởi hành từ
+        if (departureFrom < today) {
+            alert("Ngày khởi hành từ không được chọn ở quá khứ.");
+            event.preventDefault(); // Ngăn form gửi
+            return;
+        }
+
+        // Kiểm tra ngày khởi hành đến
+        if (departureTo < today) {
+            alert("Ngày khởi hành đến không được chọn ở quá khứ.");
+            event.preventDefault(); // Ngăn form gửi
+            return;
+        }
+
+        // Kiểm tra ngày khởi hành đến phải lớn hơn hoặc bằng ngày khởi hành từ
+        if (departureTo < departureFrom) {
+            alert("Ngày khởi hành đến phải lớn hơn hoặc bằng ngày khởi hành.");
+            event.preventDefault(); // Ngăn form gửi
+            return;
+        }
+    });
 </script>
 
 <style>

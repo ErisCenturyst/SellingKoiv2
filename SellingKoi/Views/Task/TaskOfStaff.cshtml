@@ -1,0 +1,35 @@
+﻿@model IEnumerable<SellingKoi.Models.TripTask> 
+@{
+    ViewBag.Title = "Tác Công Việc Của Staff";
+}
+
+<h2>Tác Công Việc Của Staff</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Tên Công Việc</th>
+            <th>Trạng Thái</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any()) // Kiểm tra model không null và có dữ liệu
+        {
+            foreach (var task in Model) // Lặp qua danh sách công việc
+            {
+                <tr>
+                    <td>@task.Id</td> 
+                    <td>@task.Name</td> 
+                    <td>@task.Status</td> 
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="3">Không có công việc nào để hiển thị.</td> 
+            </tr>
+        }
+    </tbody>
+</table>

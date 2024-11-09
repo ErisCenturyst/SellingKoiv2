@@ -1,4 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Google.Apis.Requests;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
+using Microsoft.IdentityModel.Tokens;
 using SellingKoi.Data;
 using SellingKoi.Models;
 
@@ -11,18 +15,43 @@ namespace SellingKoi.Services
         {
             _dataContext = context;
         }
+        public async Task<Account> GetSaleStaffByTripIdAsync(string tripId)
+        {
+             return await _dataContext.Accounts
+                .Where(a => a.Role.Equals("SaleStaff") && a.Status && a.TripId == tripId) // Kiểm tra các điều kiện
+                .SingleOrDefaultAsync(); // Chuyển đổi kết 
+        }
 
+        public async Task<List<Account>> GetStaffByTripIdAsync(string tripId)
+        {
+            return await _dataContext.Accounts
+                .Where(a => a.Role.Equals("Staff") && a.Status && a.TripId == tripId.ToUpper()) // Kiểm tra các điều kiện
+                .ToListAsync(); // Chuyển đổi kết quả thành danh sách
+        }
+
+        public async Task<List<Account>> GetSaleStaffWithNoTrip()
+        {
+            return await _dataContext.Accounts
+                .Where(a => a.Status && a.Role.Equals("SaleStaff") && a.TripId == null) // Kiểm tra các điều kiện
+                .ToListAsync(); // Chuyển đổi kết quả thành danh sách
+        }
+        public async Task<List<Account>> GetStaffWithNoTrip()
+        {
+            return await _dataContext.Accounts
+                .Where(a => a.Status && a.Role.Equals("Staff") && a.TripId == null) // Kiểm tra các điều kiện
+                .ToListAsync(); // Chuyển đổi kết quả thành danh sách
+        }
         public async Task<Account> GetAccountByIdAsync(Guid id)
         {
             return await _dataContext.Accounts.Where(a => a.Status).FirstOrDefaultAsync(a => a.Id == id);
         }
         public async Task<List<Account>> GetStaffAccountAsync()
         {
-            return await _dataContext.Accounts.Where(a => a.Role.Equals("Staff")).ToListAsync();
+            return await _dataContext.Accounts.Where(a => a.Role.Equals("Staff") && a.Status).ToListAsync();
         }
         public async Task<List<Account>> GetSaleStaffAccountAsync()
         {
-            return await _dataContext.Accounts.Where(a => a.Role.Equals("SaleStaff")).ToListAsync();
+            return await _dataContext.Accounts.Where(a => a.Role.Equals("SaleStaff") && a.Status).ToListAsync();
         }
         public async Task<List<Account>> SearchlistStaffbylistId(List<string> listaccountid)
         {
@@ -30,11 +59,57 @@ namespace SellingKoi.Services
                 .Where(a => a.Role.Equals("Staff") && listaccountid.Contains(a.Id.ToString()))
                 .ToListAsync();
         }
+        public async Task UnassignTripFromSaleStaffAsync(string accountId)
+        {
+            if (string.IsNullOrEmpty(accountId))
+            {
+                throw new ArgumentException("Account ID cannot be null or empty", nameof(accountId));
+            }
+
+            var account = await _dataContext.Accounts.FindAsync(Guid.Parse(accountId));
+            if (account == null)
+            {
+                throw new ArgumentException("Account not found", nameof(account));
+            }
+
+            account.TripId = null;
+            await _dataContext.SaveChangesAsync();
+        }
+
+        public async Task UnassignTripFromFollowStaffAsync(List<string> accountIds)
+        {
+            if (accountIds == null || !accountIds.Any())
+            {
+                throw new ArgumentException("Account IDs cannot be null or empty", nameof(accountIds));
+            }
+
+            var accounts = await _dataContext.Accounts
+            .Where(a => accountIds.Contains(a.Id.ToString())) // Lấy tất cả tài khoản có trong danh sách accountIds
+                .ToListAsync();
+
+            if (accounts.Count == 0)
+            {
+                throw new ArgumentException("No accounts found for the provided IDs", nameof(accountIds));
+            }
+
+            foreach (var account in accounts)
+            {
+                account.TripId = null; // Gỡ bỏ tripId
+            }
+
+            await _dataContext.SaveChangesAsync(); // Lưu thay đổi vào cơ sở dữ liệu
+        }
+
 
         public async Task<IEnumerable<Account>> GetAllAccountsAsync()
         {
             return await _dataContext.Accounts.Where(a => a.Status).ToListAsync();
         }
+
+        //public async Task<List<Account>> GetFreeSaleStaffAccountAsync()
+        //{
+            
+        //}
 
         public async Task NegateAccountAsync(Guid id)
         {

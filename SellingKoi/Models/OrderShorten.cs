@@ -21,11 +21,10 @@ namespace SellingKoi.Models
         public string? buyer { get; set; }
         public string? TripId { get; set; }
         public string? TripNum { get; set; }
-
         public string? participants { get; set; }
         public string? participantsPhone { get;set; }
+        public DateTime? DepartureFrom { get; set; }
+        public DateTime? DepartureTo { get; set; }
         //FK
-
-
     }
 }

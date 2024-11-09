@@ -3,26 +3,26 @@
 }
 
 <div class="auth-container">
-    <h2>SIGN UP</h2>
+    <h2>ĐĂNG KÍ</h2>
     <form asp-controller="Account" asp-action="SignUp" method="post">
         <div class="form-group">
-            <input type="text" class="form-control" id="fullname" name="fullname" placeholder="Full Name" required>
+            <input type="text" class="form-control" id="fullname" name="fullname" placeholder="Tên đầy đủ" required>
         </div>
-        <div class="form-group">
+       @*  <div class="form-group">
             <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
+        </div> *@
+        <div class="form-group">
+            <input type="text" class="form-control" id="username" name="username" placeholder="Tên Đăng nhập" required>
         </div>
         <div class="form-group">
-            <input type="text" class="form-control" id="username" name="username" placeholder="username" required>
+            <input type="password" class="form-control" id="password" name="password" placeholder="Mật khẩu" required>
         </div>
         <div class="form-group">
-            <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Nhập lại mật khẩu" required>
         </div>
-        <div class="form-group">
-            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" required>
-        </div>
-        <button type="submit" class="btn btn-primary">Sign Up</button>
+        <button type="submit" class="btn btn-primary">Đăng kí</button>
     </form>
     <div class="text-center mt-3">
-        <p>Already have an account? <a asp-controller="Account" asp-action="Login">Login</a></p>
+        <p>Đã có tài khoản ? <a asp-controller="Account" asp-action="Login">Đăng nhập</a></p>
     </div>
 </div>

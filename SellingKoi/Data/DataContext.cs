@@ -13,6 +13,7 @@ namespace SellingKoi.Data
         public DbSet<Models.Route> Routes { get; set; }
         public DbSet<OrderShorten> OrtherShortens { get; set; }
         public DbSet<Trip> Trips { get; set; }
+        public DbSet<TripTask> Tasks { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

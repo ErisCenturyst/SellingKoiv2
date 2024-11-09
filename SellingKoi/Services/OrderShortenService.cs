@@ -83,7 +83,16 @@ namespace SellingKoi.Services
             var orders = await _dataContext.OrtherShortens.Where(o=> o.TripId.Equals(tripid.ToUpper())).ToListAsync();
             return orders;
         }
-
-
+        public async Task Confirm(string id)
+        {
+            var order = await _dataContext.OrtherShortens.FirstOrDefaultAsync(o => o.Id.ToString().ToUpper().Equals(id));
+            order.Status = "confirmed";
+            _dataContext.Entry(order).State = EntityState.Modified;
+            await _dataContext.SaveChangesAsync();
+        }
+        public async Task<IEnumerable<OrderShorten>> GetOrdersByTrip(string tripid)
+        {
+            return await _dataContext.OrtherShortens.Where(o => o.TripId.Equals(tripid.ToUpper())).ToListAsync();
+        }
     }
 }

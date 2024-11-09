@@ -6,6 +6,13 @@
 
 <h2>Chi Tiết Chuyến Đi</h2>
 
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
 <form method="post" action="@Url.Action("UpdateTrip", "Trip")">
     <input type="hidden" name="tripid" value="@Model.Id" />
 
@@ -96,9 +103,15 @@
         <thead>
             <tr>
                 <th>Đơn Hàng ID</th>
+                <th>Người Đặt</th>
                 <th>Ngày Đặt</th>
+                <th>Lộ trình</th>
                 <th>Trạng Thái</th>
+                <th>Hành khách tham gia</th>
+                <th>Số điện thoại</th>
                 <th>Tổng Tiền</th>
+                <th>Hành động</th> <!-- Cột mới cho nút Bỏ Gán -->
+
             </tr>
         </thead>
         <tbody>
@@ -106,9 +119,20 @@
             {
                 <tr>
                     <td>@order.Id</td>
+                    <td>@order.buyer</td>
                     <td>@order.Registration_date.ToString("dd/MM/yyyy")</td>
+                    <td>@order.routename</td>
                     <td>@order.Status</td>
+                    <td>@order.participants </td>
+                    <td>@order.participantsPhone </td>
                     <td>@order.Price.ToString("N0") VNĐ</td>
+                    <td>
+                        <form method="post" action="@Url.Action("UnasignOrderFromTrip", "OrderShorten")" style="display:inline;" onsubmit="return confirmUnassign();">
+                            <input type="hidden" name="orderId" value="@order.Id" />
+                            <input type="hidden" name="tripId" value="@Model.Id" /> <!-- Truyền tripId -->
+                            <button type="submit" class="btn btn-danger btn-sm" data-status="@order.Status">Bỏ Gán</button>
+                        </form>
+                    </td>
                 </tr>
             }
         </tbody>
@@ -153,7 +177,12 @@ else
                 form.submit(); // Gửi form nếu ngày hợp lệ
             }
         });
+
     });
+
+    function confirmUnassign() {
+        return confirm("Bạn có chắc chắn muốn bỏ gán không, nếu các đơn hàng đã thanh toán tiền sẽ dẫn tới việc bị hủy và phải hoàn tiền?");
+    }
 </script>
 
 <style>
@@ -181,7 +210,7 @@ else
         font-size: 14px;
     }
 
-        button[type="submit"]:hover {
-            background-color: #45a049;
-        }
+    button[type="submit"]:hover {
+        background-color: #45a049;
+    }
 </style>

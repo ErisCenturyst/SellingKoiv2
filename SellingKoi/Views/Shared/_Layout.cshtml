@@ -44,6 +44,12 @@
                             </li>
                             
                         }
+                        @if (Context.Session.GetString("UserRole") == "Staff")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Task" asp-action="TaskOfStaff">Công việc được giao</a>
+                            </li>
+                        }
                     </ul>
                     @if (Context.Session.GetString("UserRole") == null)
                     {
