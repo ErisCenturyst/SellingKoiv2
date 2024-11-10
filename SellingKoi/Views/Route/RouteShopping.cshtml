@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-﻿@using System.Linq
+@using System.Linq
 @model IEnumerable<SellingKoi.Models.Route>
 
 <div class="container mt-5">
@@ -152,125 +151,11 @@
 </style>
 
 @section Scripts {
-=======
-﻿@model IEnumerable<SellingKoi.Models.Route>
-
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Danh sách Lộ trình</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-
-        .route-container {
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 10px;
-        }
-
-        .add-to-cart {
-            background-color: #28a745;
-            color: white;
-            border: none;
-            padding: 10px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-
-        .route-title {
-            font-size: 20px;
-            font-weight: bold;
-        }
-
-        .farm-list {
-            margin-top: 10px;
-            padding-left: 20px;
-        }
-
-        .farm-item {
-            margin: 5px 0;
-            display: flex;
-            align-items: center;
-        }
-
-            .farm-item img {
-                width: 50px;
-                height: 50px;
-                object-fit: cover;
-                margin-right: 10px;
-            }
-    </style>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-</head>
-<body>
-
-    <h1>Danh sách Lộ trình</h1>
-
-    <!-- Hiển thị thông báo và danh sách trang trại -->
-    <div>
-        <h2>Lộ trình mà bạn chọn nên có các trang trại sau:</h2>
-        <div class="farm-list">
-            @if (ViewBag.RecommendedFarms != null)
-            {
-                foreach (var farm in ViewBag.RecommendedFarms)
-                {
-                    <div class="farm-item">
-                        <img src="@farm.AvatarUrl" alt="Hình ảnh trang trại" />
-                        @farm.Name
-                    </div>
-                }
-            }
-            else
-            {
-                <div class="farm-item">Không có trang trại nào được gợi ý.</div>
-            }
-        </div>
-    </div>
-
-    @foreach (var route in Model)
-    {
-        <div class="route-container">
-            <div class="route-title">@route.Name</div>
-            <div>
-                <strong>Giá tiền :</strong> @route.Price.ToString("N0") VNĐ
-            </div>
-            <div class="farm-list">
-                <strong>Trang trại đi qua :</strong>
-                @if (route.Farms != null && route.Farms.Any())
-                {
-                    foreach (var farm in route.Farms)
-                    {
-                        <div class="farm-item">
-                            <img src="@farm.AvatarUrl" alt="Hình ảnh trang trại" />
-                            @farm.Name
-                        </div>
-                    }
-                }
-                else
-                {
-                    <div class="farm-item">Không có trang trại nào.</div>
-                }
-            </div>
-            <!-- Thêm nút "Add to Cart" -->
-            <button class="add-to-cart" onclick="addToCart('@route.Id', '@route.Name', '@route.Price')">Add to Cart</button>
-        </div>
-    }
->>>>>>> 85c932f9196067835fd31f943dac733028fd05c6
     <script>
         function addToCart(routeId, routeName, routePrice) {
             // Kiểm tra xem giỏ hàng đã có route nào chưa
             $.ajax({
-<<<<<<< HEAD
                 url: '/Cart/GetCartItems',
-=======
-                url: '/Cart/GetCartItems', // Đường dẫn để lấy các mục trong giỏ hàng
->>>>>>> 85c932f9196067835fd31f943dac733028fd05c6
                 type: 'GET',
                 success: function (response) {
                     if (response.length > 0) {
@@ -285,7 +170,6 @@
                             success: function (response) {
                                 if (response.success) {
                                     alert('Đã thêm vào giỏ hàng!');
-<<<<<<< HEAD
                                     // Update cart counter immediately
                                     fetch('/Cart/GetCartCount')
                                         .then(response => response.json())
@@ -308,10 +192,6 @@
                                                 counter.style.display = count > 0 ? 'inline' : 'none';
                                             }
                                         });
-=======
-                                } else {
-                                    alert('Đã thêm vào giỏ hàng.');
->>>>>>> 85c932f9196067835fd31f943dac733028fd05c6
                                 }
                             },
                             error: function () {
@@ -326,9 +206,4 @@
             });
         }
     </script>
-<<<<<<< HEAD
 }
-=======
-</body>
-</html>
->>>>>>> 85c932f9196067835fd31f943dac733028fd05c6
