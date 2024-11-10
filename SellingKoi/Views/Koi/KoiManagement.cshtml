@@ -1,0 +1,48 @@
+﻿@model IEnumerable<SellingKoi.Models.KOI>
+
+@{
+    ViewData["Title"] = "Koi List";
+}
+
+<h2>Quản lí cá Koi</h2>
+
+@if (Model != null && Model.Any())
+{
+    <div class="row">
+        @foreach (var koi in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">@koi.Name</h5>
+                        <p class="card-text">
+                            <strong>Type:</strong> @koi.Type<br>
+                            <strong>Farm :</strong> @koi.Farm.Name
+                        </p>
+                        <p class="card-text">
+                            <small class="text-muted">Registered on @koi.Registration_date.ToShortDateString()</small>
+                        </p>
+                        <a asp-controller="Koi" asp-action="DetailsKoi" asp-route-id="@koi.Id" class="btn btn-info">Details</a>
+                        <a asp-controller="Koi" asp-action="EditKoi" asp-route-id="@koi.Id" class="btn btn-warning">Edit</a>
+                        <form asp-action="NegateKoi" asp-controller="Koi" method="post" style="display: inline;">
+                            <input type="hidden" name="id" value="@koi.Id" />
+                            <button type="submit" class="btn btn-warning btn-sm">Negate Koi</button>
+                        </form>
+                        <img src="@koi.AvatarUrl" class="card-img-top" alt="Koi Image" style="width: 300px; height: 200px; object-fit: cover;">
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <p>No Koi found.</p>
+}
+
+@section Scripts {
+    <script>
+        // Bạn có thể thêm JavaScript tùy chỉnh ở đây nếu cần
+    </script>
+}
+

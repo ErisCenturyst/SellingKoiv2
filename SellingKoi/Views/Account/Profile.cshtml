@@ -1,0 +1,162 @@
+﻿@model SellingKoi.Models.Account 
+
+@{
+    ViewData["Title"] = "Trang cá nhân";
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <!-- Profile Card -->
+        <div class="col-md-4 mb-4">
+            <div class="card profile-card shadow">
+                <div class="card-body text-center">
+                    <div class="profile-avatar mb-4">
+                        <i class="fas fa-user-circle fa-5x text-primary"></i>
+                    </div>
+                    <h3 class="card-title mb-3">@Model.Fullname</h3>
+                    <p class="text-muted mb-1">@Model.Username</p>
+                    <p class="badge bg-primary">@Model.Role</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Orders Section -->
+        <div class="col-md-8">
+            @if (Model.Role == "Customer")
+            {
+                <div class="card shadow">
+                    <div class="card-header bg-white">
+                        <h4 class="mb-0"><i class="fas fa-shopping-bag me-2"></i>Đơn hàng của bạn</h4>
+                    </div>
+                    <div class="card-body">
+                        @if (ViewBag.Orders != null && ViewBag.Orders.Count > 0)
+                        {
+                            <div class="order-list">
+                                @foreach (var order in ViewBag.Orders)
+                                {
+                                    <div class="order-item bg-light rounded p-3 mb-3">
+                                        <div class="row align-items-center">
+                                            <div class="col-md-8">
+                                                <div class="order-info">
+                                                    <h5 class="mb-2">Đơn hàng #@order.Id</h5>
+                                                    <p class="mb-1">
+                                                        <i class="far fa-calendar-alt me-2"></i>
+                                                        @order.Registration_date.ToString("dd/MM/yyyy")
+                                                    </p>
+                                                    <p class="mb-1">
+                                                        <i class="fas fa-money-bill-wave me-2"></i>
+                                                        @order.Price.ToString("N0") VND
+                                                    </p>
+                                                    <span class="badge @(order.Status == "Completed" ? "bg-success" : "bg-warning")">
+                                                        @order.Status
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                                                <form asp-action="DetailsOrder" asp-controller="OrderShorten" method="get">
+                                                    <input type="hidden" name="id" value="@order.Id" />
+                                                    <button type="submit" class="btn btn-primary">
+                                                        <i class="fas fa-info-circle me-2"></i>Chi tiết
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="text-center py-5">
+                                <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
+                                <p class="text-muted">Bạn chưa có đơn hàng nào</p>
+                                <a href="/Route/RouteShopping" class="btn btn-primary">
+                                    <i class="fas fa-shopping-bag me-2"></i>Mua sắm ngay
+                                </a>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+    .profile-card {
+        border-radius: 15px;
+        border: none;
+        transition: transform 0.2s;
+    }
+
+    .profile-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .profile-avatar {
+        width: 100px;
+        height: 100px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f8f9fa;
+        border-radius: 50%;
+    }
+
+    .order-item {
+        transition: all 0.3s ease;
+        border: 1px solid rgba(0,0,0,0.1);
+    }
+
+    .order-item:hover {
+        transform: translateX(5px);
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .badge {
+        padding: 8px 12px;
+        border-radius: 20px;
+    }
+
+    .btn-primary {
+        border-radius: 8px;
+        padding: 8px 20px;
+        transition: all 0.2s;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    @@media (max-width: 768px) {
+        .profile-container {
+            padding: 1rem;
+        }
+        
+        .profile-header {
+            flex-direction: column;
+            text-align: center;
+        }
+        
+        .profile-avatar {
+            margin-bottom: 1rem;
+        }
+    }
+
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .order-item {
+        animation: fadeIn 0.5s ease-out;
+    }
+</style>

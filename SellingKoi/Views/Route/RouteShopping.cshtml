@@ -1,0 +1,209 @@
+﻿@using System.Linq
+@model IEnumerable<SellingKoi.Models.Route>
+
+<div class="container mt-5">
+    <div class="row mb-5">
+        <div class="col-12">
+            <h1 class="text-center mb-4">Danh sách Lộ trình</h1>
+            <div class="alert alert-info">
+                <h4 class="alert-heading mb-3">Gợi ý trang trại phù hợp</h4>
+                <div class="recommended-farms">
+                    @if (ViewBag.RecommendedFarms != null && ViewBag.RecommendedFarms.Count > 0)
+                    {
+                        <div class="row">
+                            @foreach (var farm in ViewBag.RecommendedFarms)
+                            {
+                                <div class="col-md-4 mb-3">
+                                    <div class="farm-recommendation d-flex align-items-center p-2 bg-white rounded shadow-sm">
+                                        <img src="@farm.AvatarUrl" alt="@farm.Name" class="farm-avatar me-3">
+                                        <span class="farm-name">@farm.Name</span>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="mb-0">Không có trang trại nào được gợi ý.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        @foreach (var route in Model)
+        {
+            <div class="col-md-6 mb-4">
+                <div class="route-card card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary mb-3">@route.Name</h5>
+                        <div class="price-tag mb-3">
+                            <span class="h4 text-success">@route.Price.ToString("N0") VNĐ</span>
+                        </div>
+                        
+                        <div class="farms-section">
+                            <h6 class="text-muted mb-3">Trang trại đi qua:</h6>
+                            <div class="farms-list">
+                                @if (route.Farms != null && route.Farms.Any())
+                                {
+                                    foreach (var farm in route.Farms)
+                                    {
+                                        <div class="farm-item-small d-flex align-items-center mb-2">
+                                            <img src="@farm.AvatarUrl" alt="@farm.Name" class="farm-thumbnail me-2">
+                                            <span>@farm.Name</span>
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <p class="text-muted">Không có trang trại nào.</p>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent border-top-0">
+                        <button class="btn btn-primary w-100" onclick="addToCart('@route.Id', '@route.Name', '@route.Price')">
+                            <i class="fas fa-cart-plus me-2"></i>Thêm vào giỏ hàng
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    /* Base styles */
+    .route-card {
+        transition: transform 0.2s;
+        border: none;
+        border-radius: 15px;
+    }
+
+    @@media (max-width: 768px) {
+        .route-card {
+            margin-bottom: 20px;
+        }
+    }
+
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    .farm-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .farm-thumbnail {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        object-fit: cover;
+    }
+
+    .recommended-farms {
+        padding: 15px;
+        border-radius: 10px;
+    }
+
+    .farm-recommendation {
+        transition: transform 0.2s;
+    }
+
+    .farm-recommendation:hover {
+        transform: translateY(-2px);
+    }
+
+    .price-tag {
+        padding: 8px 15px;
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        display: inline-block;
+    }
+
+    .farms-section {
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 15px;
+    }
+
+    .btn-primary {
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-weight: 500;
+    }
+
+    .alert-info {
+        background-color: #e3f2fd;
+        border-color: #90caf9;
+        color: #0d47a1;
+    }
+</style>
+
+@section Scripts {
+    <script>
+        function addToCart(routeId, routeName, routePrice) {
+            // Kiểm tra xem giỏ hàng đã có route nào chưa
+            $.ajax({
+                url: '/Cart/GetCartItems',
+                type: 'GET',
+                success: function (response) {
+                    if (response.length > 0) {
+                        alert('Chỉ cho phép một route trong giỏ hàng. Vui lòng xóa route hiện tại trước khi thêm route mới.');
+                    } else {
+                        // Nếu giỏ hàng trống, thêm route mới
+                        $.ajax({
+                            url: '/Cart/AddToCart',
+                            type: 'POST',
+                            data: JSON.stringify({ Id: routeId, Name: routeName, Price: routePrice }),
+                            contentType: 'application/json',
+                            success: function (response) {
+                                if (response.success) {
+                                    alert('Đã thêm vào giỏ hàng!');
+                                    // Update cart counter immediately
+                                    fetch('/Cart/GetCartCount')
+                                        .then(response => response.json())
+                                        .then(count => {
+                                            const counter = document.getElementById('cartCounter');
+                                            if (counter) {
+                                                counter.textContent = count;
+                                                counter.style.display = count > 0 ? 'inline' : 'none';
+                                            }
+                                        });
+                                } else {
+                                    alert('Đã thêm vào giỏ hàng.');
+                                    // Update cart counter immediately
+                                    fetch('/Cart/GetCartCount')
+                                        .then(response => response.json())
+                                        .then(count => {
+                                            const counter = document.getElementById('cartCounter');
+                                            if (counter) {
+                                                counter.textContent = count;
+                                                counter.style.display = count > 0 ? 'inline' : 'none';
+                                            }
+                                        });
+                                }
+                            },
+                            error: function () {
+                                alert('Có lỗi xảy ra khi thêm vào giỏ hàng!');
+                            }
+                        });
+                    }
+                },
+                error: function () {
+                    alert('Có lỗi xảy ra khi kiểm tra giỏ hàng!');
+                }
+            });
+        }
+    </script>
+}

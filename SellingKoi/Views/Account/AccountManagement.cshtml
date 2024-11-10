@@ -1,0 +1,52 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model IEnumerable<SellingKoi.Models.Account>
+
+@{
+    ViewData["Title"] = "Quản lý Tài khoản";
+}
+
+<h2>Quản lý Tài khoản</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Tên tài khoản</th>
+            <th>Họ tên</th>
+            <th>Ngày đăng kí</th>
+            <th>Vai trò</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var account in Model.Where(a => a.Role != "ADMIN"))
+@*         @foreach (var account in Model) *@
+        {
+            <tr>
+                <td>@account.Username</td>
+                <td>@account.Fullname</td>
+                <td>@account.Registration_date</td>
+                <td>
+                    @{
+                        string roleDisplay = account.Role switch
+                        {
+                            "Staff" => "Nhân viên",
+                            "SaleStaff" => "Nhân viên bán hàng",
+                            "Customer" => "Khách hàng",
+                            "Manager" => "Quản lý",
+                            _ => account.Role // Giữ nguyên nếu không khớp với bất kỳ vai trò nào
+                        };
+                    }
+                    @roleDisplay
+                </td>
+                <td>
+                    <a asp-action="DetailsAccount" asp-route-id="@account.Id" class="btn btn-warning">Chi tiết </a>
+                    <form asp-action="NegateAccount" asp-route-id="@account.Id" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa tài khoản này?');">Xóa</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

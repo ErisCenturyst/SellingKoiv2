@@ -1,0 +1,55 @@
+﻿@model SellingKoi.Models.Route
+
+@{
+    ViewBag.Title = "Chi tiết Route";
+}
+
+<h2>Chi tiết Route</h2>
+
+<div class="route-details">
+    <h3>@Model.Name</h3>
+    @* <p><strong>Mô tả:</strong> @Model.Description</p>
+    <p><strong>Ngày tạo:</strong> @Model.CreatedDate.ToString("dd/MM/yyyy")</p> *@
+
+    <h4>Danh sách Farm liên quan:</h4>
+    <ul style="list-style-type: none; padding: 0;">
+        @if (Model.Farms != null && Model.Farms.Any(f => f.Status))
+        {
+            foreach (var farm in Model.Farms.Where(f => f.Status))
+            {
+                <li style="display: flex; align-items: center; margin-bottom: 10px;">
+                    <img src="@farm.AvatarUrl" alt="Hình ảnh trang trại" style="width: 80px; height: 80px; object-fit: cover; margin-right: 10px;">
+                    <span>@farm.Name</span>
+                </li>
+            }
+        }
+        else
+        {
+            <li>Không có farm nào liên quan.</li>
+        }
+    </ul>
+
+    <div class="actions">
+        <a asp-action="UpdateRoute" asp-route-id="@Model.Id" class="btn btn-primary">Chỉnh sửa</a>
+        <a asp-action="NegateRoute" asp-route-id="@Model.Id" class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa route này không?');">Xóa</a>
+        <a asp-action="RouteManagement" class="btn btn-secondary">Quay lại danh sách Route</a>
+    </div>
+</div>
+
+<style>
+    .route-details {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 20px;
+        margin-top: 20px;
+        background-color: #f9f9f9;
+    }
+
+    .actions {
+        margin-top: 20px;
+    }
+
+    .actions a {
+        margin-right: 10px;
+    }
+</style>

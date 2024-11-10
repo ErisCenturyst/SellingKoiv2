@@ -1,0 +1,72 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@model SellingKoi.Models.Farm
+
+@{
+    ViewData["Title"] = "Chi tiết Farm";
+}
+
+<div class="container mt-4">
+    <h2 class="text-center">Chi tiết Trang trại</h2>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <h4 class="card-title">@Model.Name</h4>
+            <hr />
+            <dl class="row">
+                <dt class="col-sm-3">Chủ trại:</dt>
+                <dd class="col-sm-9">@Model.Owner</dd>
+
+                <dt class="col-sm-3">Chú thích:</dt>
+                <dd class="col-sm-9">@Model.Description</dd>
+
+                <dt class="col-sm-3">Vị trí:</dt>
+                <dd class="col-sm-9">
+                    <a href="https://www.google.com/maps/search/?api=1&query=@Model.Location" target="_blank" class="btn btn-link">
+                        @Model.Location
+                    </a>
+                </dd>
+
+                <dt class="col-sm-3">Diện tích:</dt>
+                <dd class="col-sm-9">@Model.Size m²</dd>
+            </dl>
+        </div>
+    </div>
+
+   
+    <div>
+        <h4>Danh sách cá thuộc farm này</h4>
+        @if (Model.KOIs.Any())
+        {
+            <table class="table table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Tên cá</th>
+                        <th>Loại cá</th>
+                        <th>Tuổi</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var koi in Model.KOIs.Where(k => k.Status))
+                    {
+                        <tr>
+                            <td>@koi.Name</td>
+                            <td>@koi.Type</td>
+                            <td>@koi.Age</td>
+                            <td>
+                                <a asp-controller="Koi" asp-action="DetailsKoi" asp-route-id="@koi.Id" class="btn btn-info">Chi tiết</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>Không có cá nào thuộc farm này.</p>
+        }
+    </div>
+</div>

@@ -1,0 +1,200 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - SellingKoi</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+</head>
+<body>
+    <header class="header">
+        <nav class="navbar navbar-expand-sm navbar-light">
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img src="~/Images/logo/koi-logo.png" alt="SellingKoi Logo" height="30" class="d-inline-block align-top">
+                    SellingKoi
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Trang chủ</a>
+                        </li>
+                        @if (Context.Session.GetString("UserRole") == "ADMIN")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="AdminPage">Admin</a>
+                            </li>
+                        }
+                        @if (Context.Session.GetString("UserRole") == "Customer")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Koi" asp-action="KoiShopping">Cá Koi</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Route" asp-action="RouteShopping">Lộ trình</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Farm" asp-action="FarmShopping">Trang trại</a>
+                            </li>
+                            
+                        }
+                        @if (Context.Session.GetString("UserRole") == "Staff")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Task" asp-action="TaskOfStaff">Công việc được giao</a>
+                            </li>
+                        }
+                    </ul>
+                    @if (Context.Session.GetString("UserRole") == null)
+                    {
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Account" asp-action="Login">Đăng nhập</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Account" asp-action="SignUp">Đăng kí</a>
+                            </li>
+                        </ul>
+                    }
+                    else
+                    {
+                        <ul class="navbar-nav align-items-center">
+                            <li class="nav-item position-relative">
+                                <a class="nav-link" href="/Cart">
+                                    <i class="fas fa-shopping-cart"></i>
+                                    <span id="cartCounter" class="cart-counter">0</span>
+                                </a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fas fa-user-circle fa-lg me-2"></i>
+                                    <span>@Context.Session.GetString("Username")</span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="Account" asp-action="Profile" asp-route-id="@Context.Session.GetString("UserId")">
+                                            <i class="fas fa-user me-2"></i> Thông tin cá nhân
+                                        </a>
+                                    </li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <a class="dropdown-item text-danger" asp-controller="Account" asp-action="Logout">
+                                            <i class="fas fa-sign-out-alt me-2"></i> Đăng xuất
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    }
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main role="main" class="pb-3">
+        @RenderBody()
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>Về SellingKoi</h5>
+                    <p>Chúng tôi đam mê cung cấp cá Koi chất lượng cao và tư vấn chuyên nghiệp cho những người yêu thích.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Liên Kết Nhanh</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#">Về Chúng Tôi</a></li>
+                        <li><a href="#">Liên Hệ</a></li>
+                        <li><a href="#">Điều Khoản Dịch Vụ</a></li>
+                        <li><a href="#">Chính Sách Bảo Mật</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Kết Nối Với Chúng Tôi</h5>
+                    <ul class="list-inline">
+                        <li class="list-inline-item"><a href="#"><i class="fab fa-facebook"></i></a></li>
+                        <li class="list-inline-item"><a href="#"><i class="fab fa-twitter"></i></a></li>
+                        <li class="list-inline-item"><a href="#"><i class="fab fa-instagram"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="footer-divider" />
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <p>&copy; 2024 SellingKoi. Đã đăng ký bản quyền.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+
+    <script>
+        function updateCartCounter() {
+            fetch('/Cart/GetCartCount')
+                .then(response => response.json())
+                .then(count => {
+                    const counter = document.getElementById('cartCounter');
+                    if (counter) {
+                        counter.textContent = count;
+                        counter.style.display = count > 0 ? 'inline' : 'none';
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        // Update cart counter when page loads
+        document.addEventListener('DOMContentLoaded', updateCartCounter);
+
+        // Update cart counter every 30 seconds
+        setInterval(updateCartCounter, 30000);
+    </script>
+
+    <style>
+        .cart-counter {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: #dc3545;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 0.7rem;
+            min-width: 18px;
+            text-align: center;
+        }
+
+        .dropdown-menu {
+            border-radius: 8px;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+
+        .dropdown-item {
+            padding: 0.5rem 1rem;
+        }
+
+        .dropdown-item i {
+            width: 20px;
+        }
+
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .dropdown-item.text-danger:hover {
+            background-color: #fff5f5;
+        }
+    </style>
+</body>
+</html>
