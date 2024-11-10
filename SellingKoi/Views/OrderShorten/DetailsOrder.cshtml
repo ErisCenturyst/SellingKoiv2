@@ -1,0 +1,110 @@
+﻿@model SellingKoi.Models.OrtherShorten
+
+@{
+    ViewData["Title"] = "Chi tiết đơn hàng";
+    string userRole = Context.Session.GetString("UserRole");
+    string userId = Context.Session.GetString("UserId");
+
+    string GetStatusBadgeClass(string status)
+    {
+        return status switch
+        {
+            "booked" => "bg-warning",
+            "paid" => "bg-info",
+            "confirmed" => "bg-success",
+            "CancleByAdmin" => "bg-danger",
+            _ => "bg-secondary"
+        };
+    }
+}
+
+<div class="container mt-5">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h3 class="mb-0">Chi tiết đơn hàng #@Model.Id</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5 class="mb-3">Thông tin đơn hàng</h5>
+                    <p><strong>Trạng thái:</strong> 
+                        <span class="badge @GetStatusBadgeClass(Model.Status)">@Model.Status</span>
+                    </p>
+                    <p><strong>Ngày đặt:</strong> @Model.Registration_date.ToString("dd/MM/yyyy HH:mm")</p>
+                    <p><strong>Giá:</strong> @Model.Price.ToString("N0") VNĐ</p>
+                </div>
+                <div class="col-md-6">
+                    <h5 class="mb-3">Thông tin người đặt</h5>
+                    <p><strong>Người đặt:</strong> @Model.buyer</p>
+                    <p><strong>Người tham gia:</strong> @Model.participants</p>
+                    <p><strong>Số điện thoại:</strong> @Model.participantsPhone</p>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-12">
+                    <h5 class="mb-3">Thông tin lộ trình</h5>
+                    <p><strong>Tên lộ trình:</strong> @Model.routename</p>
+                    <p><strong>Ngày khởi hành:</strong> @Model.DepartureFrom?.ToString("dd/MM/yyyy")</p>
+                    <p><strong>Ngày kết thúc:</strong> @Model.DepartureTo?.ToString("dd/MM/yyyy")</p>
+                    @if (Model.TripId != null)
+                    {
+                        <p><strong>Chuyến đi số:</strong> @Model.TripNum</p>
+                        <p><strong>Ngày khởi hành chuyến đi:</strong> @ViewBag.TripDepartureTime?.ToString("dd/MM/yyyy")</p>
+                    }
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-12">
+                    <h5 class="mb-3">Danh sách cá Koi</h5>
+                    @if (Model.koisname != null && Model.koisname.Any())
+                    {
+                        <ul class="list-group">
+                            @foreach (var koi in Model.koisname)
+                            {
+                                <li class="list-group-item">@koi</li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p class="text-muted">Không có cá Koi nào trong đơn hàng.</p>
+                    }
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-12">
+                    @if (userRole == "Admin")
+                    {
+                        @if (Model.Status == "booked")
+                        {
+                            <form asp-action="Confirm" method="post" class="d-inline">
+                                <input type="hidden" name="orderId" value="@Model.Id" />
+                                <button type="submit" class="btn btn-success me-2">Xác nhận</button>
+                            </form>
+                        }
+                    }
+                    @if (userRole == "Customer" && Model.Status == "booked")
+                    {
+                        <form asp-action="Payment" method="post" class="d-inline">
+                            <input type="hidden" name="orderId" value="@Model.Id" />
+                            <button type="submit" class="btn btn-primary me-2">Thanh toán</button>
+                        </form>
+                    }
+                    @if ((userRole == "Admin" && Model.Status != "CancleByAdmin") || 
+                         (userRole == "Customer" && Model.Status == "booked" && Model.buyer == userId))
+                    {
+                        <form asp-action="CancelOrder" method="post" class="d-inline">
+                            <input type="hidden" name="orderId" value="@Model.Id" />
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn có chắc muốn hủy đơn hàng này?')">
+                                Hủy đơn hàng
+                            </button>
+                        </form>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

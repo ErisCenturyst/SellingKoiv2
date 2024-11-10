@@ -1,0 +1,236 @@
+﻿@model SellingKoi.Models.OrtherShorten
+
+@{
+    ViewData["Title"] = "Xác nhận đơn hàng";
+}
+
+<div class="container mt-5">
+    <div class="success-card">
+        <div class="success-icon">
+            <i class="fas fa-check-circle text-primary"></i>
+        </div>
+        <h2 class="success-title">Đơn hàng đã được tạo thành công!</h2>
+        <p class="success-message">
+            Cảm ơn bạn đã đặt hàng. Đơn hàng của bạn sẽ được lên lịch để sang Nhật trong 1 tuần.
+        </p>
+
+        <div class="row">
+            <!-- Order Information -->
+            <div class="col-md-6">
+                <div class="info-section">
+                    <h4 class="section-title">
+                        <i class="fas fa-file-invoice text-primary"></i>
+                        Thông tin đơn hàng
+                    </h4>
+                    <div class="info-item">
+                        <span class="label">Mã đơn hàng:</span>
+                        <span class="value text-primary">@Model.Id</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Ngày tạo:</span>
+                        <span class="value">@Model.Registration_date.ToString("dd/MM/yyyy HH:mm")</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Trạng thái:</span>
+                        <span class="status-badge">@Model.Status</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Tổng tiền:</span>
+                        <span class="value text-primary">@Model.Price.ToString("N0") VNĐ</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Customer Information -->
+            <div class="col-md-6">
+                <div class="info-section">
+                    <h4 class="section-title">
+                        <i class="fas fa-user text-primary"></i>
+                        Thông tin khách hàng
+                    </h4>
+                    <div class="info-item">
+                        <span class="label">Người đặt:</span>
+                        <span class="value">@Model.buyer</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Người tham gia:</span>
+                        <span class="value">@Model.participants</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Số điện thoại:</span>
+                        <span class="value">@Model.participantsPhone</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-buttons mt-4">
+            <a href="/Account/Profile" class="btn btn-primary">
+                <i class="fas fa-user me-2"></i>
+                Xem trang cá nhân
+            </a>
+            <a href="/Route/RouteShopping" class="btn btn-outline-primary">
+                <i class="fas fa-shopping-cart me-2"></i>
+                Tiếp tục mua sắm
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .success-card {
+        background: white;
+        border-radius: 16px;
+        padding: 40px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .success-icon {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .success-icon i {
+        font-size: 64px;
+        color: #0066FF;
+    }
+
+    .success-title {
+        text-align: center;
+        color: #1a1a1a;
+        font-size: 24px;
+        margin-bottom: 16px;
+    }
+
+    .success-message {
+        text-align: center;
+        color: #666;
+        margin-bottom: 40px;
+    }
+
+    .order-details {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+        margin-bottom: 40px;
+    }
+
+    .order-section {
+        background: #f8f9fa;
+        border-radius: 12px;
+        padding: 24px;
+    }
+
+    .section-header {
+        font-size: 18px;
+        font-weight: 600;
+        color: #0066FF;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .section-header i {
+        font-size: 20px;
+    }
+
+    .detail-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 16px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .detail-row:last-child {
+        margin-bottom: 0;
+        padding-bottom: 0;
+        border-bottom: none;
+    }
+
+    .detail-label {
+        color: #666;
+        font-weight: 500;
+    }
+
+    .detail-value {
+        font-weight: 600;
+        color: #1a1a1a;
+    }
+
+    .order-id {
+        color: #0066FF;
+    }
+
+    .price {
+        color: #0066FF;
+        font-size: 16px;
+    }
+
+    .status-badge {
+        background: #FFF3CD;
+        color: #856404;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 14px;
+    }
+
+    .action-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+    }
+
+    .btn-primary, .btn-secondary {
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.2s;
+        text-decoration: none;
+    }
+
+    .btn-primary {
+        background: #0066FF;
+        color: white;
+    }
+
+    .btn-secondary {
+        background: white;
+        color: #0066FF;
+        border: 1px solid #0066FF;
+    }
+
+    .btn-primary:hover, .btn-secondary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    @@media (max-width: 768px) {
+        .order-details {
+            grid-template-columns: 1fr;
+        }
+
+        .action-buttons {
+            flex-direction: column;
+        }
+
+        .btn-primary, .btn-secondary {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .success-card {
+            padding: 24px;
+        }
+    }
+</style>

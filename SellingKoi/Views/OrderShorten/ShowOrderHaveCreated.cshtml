@@ -1,0 +1,14 @@
+﻿@{
+    // Giả sử bạn đã có một đối tượng Order được truyền vào từ OrderShortenController
+    var order = Model; // Thay đổi này có thể cần điều chỉnh tùy thuộc vào cách bạn truyền dữ liệu
+}
+
+<div class="order-summary">
+    <h1>Thông tin đơn hàng</h1>
+    <p><strong>ID Đơn hàng:</strong> @order.Id</p>
+    <p><strong>Tên khách hàng:</strong> @order.buyer </p>
+    <p><strong>Ngày tạo:</strong> @order.Registration_date.ToString("dd/MM/yyyy")</p>
+
+    @* <p><strong>Tổng số tiền:</strong> @order.TotalAmount.ToString("C")</p> *@
+    <p><strong>Trạng thái:</strong> @order.Status</p>
+</div>
