@@ -455,6 +455,7 @@ body {
 .admin-dashboard .list-group-item:hover {
     background-color: #f8f9fa;
 }
+<<<<<<< HEAD
 
 .cart-counter {
     position: absolute;
@@ -489,3 +490,5 @@ body {
 .dropdown-item.text-danger:hover {
     background-color: #fff5f5;
 }
+=======
+>>>>>>> 85c932f9196067835fd31f943dac733028fd05c6

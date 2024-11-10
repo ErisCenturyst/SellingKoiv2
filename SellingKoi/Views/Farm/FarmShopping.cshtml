@@ -1,5 +1,6 @@
 ﻿@model IEnumerable<SellingKoi.Models.Farm>
 
+<<<<<<< HEAD
 <div class="container mt-5">
     <div class="row mb-4">
         <div class="col-12 text-center">
@@ -171,3 +172,80 @@
         window.scrollTo(0, 0);
     }
 </script>
+=======
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh sách Trang trại</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .farm-container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .farm-item {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin: 10px;
+            padding: 10px;
+            width: 250px;
+            text-align: center;
+        }
+
+            .farm-item img {
+                max-width: 100%;
+                height: auto;
+                border-radius: 5px;
+            }
+
+        .view-details {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+            .view-details:hover {
+                background-color: #0056b3;
+            }
+    </style>
+</head>
+<body>
+
+    <div class="container-fluid px-0">
+        <h1 class="text-center mb-4">Danh sách Trang trại</h1>
+        <span>Chọn một trang trại để xem thông tin chi tiết!</span>
+        <div class="row farm-container mx-0" id="farmContainer">
+            @foreach (var farm in Model)
+            {
+                <div class="col-md-3 col-sm-6 mb-4">
+                    <div class="farm-item">
+                        <img src="@farm.AvatarUrl" class="img-fluid" alt="@farm.Name" onclick="viewFarmDetails('@farm.Id')">
+                        <h5 class="mt-3">@farm.Name</h5>
+                        <p class="mb-1">Chủ trại: @farm.Owner</p>
+                        <p class="mb-3">Diện tích: @farm.Size m²</p>
+                        <button class="btn btn-primary btn-block view-details" onclick="viewFarmDetails('@farm.Id')">Xem chi tiết</button>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <script>
+        function viewFarmDetails(farmId) {
+            window.location.href = `/Farm/DetailsShoppingFarm/${farmId}`;
+        }
+    </script>
+
+</body>
+</html>
+>>>>>>> 85c932f9196067835fd31f943dac733028fd05c6
