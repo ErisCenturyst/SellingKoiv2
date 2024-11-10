@@ -21,20 +21,16 @@ namespace SellingKoi.Controllers
             return Json(_cartItems); // Trả về danh sách dưới dạng JSON
         }
 
-<<<<<<< HEAD
         [HttpGet]
         public IActionResult GetCartCount()
         {
             var cart = HttpContext.Session.GetObjectFromJson<List<CartItem>>("Cart") ?? new List<CartItem>();
             return Json(cart.Count);
         }
-=======
->>>>>>> 85c932f9196067835fd31f943dac733028fd05c6
 
         [HttpPost]
         public IActionResult AddToCart([FromBody] CartItem item)
         {
-<<<<<<< HEAD
             var cart = HttpContext.Session.GetObjectFromJson<List<CartItem>>("Cart") ?? new List<CartItem>();
             
             // If adding a route (Price > 0), remove any existing route
@@ -47,81 +43,17 @@ namespace SellingKoi.Controllers
             HttpContext.Session.SetObjectAsJson("Cart", cart);
             
             return Ok(new { success = true });
-=======
-            // Lấy danh sách FarmID từ session
-            var farmListJson = HttpContext.Session.GetString("FarmShouldInclude");
-            List<string> farmIds;
-
-            if (!string.IsNullOrEmpty(farmListJson))
-            {
-                // Nếu đã có danh sách, chuyển đổi từ JSON về List<string>
-                farmIds = JsonConvert.DeserializeObject<List<string>>(farmListJson);
-            }
-            else
-            {
-                // Nếu chưa có, khởi tạo danh sách mới
-                farmIds = new List<string>();
-            }
-
-            // Thêm FarmID mới vào danh sách nếu chưa có
-            if (!farmIds.Contains(item.FarmID))
-            {
-                farmIds.Add(item.FarmID);
-            }
-
-            // Lưu lại danh sách FarmID vào session
-            HttpContext.Session.SetString("FarmShouldInclude", JsonConvert.SerializeObject(farmIds));
-
-
-            var cart = HttpContext.Session.GetObjectFromJson<List<CartItem>>("Cart") ?? new List<CartItem>();
-            cart.Add(new CartItem { Id = item.Id, Name = item.Name, Price = item.Price,FarmID = item.FarmID });
-
-            // Lưu giỏ hàng vào session
-            HttpContext.Session.SetObjectAsJson("Cart", cart);
-            return Ok();
->>>>>>> 85c932f9196067835fd31f943dac733028fd05c6
         }
 
         [HttpPost]
         public IActionResult RemoveFromCart([FromBody] RemoveFromCartRequest request)
         {
-<<<<<<< HEAD
             var cart = HttpContext.Session.GetObjectFromJson<List<CartItem>>("Cart");
             if (cart != null)
             {
                 cart.RemoveAll(item => item.Id == request.ItemId);
                 HttpContext.Session.SetObjectAsJson("Cart", cart);
             }
-=======
-            string itemId = request.ItemId; // Lấy itemId từ request
-            var cart = HttpContext.Session.GetObjectFromJson<List<CartItem>>("Cart") ?? new List<CartItem>();
-
-            // Tìm item trong giỏ hàng
-            var itemToRemove = cart.FirstOrDefault(i => i.Id == itemId);
-            if (itemToRemove != null)
-            {
-                // Lưu FarmID trước khi xóa item
-                string farmIdToRemove = itemToRemove.FarmID; // Giả sử CartItem có thuộc tính FarmId
-
-                cart.Remove(itemToRemove); // Xóa item
-
-                // Cập nhật danh sách FarmID trong session
-                var farmListJson = HttpContext.Session.GetString("FarmShouldInclude");
-                List<string> farmIds = string.IsNullOrEmpty(farmListJson) ? new List<string>() : JsonConvert.DeserializeObject<List<string>>(farmListJson);
-
-                // Xóa FarmID khỏi danh sách nếu nó tồn tại
-                if (farmIds.Contains(farmIdToRemove))
-                {
-                    farmIds.Remove(farmIdToRemove);
-                }
-
-                // Lưu lại danh sách FarmID vào session
-                HttpContext.Session.SetString("FarmShouldInclude", JsonConvert.SerializeObject(farmIds));
-            }
-
-            // Lưu giỏ hàng vào session
-            HttpContext.Session.SetObjectAsJson("Cart", cart);
->>>>>>> 85c932f9196067835fd31f943dac733028fd05c6
             return Ok();
         }
        

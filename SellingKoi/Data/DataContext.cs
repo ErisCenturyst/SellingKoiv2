@@ -11,11 +11,7 @@ namespace SellingKoi.Data
         public DbSet<Farm> Farms { get; set; }
         public DbSet<KOI> KOIs { get; set; }
         public DbSet<Models.Route> Routes { get; set; }
-<<<<<<< HEAD
         public DbSet<OrtherShorten> OrtherShortens { get; set; }
-=======
-        public DbSet<OrderShorten> OrtherShortens { get; set; }
->>>>>>> 85c932f9196067835fd31f943dac733028fd05c6
         public DbSet<Trip> Trips { get; set; }
         public DbSet<TripTask> Tasks { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -53,7 +49,6 @@ namespace SellingKoi.Data
             modelBuilder.Entity<Trip>()
                 .HasKey(e => e.Id);
 
-<<<<<<< HEAD
             // Add configuration for OrderShorten if needed
             modelBuilder.Entity<OrtherShorten>()
                 .Property(o => o.Status)
@@ -62,8 +57,6 @@ namespace SellingKoi.Data
 
             modelBuilder.Entity<OrtherShorten>()
                 .HasKey(o => o.Id);
-=======
->>>>>>> 85c932f9196067835fd31f943dac733028fd05c6
         }
 
     }

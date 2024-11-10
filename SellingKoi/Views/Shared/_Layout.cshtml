@@ -65,12 +65,15 @@
                     else
                     {
                         <ul class="navbar-nav align-items-center">
-                            <li class="nav-item position-relative">
-                                <a class="nav-link" href="/Cart">
-                                    <i class="fas fa-shopping-cart"></i>
-                                    <span id="cartCounter" class="cart-counter">0</span>
-                                </a>
-                            </li>
+                            @if (Context.Session.GetString("UserRole") == "Customer")
+                            {
+                                <li class="nav-item position-relative">
+                                    <a class="nav-link" href="/Cart">
+                                        <i class="fas fa-shopping-cart"></i>
+                                        <span id="cartCounter" class="cart-counter">0</span>
+                                    </a>
+                                </li>
+                            }
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="fas fa-user-circle fa-lg me-2"></i>
@@ -90,26 +93,6 @@
                                     </li>
                                 </ul>
                             </li>
-                                <a class="nav-link" asp-area="" asp-controller="Account" asp-action="SignUp">Đăng kí</a>
-                            </li>
-                        </ul>
-                    } else
-                    {
-                        <ul class="navbar-nav">
-                            <li class="nav-item">
-                                <a class="nav-link" asp-controller="Account" asp-action="Profile" asp-route-id="@Context.Session.GetString("UserId")">@Context.Session.GetString("Username")</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" asp-controller="Account" asp-action="Logout">Đăng xuất</a>
-                            </li>
-                            @if (Context.Session.GetString("UserRole") != "ADMIN")
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Cart" asp-action="Index">
-                                        <i class="fas fa-shopping-cart"></i>
-                                    </a>
-                                </li>
-                            }
                         </ul>
                     }
                 </div>

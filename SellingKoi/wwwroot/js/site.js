@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 ﻿function updateCartCounter() {
     fetch('/Cart/GetCartCount')
         .then(response => {
@@ -38,9 +37,3 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
-=======
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
-
-// Write your JavaScript code.
->>>>>>> 85c932f9196067835fd31f943dac733028fd05c6

@@ -46,14 +46,10 @@ namespace SellingKoi.Controllers
                 return NotFound($"Account with ID '{id}' not found.");
             }
             var orders = await _orderShortenService.GetOrdersByUser(account.Username);
-<<<<<<< HEAD
 
             // Sort orders before passing to view
             ViewBag.Orders = orders.OrderByDescending(o => o.Registration_date).ToList();
 
-=======
-            ViewBag.Orders = orders;
->>>>>>> 85c932f9196067835fd31f943dac733028fd05c6
             return View(account);
         }
 

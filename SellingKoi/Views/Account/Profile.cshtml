@@ -4,7 +4,6 @@
     ViewData["Title"] = "Trang cá nhân";
 }
 
-<<<<<<< HEAD
 <div class="container mt-5">
     <div class="row">
         <!-- Profile Card -->
@@ -161,53 +160,3 @@
         animation: fadeIn 0.5s ease-out;
     }
 </style>
-=======
-<h2>Trang cá nhân</h2>
-
-<div>
-    <strong>Tên tài khoản :</strong> @Model.Username <br />
-    <strong>Tên người dùng :</strong> @Model.Fullname <br />
-   
-</div>
-
-@if (Model.Role == "Customer")
-{
-    <h3>Đơn hàng của bạn</h3>
-    <ul>
-        @foreach (var order in ViewBag.Orders) 
-        {
-            <li>
-                <strong>Đơn hàng ID:</strong> @order.Id <br />
-                <strong>Ngày đặt:</strong> @order.Registration_date.ToString("dd/MM/yyyy") <br />
-                <strong>Tổng tiền:</strong> @order.Price.ToString("N0") VND <br />
-                <strong>Trạng thái:</strong> @order.Status <br />
-                <form asp-action="DetailsOrder" asp-controller="OrderShorten" method="get">
-                    <input type="hidden" name="id" value="@order.Id" />
-                    <button type="submit" class="btn btn-info btn-sm">Chi tiết đơn hàng</button>
-                </form>
-                <br />
-            </li>
-        }
-    </ul>
-}
-
-
-@* else if (User.IsInRole("Staff") || User.IsInRole("SaleStaff"))
-{
-    <h3>Công viên đã được phân công</h3>
-    <ul>
-        @foreach (var park in Model.AssignedParks) // Giả sử bạn đã truyền danh sách công viên vào ViewModel
-        {
-            <li>
-                <strong>Tên công viên:</strong> @park.Name <br />
-                <strong>Địa chỉ:</strong> @park.Location <br />
-                <strong>Ngày phân công:</strong> @park.AssignmentDate.ToString("dd/MM/yyyy")
-            </li>
-        }
-    </ul>
-}
-else
-{
-    <p>Bạn không có quyền truy cập vào thông tin này.</p>
-} *@
->>>>>>> 85c932f9196067835fd31f943dac733028fd05c6
