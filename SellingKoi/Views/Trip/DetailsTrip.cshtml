@@ -24,22 +24,22 @@
     <div class="form-group">
         <label for="StatusDropdown">Trạng Thái</label>
         <select class="form-control" id="StatusDropdown" name="Status" required>
-            <option value="@Model.status">@Model.status</option>
-            @if (Model.status != "Preparing")
+            <option value="@Model.status">@GetVietnameseStatus(Model.status)</option>
+            @if (Model.status != "Đang chuẩn bị")
             {
-                <option value="Preparing">Preparing</option>
+                <option value="Preparing">Đang chuẩn bị</option>
             }
-            @if (Model.status != "Ongoing")
+            @if (Model.status != "Đang diễn ra")
             {
-                <option value="Ongoing">Ongoing</option>
+                <option value="Ongoing">Đang diễn ra</option>
             }
-            @if (Model.status == "Ongoing")
+            @if (Model.status == "Đang diễn ra")
             {
-                <option value="Done">Done</option>
+                <option value="Done">Hoàn thành</option>
             }
             else
             {
-                <option value="Done" disabled>Done</option>
+                <option value="Done" disabled>Hoàn thành</option>
             }
         </select>
     </div>
@@ -53,7 +53,7 @@
 
     <div class="form-group">
         <label for="FollowAccountsID">Nhân Viên</label>
-        <select class="form-control" id="FollowAccountsID" name="FollowAccountsID[]" multiple >
+        <select class="form-control" id="FollowAccountsID" name="FollowAccountsID[]" multiple>
             <option value="" disabled>Chọn nhân viên</option>
             @if (ViewBag.StaffList != null)
             {
@@ -74,7 +74,7 @@
 
     <div class="form-group">
         <label for="SaleStaffID">Nhân Viên Bán Hàng - Trưởng đoàn</label>
-        <select class="form-control" id="SaleStaffID" name="SaleStaffID" >
+        <select class="form-control" id="SaleStaffID" name="SaleStaffID">
             <option value="">Chọn nhân viên bán hàng</option>
             @if (ViewBag.SaleStaffList != null)
             {
@@ -110,8 +110,7 @@
                 <th>Hành khách tham gia</th>
                 <th>Số điện thoại</th>
                 <th>Tổng Tiền</th>
-                <th>Hành động</th> <!-- Cột mới cho nút Bỏ Gán -->
-
+                <th>Hành động</th>
             </tr>
         </thead>
         <tbody>
@@ -122,14 +121,14 @@
                     <td>@order.buyer</td>
                     <td>@order.Registration_date.ToString("dd/MM/yyyy")</td>
                     <td>@order.routename</td>
-                    <td>@order.Status</td>
-                    <td>@order.participants </td>
-                    <td>@order.participantsPhone </td>
+                    <td>@GetVietnameseOrderStatus(order.Status)</td>
+                    <td>@order.participants</td>
+                    <td>@order.participantsPhone</td>
                     <td>@order.Price.ToString("N0") VNĐ</td>
                     <td>
                         <form method="post" action="@Url.Action("UnasignOrderFromTrip", "OrderShorten")" style="display:inline;" onsubmit="return confirmUnassign();">
                             <input type="hidden" name="orderId" value="@order.Id" />
-                            <input type="hidden" name="tripId" value="@Model.Id" /> <!-- Truyền tripId -->
+                            <input type="hidden" name="tripId" value="@Model.Id" />
                             <button type="submit" class="btn btn-danger btn-sm" data-status="@order.Status">Bỏ Gán</button>
                         </form>
                     </td>
@@ -152,7 +151,7 @@ else
         var originalStatus = statusDropdown.value;
 
         statusDropdown.addEventListener('change', function () {
-            if (originalStatus === 'Preparing' && this.value === 'Ongoing') {
+            if (originalStatus === 'Đang chuẩn bị' && this.value === 'Đang diễn ra') {
                 var confirmMessage = "Bạn có chắc muốn đổi trạng thái của chuyến đi này thành sẵn sàng không? Chuyến đi này sẽ được lên lịch và các thành viên liên quan sẽ nhận được thông báo nhiệm vụ của mình.";
 
                 if (!confirm(confirmMessage)) {
@@ -214,3 +213,28 @@ else
         background-color: #45a049;
     }
 </style>
+
+@functions {
+    private string GetVietnameseStatus(string status)
+    {
+        return status switch
+        {
+            "Preparing" => "Đang chuẩn bị",
+            "Ongoing" => "Đang diễn ra",
+            "Done" => "Hoàn thành",
+            "Cancelled" => "Đã hủy",
+            _ => status // Default case if status doesn't match
+        };
+    }
+
+    private string GetVietnameseOrderStatus(string status)
+    {
+        return status switch
+        {
+            "Paid" => "Đã thanh toán",
+            "Pending" => "Đang chờ",
+            "Cancelled" => "Đã hủy",
+            _ => status // Default case if status doesn't match
+        };
+    }
+}

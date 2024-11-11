@@ -1,44 +1,46 @@
 ﻿@model IEnumerable<SellingKoi.Models.KOI>
 
 @{
-    ViewData["Title"] = "Koi List";
+    ViewData["Title"] = "Danh sách cá Koi";
 }
 
-<h2>Quản lí cá Koi</h2>
+<div class="container-fluid">
+    <h2 class="mt-4 mb-4 text-center">Quản lý danh sách cá Koi</h2>
 
-@if (Model != null && Model.Any())
-{
-    <div class="row">
-        @foreach (var koi in Model)
-        {
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">@koi.Name</h5>
-                        <p class="card-text">
-                            <strong>Type:</strong> @koi.Type<br>
-                            <strong>Farm :</strong> @koi.Farm.Name
-                        </p>
-                        <p class="card-text">
-                            <small class="text-muted">Registered on @koi.Registration_date.ToShortDateString()</small>
-                        </p>
-                        <a asp-controller="Koi" asp-action="DetailsKoi" asp-route-id="@koi.Id" class="btn btn-info">Details</a>
-                        <a asp-controller="Koi" asp-action="EditKoi" asp-route-id="@koi.Id" class="btn btn-warning">Edit</a>
-                        <form asp-action="NegateKoi" asp-controller="Koi" method="post" style="display: inline;">
-                            <input type="hidden" name="id" value="@koi.Id" />
-                            <button type="submit" class="btn btn-warning btn-sm">Negate Koi</button>
-                        </form>
-                        <img src="@koi.AvatarUrl" class="card-img-top" alt="Koi Image" style="width: 300px; height: 200px; object-fit: cover;">
+    @if (Model != null && Model.Any())
+    {
+        <div class="row">
+            @foreach (var koi in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-sm">
+                        <img src="@koi.AvatarUrl" class="card-img-top" alt="Hình ảnh cá Koi" style="height: 200px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title">@koi.Name</h5>
+                            <p class="card-text">
+                                <strong>Loại:</strong> @koi.Type<br>
+                                <strong>Trang trại:</strong> @koi.Farm.Name<br>
+                                <small class="text-muted">Đăng ký vào ngày: @koi.Registration_date.ToShortDateString()</small>
+                            </p>
+                            <div class="d-flex justify-content-between">
+                                <a asp-controller="Koi" asp-action="DetailsKoi" asp-route-id="@koi.Id" class="btn btn-info">Chi tiết</a>
+                                <a asp-controller="Koi" asp-action="EditKoi" asp-route-id="@koi.Id" class="btn btn-warning">Chỉnh sửa</a>
+                                <form asp-action="NegateKoi" asp-controller="Koi" method="post" style="display: inline;">
+                                    <input type="hidden" name="id" value="@koi.Id" />
+                                    <button type="submit" class="btn btn-danger btn-sm">Hủy bỏ Koi</button>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        }
-    </div>
-}
-else
-{
-    <p>No Koi found.</p>
-}
+            }
+        </div>
+    }
+    else
+    {
+        <p class="text-center">Không tìm thấy cá Koi nào.</p>
+    }
+</div>
 
 @section Scripts {
     <script>

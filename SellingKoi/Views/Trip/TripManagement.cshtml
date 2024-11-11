@@ -7,39 +7,41 @@
 
 <div style="text-align: center; margin-top: 20px;">
     <a href="@Url.Action("CreateTrip", "Trip")">
-        <button type="button" class="create-button">Tạo chuyến đi</button>
+        <button type="button" class="btn btn-success">Tạo chuyến đi</button>
     </a>
 </div>
 
-<table>
-    <thead>
-        <tr>
-            <th>Số chuyến đi</th>
-            <th>Ngày tạo</th>
-            <th>Ngày khởi hành</th>
-            <th>Trưởng đoàn</th>
-            <th>Trạng thái</th>
-            <th>Hành động</th>
-        </tr>
-    </thead>
-
-    <tbody>
-        @foreach (var trip in Model)
-        {
+<div class="table-responsive mt-4">
+    <table class="table table-striped table-hover">
+        <thead>
             <tr>
-                <td>@trip.TripNum</td>
-                <td>@trip.Registration_date.ToString("dd/MM/yyyy")</td>
-                <td>@trip.Date_of_departure.Value.ToString("dd/MM/yyyy")</td>
-                <td>@(trip.SaleStaff != null ? trip.SaleStaff.Fullname : "Chưa có nhân viên")</td>
-                <td>@trip.status</td>
-                <td>
-                    <a asp-controller="Trip" asp-action="DetailsTrip" asp-route-id="@trip.Id" class="button btn btn-primary">Chi tiết</a>
-                    <button type="button" onclick="confirmDelete('@trip.Id', @(trip.SaleStaff != null || (trip.FollowAccountsID != null && trip.FollowAccountsID.Any()) ? "true" : "false"))">Xóa</button>
-                </td>
+                <th>Số chuyến đi</th>
+                <th>Ngày tạo</th>
+                <th>Ngày khởi hành</th>
+                <th>Trưởng đoàn</th>
+                <th>Trạng thái</th>
+                <th>Hành động</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+
+        <tbody>
+            @foreach (var trip in Model)
+            {
+                <tr>
+                    <td>@trip.TripNum</td>
+                    <td>@trip.Registration_date.ToString("dd/MM/yyyy")</td>
+                    <td>@trip.Date_of_departure.Value.ToString("dd/MM/yyyy")</td>
+                    <td>@(trip.SaleStaff != null ? trip.SaleStaff.Fullname : "Chưa có nhân viên")</td>
+                    <td>@trip.status</td>
+                    <td>
+                        <a asp-controller="Trip" asp-action="DetailsTrip" asp-route-id="@trip.Id" class="btn btn-primary">Chi tiết</a>
+                        <button type="button" onclick="confirmDelete('@trip.Id', @(trip.SaleStaff != null || (trip.FollowAccountsID != null && trip.FollowAccountsID.Any()) ? "true" : "false"))" class="btn btn-danger">Xóa</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 
 <script>
     function confirmDelete(tripId, hasStaff) {
@@ -76,13 +78,12 @@
     }
 </script>
 
-
 <style>
     /* Căn chỉnh và kiểu cho tiêu đề */
     h2 {
-        font-size: 24px;
+        font-size: 28px;
         text-align: center;
-        margin-bottom: 20px;
+        margin-bottom: 30px;
         color: #333;
     }
 
@@ -93,65 +94,57 @@
         margin: 20px 0;
         font-size: 16px;
         text-align: left;
-        box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+        box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        overflow: hidden;
     }
 
     thead th {
-        background-color: #4CAF50;
-        color: white;
-        padding: 12px;
+     position: sticky;
+        top: 0;
+        background-color: #4e73df; /* Màu xanh dương hiện đại */
+        color: black; /* Changed text color to solid black */
+        padding: 15px;
         font-weight: bold;
-    }
+        text-transform: uppercase;
+        border-bottom: 3px solid #e3e6f0;
+        letter-spacing: 0.05em;
+        text-shadow: none; 
+}
 
     tbody td {
-        padding: 12px;
+        padding: 15px;
         border-bottom: 1px solid #ddd;
     }
 
     /* Kiểu chọn dòng */
     tbody tr:hover {
-        background-color: #f5f5f5;
-    }
-
-    /* Kiểu cho các ô chọn */
-    select {
-        width: 100%;
-        padding: 8px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        background-color: #f9f9f9;
+        background-color: #f1f1f1;
     }
 
     /* Kiểu cho nút Cập nhật */
-    button[type="submit"] {
-        background-color: #4CAF50;
+    button[type="submit"], button[type="button"] {
+        background-color: #28a745;
         color: white;
-        padding: 8px 16px;
+        padding: 10px 20px;
         margin-right: 5px;
         border: none;
-        border-radius: 4px;
+        border-radius: 5px;
         cursor: pointer;
-        font-size: 14px;
+        font-size: 16px;
+        transition: background-color 0.3s;
     }
 
-        button[type="submit"]:hover {
-            background-color: #45a049;
-        }
-
-    /* Kiểu cho nút Xóa */
-    button[type="button"] {
-        background-color: #007BFF;
-        color: white;
-        padding: 8px 16px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 14px;
+    button[type="submit"]:hover, button[type="button"]:hover {
+        background-color: #218838;
     }
 
-        button[type="button"]:hover {
-            background-color: #0069D9;
-        }
+    /* Specific styles for delete button */
+    button.btn-danger {
+        background-color: #dc3545;
+    }
 
-
+    button.btn-danger:hover {
+        background-color: #c82333;
+    }
 </style>
